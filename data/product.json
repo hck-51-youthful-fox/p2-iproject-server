@@ -1,11 +1,13 @@
 [
   {
     "name": "rinso",
-    "price": 2000
+    "price": 2000,
+    "imageUrl": "balbalablaba"
   },
 
   {
     "name": "lontong",
-    "price": 2000
+    "price": 2000,
+    "imageUrl": "bldsadjsa"
   }
 ]
