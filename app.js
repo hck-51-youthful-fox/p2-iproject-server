@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.post("/register", Controller.registerUser);
+app.post("/login", Controller.loginUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
