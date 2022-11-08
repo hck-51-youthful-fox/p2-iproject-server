@@ -15,7 +15,6 @@ async function authAdmin(req, res, next) {
     }
     req.admin = {
       id: admin.id,
-      role: admin.role,
       email: admin.email,
     };
     next();
@@ -23,5 +22,26 @@ async function authAdmin(req, res, next) {
     next(error);
   }
 }
+async function authCustomer(req, res, next) {
+  try {
+    let access_token = req.headers.access_token;
+    if (!access_token) {
+      throw { name: "Unauthorized" };
+    }
+    let payload = verifyToken(access_token);
+    let customer = await Customer.findByPk(payload.id);
 
-module.exports = { authAdmin };
+    if (!customer) {
+      throw { name: "Unauthorized" };
+    }
+    req.customer = {
+      id: customer.id,
+      email: customer.email,
+    };
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { authAdmin, authCustomer };
