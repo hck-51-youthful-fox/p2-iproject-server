@@ -1,0 +1,18 @@
+[
+    {
+        "id":1,
+        "name": "COLORFUL GEFORCE RTX 4090 NB EX-V 24GB",
+        "merk": "Colorfull",
+        "rating": 4,
+        "imgUrl":"https://cdn.mos.cms.futurecdn.net/sifY5sDGSSFAoFbBTyc9Wk.jpg",
+        "description":"Colorful is in the house with their beautiful Colorful GeForce iGame RTX 4090 Vulcan OC-V. It has all the features of a flagship premium 4090, plus a high-colour 480 x 128-pixel LCD display"
+    },
+    {
+        "id":2,
+        "name": "COLORFUL GEFORCE RTX 3080 NB EX-V 24GB",
+        "merk": "Colorfull",
+        "rating": 4,
+        "imgUrl":"https://cdn.mos.cms.futurecdn.net/sifY5sDGSSFAoFbBTyc9Wk.jpg",
+        "description":"Colorful is in the house with their beautiful Colorful GeForce iGame RTX 4090 Vulcan OC-V. It has all the features of a flagship premium 4090, plus a high-colour 480 x 128-pixel LCD display"
+    }
+]
