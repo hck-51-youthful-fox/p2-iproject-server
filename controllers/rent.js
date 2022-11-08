@@ -19,12 +19,10 @@ class Controller {
       } else {
         return res.status(405).json({ message: "Image Upload Failed" });
       }
-      let filename = Date.now() + "-" + file.originalname;
+      let imgName = Date.now() + "-" + file.originalname;
+      let imgUrl = url.url;
       let { ShowId } = req.params;
       let { id: UserId } = req.user;
-      if (!filename) {
-        throw { name: "Unauthorized" };
-      }
       let { data } = await axios.get(`${showsUrl}/${ShowId}`);
       let checkRented = await Rent.findOne({
         where: { UserId, ShowId: data.id },
@@ -34,15 +32,17 @@ class Controller {
       }
       let payload = {
         UserId,
-        imgName: filename,
+        imgName,
         ShowId,
+        imgUrl,
         showName: data.name,
         showImgUrl: data.image.original,
         showSummary: data.summary,
       };
       let rented = await Rent.create(payload);
-      res.status(201).json({ rented, url });
+      res.status(201).json(rented);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
