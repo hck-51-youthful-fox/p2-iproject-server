@@ -28,6 +28,10 @@ function errorHandler(error, req, res, next) {
       code = 401;
       message = "You need to login first";
       break;
+    case "FOOD_NOT_FOUND":
+      code = 404;
+      message = `${error.model} not found`;
+      break;
     case "DATA_NOT_FOUND":
       code = 404;
       message = `${error.model} id: ${error.id} not found`;
