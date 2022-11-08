@@ -1,0 +1,23 @@
+[
+  {
+    "CustomerId": 1,
+    "FoodId": 1,
+    "quantity": 2,
+    "totalPrice": 90000,
+    "isPaid": false
+  },
+  {
+    "CustomerId": 1,
+    "FoodId": 2,
+    "quantity": 1,
+    "totalPrice": 33000,
+    "isPaid": false
+  },
+  {
+    "CustomerId": 1,
+    "FoodId": 3,
+    "quantity": 4,
+    "totalPrice": 20000,
+    "isPaid": false
+  }
+]
