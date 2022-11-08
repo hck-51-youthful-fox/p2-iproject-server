@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 var cors = require("cors");
 const { User, Cart, Product, Invoice } = require("./models/index");
+const { Op } = require("sequelize");
 // const { Op } = require("sequelize");
 app.use(cors());
 app.use(express.json());
@@ -127,6 +128,49 @@ app.post("/cart/:ProductId", async (req, res, next) => {
       );
       res.status(200).json({ message: "Berhasil Update" });
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+//CREATE INVOICE
+app.post("/invoice", async (req, res, next) => {
+  try {
+    const { UserId } = req.user;
+    const { ongkir } = req.body;
+    const unpaid = await Cart.findAll({
+      include: Product,
+      where: { [Op.and]: [{ isPay: false }, { UserId }] },
+    });
+    let totalPrice = 0;
+    let information = [];
+    unpaid.forEach((e) => {
+      totalPrice += e.price;
+      obj = {
+        productName: e.Product.name,
+        quantity: e.quantity,
+        price: e.price,
+      };
+      information.push(obj);
+    });
+    // console.log(information);
+    // console.log(totalPrice);
+
+    // console.log({
+    //   totalPrice,
+    //   ongkir,
+    //   information,
+    //   UserId,
+    // });
+    const ongkirInt = Number(ongkir);
+    // console.log(totalPrice, ongkirInt, information, UserId);
+    const addInvoice = await Invoice.create({
+      totalPrice,
+      ongkir: ongkirInt,
+      information,
+      UserId,
+    });
+    res.status(200).json(addInvoice);
   } catch (err) {
     next(err);
   }

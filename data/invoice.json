@@ -2,11 +2,31 @@
   {
     "totalPrice": 10000,
     "ongkir": 12000,
-    "information": "[{ name: rinso,price: 4000, UserId: 1,ispay: false},{name: lontong,quantity: 3,price: 6000, ProductId: 2, UserId: 1, ispay: false }]"
+    "information": [
+      { "name": "rinso", "price": 4000, "UserId": 1, "ispay": false },
+      {
+        "name": "lontong",
+        "quantity": 3,
+        "price": 6000,
+        "ProductId": 2,
+        "UserId": 1,
+        "ispay": false
+      }
+    ]
   },
   {
     "totalPrice": 20000,
     "ongkir": 1233,
-    "information": "[{ name: rinso,price: 4000, UserId: 1,ispay: false},{name: lontong,quantity: 3,price: 6000, ProductId: 2, UserId: 1, ispay: false }]"
+    "information": [
+      { "name": "rinso", "price": 4000, "UserId": 1, "ispay": false },
+      {
+        "name": "lontong",
+        "quantity": 3,
+        "price": 6000,
+        "ProductId": 2,
+        "UserId": 1,
+        "ispay": false
+      }
+    ]
   }
 ]
