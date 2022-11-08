@@ -8,6 +8,6 @@ router.get(`/`, Controller.fetchGames)
 router.use(loginAuthentication)
 
 router.get(`/explore`, Controller.exploreGames)
-router.post(`/explore`,Controller.postGameFromExplore)
+// router.post(`/explore/:id`,Controller.postGameFromExplore)
 
 module.exports = router

@@ -1,6 +1,5 @@
-const { Game, Genre } = require(`../models/`);
+const { Game, Genre, GameGenre } = require(`../models/`);
 const axios = require("axios");
-const { response } = require("express");
 
 const rawg_url = "https://api.rawg.io/api/games";
 
@@ -17,51 +16,69 @@ class Controller {
 				games,
 			});
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	}
 
 	static async exploreGames(req, res, next) {
 		try {
-			let { page } = req.params;
-			let query = `key=${process.env.RAWG_KEY}&page_size=20`;
+			let { page } = req.query;
+			let query = `key=${process.env.RAWG_KEY}&page_size=10`;
 
-			if (page) {
+			if (page > 1) {
 				query += `&page=${page}`;
 			}
 
-			let { data } = await axios.get(`${rawg_url}/?${query}`);
+			let { data } = await axios.get(`${rawg_url}?${query}`);
+
+			let genreList = await Genre.findAll();
+
+			let games = await Promise.all(
+				data.results.map((game) => {
+					return Game.findOrCreate({
+						where: { name: game.name },
+						defaults: {
+							name: game.name,
+							releaseDate: game.released,
+							imageUrl: game.background_image,
+							rating: game.metacritic || 0,
+						},
+					})
+						.then((result) => {
+							//index 0 data, index 1 true/false created
+							return result[0];
+						})
+						.catch((error) => {});
+				})
+			);
+
+			let GameGenres = await Promise.all(
+				data.results.map((game) => {
+					return game.genres.map((genre) => {
+						let foundGenre = genreList.find((el) => genre.name == el.name);
+						return GameGenre.findOrCreate({
+							where: {
+								GameId: game.id,
+								GenreId: foundGenre.id,
+							},
+							defaults: {
+								GameId: game.id,
+								GenreId: foundGenre.id,
+							},
+						})
+						.then((result) => {
+							return result[0];
+						})
+						.catch((error) => {})
+					});
+				})
+			);
+
+			console.log(GameGenres);
 
 			res.status(200).json({
 				next: data.next,
-				games: data.results,
-			});
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	static async postGameFromExplore(req, res, next) {
-		let { id } = req.params;
-		try {
-			let { data } = await axios.get(`${rawg_url}/${id}`);
-
-			if (!data) {
-				throw { name: "GAME_NOT_FOUND", message: "Game not Found!" };
-			}
-
-			let [game, created] = await Game.findOrCreate({
-				where: { name: data.name },
-				defaults: {
-					name: data.name,
-					releaseDate: data.released,
-					rating: data.metacritic,
-				},
-			});
-
-			res.status(200).json({
-				id: game.id,
+				games,
 			});
 		} catch (error) {
 			next(error);
