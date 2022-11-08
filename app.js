@@ -1,3 +1,4 @@
+var axios = require("axios");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 const express = require("express");
@@ -181,6 +182,56 @@ app.post("/invoice", async (req, res, next) => {
     });
 
     res.status(200).json(addInvoice);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//Raja Ongkir - GET /CITY
+
+app.get("/city", async (req, res, next) => {
+  try {
+    console.log("ihza");
+    // const { province } = req.query;
+    // const { key } = req.headers;
+    // console.log(key);
+    const { data } = await axios.get(
+      `https://api.rajaongkir.com/starter/city?province=11`,
+      {
+        headers: { key: "47a0a696c237a5da1e4037606950f67d" },
+      }
+    );
+    // console.log(data.rajaongkir.results);
+    // console.log(data.rajaongkir.results);
+
+    res.status(200).json(data.rajaongkir.results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//RajaOngkir - POST /COST
+app.post("/cost", async (req, res, next) => {
+  try {
+    console.log("ihza");
+    const { origin, destination, weight, courier } = req.body;
+    const { data } = await axios.post(
+      `https://api.rajaongkir.com/starter/cost`,
+      {
+        origin,
+        destination,
+        weight,
+        courier,
+      },
+      {
+        headers: { key: "47a0a696c237a5da1e4037606950f67d" },
+      }
+    );
+    // console.log(data.rajaongkir.results);
+    // console.log(data.rajaongkir.results);
+    // console.log(data.rajaongkir.results[0].costs);
+
+    res.status(200).json(data.rajaongkir.results[0].costs);
   } catch (err) {
     next(err);
   }
