@@ -6,7 +6,7 @@ const express = require("express");
 const errorHandler = require("./middleware/errorHandler");
 const app = express();
 const port = 3000;
-const routes = require("./routes/admin");
+const routes = require("./routes/index");
 const cors = require("cors");
 
 app.use(cors());
