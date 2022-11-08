@@ -2,10 +2,11 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const { User } = require("./models/index");
+const { User, Hardware } = require("./models/index");
 const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
+const { authentification } = require("./middlewares/auth");
 
 app.use(cors());
 app.use(express.json());
@@ -74,6 +75,16 @@ app.post("/login", async (req, res) => {
     const access_token = createToken(payload);
     res.status(200).json({ access_token });
   } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/hardwares", authentification, async (req, res, next) => {
+  try {
+    const data = await Hardware.findAll();
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
