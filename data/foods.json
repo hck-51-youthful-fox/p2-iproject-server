@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Nasi Goreng Ayam",
+    "imageUrl": "https://www.kitchensanctuary.com/wp-content/uploads/2020/04/Chicken-Fried-Rice-square-FS-.jpg",
+    "price": "45000",
+    "CategoryId": 1
+  },
+  {
+    "name": "Rawon Ayam",
+    "imageUrl": "https://kurio-img.kurioapps.com/21/04/12/bfd167e3-3613-4a57-9515-ea4aee8fb25b.jpe",
+    "price": "45000",
+    "CategoryId": 1
+  },
+  {
+    "name": "Nutrisasi Nanas",
+    "imageUrl": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/223e7a70-acea-445b-9788-9f5931f62f5a_Go-Biz_20210408_215735.jpeg",
+    "price": "5000",
+    "CategoryId": 2
+  },
+  {
+    "name": "Vanilla Cake Waffle",
+    "imageUrl": "https://tottstore.com/recipes/wp-content/uploads/sites/2/2017/08/Vanilla-Waffle.jpg",
+    "price": "27000",
+    "CategoryId": 3
+  }
+]
