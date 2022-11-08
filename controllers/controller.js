@@ -2,7 +2,10 @@ const { User, RentReview } = require("../models/index");
 const { inputStatus } = require("../helpers/bcrypt");
 const { getToken, tokenVerif } = require("../helpers/jwt");
 const { Op } = require("sequelize");
+const getAccess = require("../helpers/access");
+const axios = require("axios");
 // const { OAuth2Client } = require("google-auth-library");
+
 class Controller {
   static async register(req, resp, next) {
     try {
@@ -40,6 +43,36 @@ class Controller {
         username: foundUser.username,
       });
     } catch (error) {
+      next(error);
+    }
+  }
+  static async getPets(req, resp, next) {
+    try {
+      const { access_token } = await getAccess();
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: "https://api.petfinder.com/v2/animals",
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      //   console.log(error);
+      next(error);
+    }
+  }
+
+  static async getPetDetails(req, resp, next) {
+    try {
+      const { id } = req.params;
+      const { access_token } = await getAccess();
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: `https://api.petfinder.com/v2/animals/${id}`,
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
