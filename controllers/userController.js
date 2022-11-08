@@ -32,7 +32,6 @@ class Controller {
         email: newUser.email,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -67,8 +66,7 @@ class Controller {
       const access_token = createToken(payload);
       res.status(200).json({ access_token });
     } catch (error) {
-      console.log(error);
-      res.status(400).json({ error });
+      next(error);
     }
   }
   static async googleLogin(req, res, next) {
