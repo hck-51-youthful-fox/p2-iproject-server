@@ -1,8 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-const { hashPassword } = require('../helpers/bcrypt');
+"use strict";
+const { Model } = require("sequelize");
+const { hashPassword } = require("../helpers/bcrypt");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,26 +10,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.post)
-      User.belongsToMany(models.post, {
-        through: models.Comment
-      })
-      User.hasMany(models.Comment)
+      User.hasMany(models.Post);
+      User.belongsToMany(models.Post, {
+        through: models.Comment,
+      });
+      User.hasMany(models.Comment);
     }
   }
-  User.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    isPremium: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      username: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      isPremium: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
 
   User.beforeCreate((instance) => {
-    instance.password = hashPassword(instance.password)
-    instance.isPremium = false
-  })
+    instance.password = hashPassword(instance.password);
+    instance.isPremium = false;
+  });
   return User;
 };
