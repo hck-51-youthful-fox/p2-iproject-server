@@ -1,7 +1,9 @@
-const { validatePassword } = require("../helpers/bcrypt");
-const { createToken } = require("../helpers/jwt");
-const { User, UserDetail } = require(`../models`);
+const { comparePassword } = require("../helpers/bcrypt");
+const { signToken } = require("../helpers/jwt");
+const { User, UserDetail } = require(`../models/index`);
 const { OAuth2Client } = require("google-auth-library");
+
+const axios = require("axios");
 
 class Controller {
 	static async userRegister(req, res, next) {
@@ -11,7 +13,11 @@ class Controller {
 				username,
 				email,
 				password,
-				verified: false,
+				verified: "",
+			});
+
+			await UserDetail.create({
+				UserId: newUser.id,
 			});
 
 			res.status(201).json({
@@ -43,38 +49,100 @@ class Controller {
 			let foundUser = await User.findOne({ where: { email } });
 			if (!foundUser) throw { name: `INVALID_CREDENTIALS` };
 
-			const validation = validatePassword(password, foundUser.password);
+			const validation = comparePassword(password, foundUser.password);
+
 			if (!validation) throw { name: `INVALID_CREDENTIALS` };
 
 			const payload = { id: foundUser.id };
 
-			const access_token = createToken(payload);
+			const access_token = signToken(payload);
+
+
 
 			res.status(200).json({
 				access_token,
-				username: foundUser.username,
-				verified: foundUser.verified,
+				username : foundUser.username,
+				verified : foundUser.verified
 			});
 		} catch (error) {
 			next(error);
 		}
 	}
 
-  static async editUserDetails(req,res,next) {
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
+	static async editUserDetails(req, res, next) {
+		let { firstName, lastName, birthDate } = req.body;
+		let { id } = req.user;
+		try {
 
-  static async verifyUser(req,res,next) {
-    try {
-      
-    } catch (error) {
-      
-    }
-  }
+			if(birthDate) {
+				birthDate = new Date(birthDate)
+			}
+
+			await UserDetail.update(
+				{ firstName, lastName, birthDate },
+				{ where: { UserId: id } }
+			);
+
+			res.status(200).json({
+				message: "User Verified!",
+			});
+		} catch (error) {
+			console.log(error)
+			next(error);
+		}
+	}
+
+	static async verifyUser(req, res, next) {
+		let { id, verified } = req.user;
+		try {
+			if(verified == "Verified") {
+				throw {name: "ALREADY_VERIFIED", message: "User already verified!"}
+			}
+			let foundUserDetail = await UserDetail.findOne({ where: { UserId: id } });
+
+			console.log(1)
+
+			if (!foundUserDetail.firstName || !foundUserDetail.lastName || !foundUserDetail.birthDate) {
+				throw {
+					name: "INCOMPLETE_DETAILS",
+					message: "Please fill in your user details first!",
+				};
+			}
+
+			const options = {
+				method: "GET",
+				url: "https://mailcheck.p.rapidapi.com/",
+				params: { domain: "mailinator.com" },
+				headers: {
+					"X-RapidAPI-Key":
+						"22f66d6d8amsh3d45c913971d1aap1528bcjsne9b7e46036ea",
+					"X-RapidAPI-Host": "mailcheck.p.rapidapi.com",
+				},
+			};
+
+			let { data } = await axios.request(options);
+
+			console.log(2)
+
+			if (!data.valid) {
+				await User.update({ verified: "Rejected" }, { where: { id } });
+				throw { name: "INVALID_EMAIL", message: "Verification rejected!" };
+			}
+
+			console.log(3)
+
+			await User.update({ verified: "Verified" }, { where: { id } });
+
+			console.log(4)
+
+			res.status(200).json({
+				message: "User details updated succesfully",
+			});
+		} catch (error) {
+			console.log(error)
+			next(error)
+		}
+	}
 
 	static async googleLogin(req, res, next) {
 		const client = new OAuth2Client(process.env.GOOGLE_ID);
@@ -90,13 +158,13 @@ class Controller {
 				username: googlePayload.name,
 				email: googlePayload.email,
 				password: `loginwithgoogle`,
-				verified : true
+				verified: "Verified",
 			},
 			hooks: false,
 		});
 
 		if (created) {
-			const newUserDetails = UserDetail.create({
+			await UserDetail.create({
 				firstName: "",
 				lastName: "",
 				birthDate: "",
@@ -109,8 +177,8 @@ class Controller {
 
 		res.status(200).json({
 			access_token,
-      username : user.username,
-      verified : user.verified
+			username: user.username,
+			verified: user.verified,
 		});
 	}
 }

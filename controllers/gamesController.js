@@ -1,4 +1,6 @@
-const { Games } = require(`../models`);
+const { Game } = require(`../models/`);
+const axios = require("axios");
+const { response } = require("express");
 
 const rawg_url = "https://api.rawg.io/api/games";
 
@@ -9,40 +11,52 @@ class Controller {
 
 			let where = {};
 
-			let games = Games.findAll(where);
+			let games = await Game.findAll()
 
 			res.status(200).json({
-				games,
+				games
 			});
 		} catch (error) {
+            console.log(error)
 			next(error);
 		}
 	}
 
-	static async exploreGames() {
+	static async exploreGames(req, res, next) {
 		try {
-			let { data } = axios.get(`${rawg_url}/`, {});
+            let { page } = req.params
+            let query = `key=${process.env.RAWG_KEY}&page_size=20`
+
+            if(page) {
+                query += `&page=${page}`
+            }
+
+			let { data } = await axios.get(`${rawg_url}/?${query}`);
+            
+            res.status(200).json({
+                next : data.next,
+                games : data.results
+            })
 		} catch (error) {
 			next(error);
 		}
 	}
 
-	static async postGameFromExplore() {
+	static async postGameFromExplore(req, res, next) {
 		let { id } = req.params;
 		try {
-			// https://api.rawg.io/api/games/{id}
 			let { data } = await axios.get(`${rawg_url}/${id}`);
 
 			if (!data) {
 				throw { name: "GAME_NOT_FOUND", message: "Game not Found!" };
 			}
 
-			let [game, created] = await Games.findOrCreate({
+			let [game, created] = await Game.findOrCreate({
 				where: { name: data.name },
 				defaults: {
 					name: data.name,
 					releaseDate: data.released,
-					rating: data.rating,
+					rating: data.metacritic,
 				},
 			});
 
