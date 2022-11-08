@@ -5,6 +5,8 @@ const Controller = require("../controllers/libraryController");
 router.get("/", Controller.fetchMyLibrary);
 router.get("/favorite", Controller.fetchFavorites);
 router.post("/:id", Controller.addToLibrary);
-router.patch("/:id/favorite", Controller.addToFavorites);
+router.delete("/favorite/:id", Controller.removeFromLibrary);
+router.patch("/favorite/:id", Controller.updateFavorite);
+router.put("/favorite/:id", Controller.updateStatus);
 
 module.exports = router;
