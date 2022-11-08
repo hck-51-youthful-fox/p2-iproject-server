@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
 const { authentification } = require("./middlewares/auth");
 const axios = require("axios");
+const { Op } = require("sequelize");
 
 app.use(cors());
 app.use(express.json());
@@ -100,7 +101,7 @@ app.get("/comments", authentification, async (req, res, next) => {
   }
 });
 
-app.get("/detail/:id", authentification, async (req, res, next) => {
+app.get("/detail/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await Hardware.findAll({
@@ -191,7 +192,20 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
   }
 });
 
-
+app.get("/detail", async (req, res, next) => {
+  const { name } = req.query;
+  try {
+    const data = await Hardware.findAll({
+      where: {
+        name: { [Op.iLike]: `%${name}%` },
+      },
+    });
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
