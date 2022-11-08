@@ -5,7 +5,7 @@ const { authenticate } = require('../middlewares/authenticate');
 // const { authorizeCustomer } = require('../middlewares/authorize');
 
 
-const userRouter = require('./users');
+const userRouter = require('./user');
 const publicRouter = require('./public'); 
 const likeRouter = require('./like'); // favorites buat premium acc
 
