@@ -60,6 +60,22 @@ class Controller {
 		}
 	}
 
+  static async editUserDetails(req,res,next) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  static async verifyUser(req,res,next) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
 	static async googleLogin(req, res, next) {
 		const client = new OAuth2Client(process.env.GOOGLE_ID);
 		const ticket = await client.verifyIdToken({
