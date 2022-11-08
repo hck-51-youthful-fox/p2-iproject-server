@@ -48,6 +48,24 @@ class UserController {
 			next(error)
 		}
 	}
+
+	static async updateStatus(req, res, next) {
+		try {
+			const id = req.params.id
+			// const { isPremium } = req.body
+			const foundUser = await User.findByPk(id)
+			if (!foundUser) throw { name: 'DATA_NOT_FOUND', model: 'User'}
+			const data = await User.update(
+				{ isPremium: true },
+				{ where: id }
+			)
+			res.status(200).json({ 
+				message: 'Successfully upgraded your account to Premium!'
+			})
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = {
