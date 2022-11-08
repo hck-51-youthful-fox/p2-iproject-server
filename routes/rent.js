@@ -1,23 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const Controller = require("../controllers/rent");
-const path = require("path");
-const multer = require("multer");
+const authorization = require("../middlewares/authorize");
+const upload = require("../setups/multer")
 
-// const storage = multer.memoryStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "./images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
 
-// const upload = multer({ storage: storage });
 
-router.get("/myrent", Controller.getRented)
-router.post("/:ShowId", Controller.addRent);
-router.delete("/:id", Controller.removeRent);
+router.get("/myrent", Controller.getRented);
+router.post("/:ShowId",upload.single('image') ,Controller.addRent);
+router.delete("/:id", authorization, Controller.removeRent);
 
 module.exports = router;
 

@@ -1,16 +1,30 @@
 const { User, Rent } = require("../models");
 const axios = require("axios");
 let showsUrl = "https://api.tvmaze.com/shows";
+const cloudinary = require("../setups/cloudinary");
+const fs = require("fs");
 
 class Controller {
   static async addRent(req, res, next) {
+    let file;
+    let url;
     try {
-      //   let { filename } = req.file;
+      const uploader = async (path) => await cloudinary.uploads(path, "Images");
+      if (req.method == "POST") {
+        file = req.file;
+        const { path } = file;
+        const newPath = await uploader(path);
+        url = newPath;
+        fs.unlinkSync(path);
+      } else {
+        return res.status(405).json({ message: "Image Upload Failed" });
+      }
+      let filename = Date.now() + "-" + file.originalname;
       let { ShowId } = req.params;
       let { id: UserId } = req.user;
-      //   if (!filename) {
-      //     throw { name: "Unauthorized" };
-      //   }
+      if (!filename) {
+        throw { name: "Unauthorized" };
+      }
       let { data } = await axios.get(`${showsUrl}/${ShowId}`);
       let checkRented = await Rent.findOne({
         where: { UserId, ShowId: data.id },
@@ -20,14 +34,14 @@ class Controller {
       }
       let payload = {
         UserId,
-        imgName: "filename",
+        imgName: filename,
         ShowId,
         showName: data.name,
         showImgUrl: data.image.original,
         showSummary: data.summary,
       };
       let rented = await Rent.create(payload);
-      res.status(201).json(rented);
+      res.status(201).json({ rented, url });
     } catch (error) {
       next(error);
     }
