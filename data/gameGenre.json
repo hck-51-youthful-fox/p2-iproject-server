@@ -1,0 +1,58 @@
+[
+    {
+        "GameId" : 1,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 1,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 2,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 2,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 3,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 4,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 4,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 4,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 5,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 5,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 6,
+        "GenreId" : 4
+    },
+    {
+        "GameId" : 6,
+        "GenreId" : 13
+    },
+    {
+        "GameId" : 7,
+        "GenreId" : 1
+    },
+    {
+        "GameId" : 7,
+        "GenreId" : 15
+    }
+]
