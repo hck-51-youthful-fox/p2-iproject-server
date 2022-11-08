@@ -19,11 +19,11 @@ async function errorHandler(err, req, res, next) {
       break;
     case "DATA_NOT_FOUND":
       code = 404;
-      msg = "Error, product not found";
+      msg = "Error, Game not found";
       break;
-    case "DATA_NOT_FOUND_CATEGORY":
+    case "DATA_NOT_FOUND_LIBRARY":
       code = 404;
-      msg = "Error, category not found";
+      msg = "Error, Game is not on your Library";
       break;
 
     //* authentication & authorization

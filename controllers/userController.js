@@ -59,9 +59,9 @@ class Controller {
       //* if email & password match
       const payload = {
         id: foundUser.id,
-        email: foundUser.email,
-        username: foundUser.username,
-        status: foundUser.status,
+        // email: foundUser.email,
+        // username: foundUser.username,
+        // status: foundUser.status,
       };
       const access_token = createToken(payload);
       res.status(200).json({ access_token });
