@@ -57,8 +57,6 @@ class Controller {
 
 			const access_token = signToken(payload);
 
-
-
 			res.status(200).json({
 				access_token,
 				username : foundUser.username,
@@ -87,7 +85,6 @@ class Controller {
 				message: "User Verified!",
 			});
 		} catch (error) {
-			console.log(error)
 			next(error);
 		}
 	}
@@ -99,8 +96,6 @@ class Controller {
 				throw {name: "ALREADY_VERIFIED", message: "User already verified!"}
 			}
 			let foundUserDetail = await UserDetail.findOne({ where: { UserId: id } });
-
-			console.log(1)
 
 			if (!foundUserDetail.firstName || !foundUserDetail.lastName || !foundUserDetail.birthDate) {
 				throw {
@@ -122,24 +117,17 @@ class Controller {
 
 			let { data } = await axios.request(options);
 
-			console.log(2)
-
 			if (!data.valid) {
 				await User.update({ verified: "Rejected" }, { where: { id } });
 				throw { name: "INVALID_EMAIL", message: "Verification rejected!" };
 			}
 
-			console.log(3)
-
 			await User.update({ verified: "Verified" }, { where: { id } });
-
-			console.log(4)
 
 			res.status(200).json({
 				message: "User details updated succesfully",
 			});
 		} catch (error) {
-			console.log(error)
 			next(error)
 		}
 	}
