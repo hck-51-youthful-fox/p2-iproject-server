@@ -49,7 +49,14 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: { msg: "Game description can't be empty." },
         },
       },
-      publisher: DataTypes.STRING,
+      publisher: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+          notEmpty: true,
+        },
+      },
       isFree: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
