@@ -1,3 +1,5 @@
+const { comparePassword } = require('../helpers/bcrypt')
+const { createToken } = require('../helpers/jwt')
 const { Log, LogSpotter, User, UserDetail } = require('../models/index')
 
 class UserController {
@@ -19,6 +21,39 @@ class UserController {
 				})
 			}
 
+		} catch (error) {
+			next(error)
+		}
+	}
+
+	static async renderFormLogin(req, res, next) {
+		try {
+			const { email, password } = req.body
+			const foundUser = await User.findOne({
+				where: { email }
+			})
+
+			if (!foundUser) {
+				throw { name: 'InvalidCredentials' }
+			} else {
+				const comparedPassword = comparePassword(password, foundUser.password)
+
+
+				if (!comparedPassword) {
+					throw { name: 'InvalidCredentials' }
+				} else {
+					const { callsign, email, role } = foundUser
+					const user_id = foundUser.id
+					const payload = { id: user_id }
+					const access_token = createToken(payload)
+
+					console.log(callsign, email, role, user_id, payload, access_token, '--------------')
+
+					res.status(200).json({
+						access_token, user_id, callsign, email, role
+					})
+				}
+			}
 		} catch (error) {
 			next(error)
 		}
