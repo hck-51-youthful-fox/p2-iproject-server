@@ -9,6 +9,7 @@ class Controller {
      * - Axios GET RAWG
      * - Search (name or publisher)
      */
+    res.status(200).json({ message: "Test fetch" });
   }
   static async fetchFreeGames(req, res, next) {
     /**
