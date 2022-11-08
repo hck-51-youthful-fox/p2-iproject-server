@@ -56,6 +56,41 @@ class Controller {
       next(err);
     }
   }
+
+  static async googleSignIn(req, res, next) {
+    let ticket = await client.verifyIdToken({
+      idToken: req.headers.google_token,
+      audience: process.env.googleClientId,
+    });
+    let payload = ticket.getPayload();
+
+    let [user, created] = await User.findOrCreate({
+      where: {
+        email: payload.email,
+      },
+      defaults: {
+        email: payload.email,
+        username: payload.given_name,
+        password: "ini dari google",
+      },
+      hooks: false,
+    });
+
+    const payloadGoogle = {
+      id: user.id,
+      role: user.role,
+      username: user.username,
+    };
+
+    const access_token = createToken(payloadGoogle);
+
+    res.status(200).json({
+      access_token: access_token,
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    });
+  }
 }
 
 module.exports = Controller;
