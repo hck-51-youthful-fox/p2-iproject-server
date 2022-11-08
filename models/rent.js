@@ -42,6 +42,14 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "Please upload the transaction proof" },
         },
       },
+      imgUrl: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Please upload the transaction proof" },
+          notNull: { msg: "Please upload the transaction proof" },
+        },
+      },
     },
     {
       sequelize,
