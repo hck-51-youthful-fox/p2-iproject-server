@@ -4,6 +4,7 @@
   "description": "Individual Project - Server",
   "main": "index.js",
   "scripts": {
+    "db:dev": "sequelize db:drop && sequelize db:create && sequelize db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
