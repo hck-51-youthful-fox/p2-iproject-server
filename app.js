@@ -106,7 +106,7 @@ app.get("/detail/:id", authentification, async (req, res, next) => {
     const data = await Hardware.findAll({
       include: {
         model: Comment,
-        attributes: ["UserId", "comment"],
+        attributes: ["UserId", "comment", "imgUrl"],
       },
       where: {
         id: id,
@@ -122,10 +122,12 @@ app.get("/detail/:id", authentification, async (req, res, next) => {
 app.post("/detail/:id", authentification, async (req, res, next) => {
   try {
     const { comment } = req.body;
+    const imgUrl = "-";
     const data = await Comment.create({
       UserId: req.user.id,
       HardwareId: req.params.id,
       comment,
+      imgUrl,
     });
     res.status(200).json(data);
   } catch (error) {
@@ -175,19 +177,21 @@ app.get("/news", async (req, res) => {
 });
 
 app.delete("/detail/:id", authentification, async (req, res, next) => {
-    try {
-      const { comment } = req.body;
-      const data = await Comment.create({
+  try {
+    const data = await Comment.destroy({
+      where: {
         UserId: req.user.id,
-        HardwareId: req.params.id,
-        comment,
-      });
-      res.status(200).json(data);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
+        HardwareId: +req.params.id,
+      },
+    });
+    res.status(200).json({ message: `Comment ${data} deleted` });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
