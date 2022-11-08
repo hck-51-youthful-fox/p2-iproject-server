@@ -11,6 +11,7 @@ module.exports = {
       },
       UserId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "Users",
           key: "id",
@@ -18,6 +19,7 @@ module.exports = {
       },
       PlayerId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "Players",
           key: "id",
@@ -25,6 +27,7 @@ module.exports = {
       },
       Position: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
