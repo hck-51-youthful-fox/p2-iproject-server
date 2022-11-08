@@ -50,6 +50,14 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       publisher: DataTypes.STRING,
+      isFree: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notNull: true,
+          notEmpty: true,
+        },
+      },
     },
     {
       sequelize,
