@@ -16,6 +16,22 @@ function errorHandler(error, req, res, next) {
       code = 400;
       message = error.errors.map((el) => el.message);
       break;
+    case "Invalid_Credentials":
+      code = 401;
+      message = "You have entered an invalid username or password";
+      break;
+    case "Unauthorized":
+      code = 401;
+      message = "You need to login first";
+      break;
+    case "JsonWebTokenError":
+      code = 401;
+      message = "You need to login first";
+      break;
+    case "DATA_NOT_FOUND":
+      code = 404;
+      message = `${error.model} id: ${error.id} not found`;
+      break;
     default:
       code = 500;
       message = "Internal Server Error";
