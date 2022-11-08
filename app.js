@@ -207,6 +207,23 @@ app.get("/detail", async (req, res, next) => {
   }
 });
 
+app.post("/add", authentification, async (req, res, next) => {
+  const { name, merk, rating, imgUrl, description } = req.body;
+  try {
+    const data = await Hardware.create({
+      name,
+      merk,
+      rating,
+      imgUrl,
+      description,
+    });
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
