@@ -103,14 +103,16 @@ app.post("/cart/:ProductId", async (req, res, next) => {
     }
     const cekProduct = await Product.findByPk(ProductId);
     // console.log(cekProduct);
-    const price = quantity * cekProduct.price;
-    console.log(price);
+    // console.log(price);
+    // console.log("lononr");
     if (!cekProduct) {
       throw { name: "PRODUCT_NOT_FOUND" };
     }
+    console.log("lontong");
+    const price = quantity * cekProduct.price;
     console.log(ProductId, UserId, quantity, isPay, price);
-    const [user, addToCart] = await Cart.findOrCreate({
-      where: { UserId },
+    const [product, addToCart] = await Cart.findOrCreate({
+      where: { ProductId },
       defaults: {
         quantity,
         price,
@@ -119,6 +121,8 @@ app.post("/cart/:ProductId", async (req, res, next) => {
         ProductId,
       },
     });
+    // console.log(product);
+    // console.log(addToCart, "<<<");
     if (addToCart) {
       res.status(201).json(addToCart);
     } else {
@@ -138,10 +142,14 @@ app.post("/invoice", async (req, res, next) => {
   try {
     const { UserId } = req.user;
     const { ongkir } = req.body;
+    // console.log(UserId);
     const unpaid = await Cart.findAll({
       include: Product,
       where: { [Op.and]: [{ isPay: false }, { UserId }] },
     });
+    if (unpaid.length === 0) {
+      throw { name: "PRODUCT_NOT_FOUND" };
+    }
     let totalPrice = 0;
     let information = [];
     unpaid.forEach((e) => {
@@ -153,23 +161,25 @@ app.post("/invoice", async (req, res, next) => {
       };
       information.push(obj);
     });
-    // console.log(information);
-    // console.log(totalPrice);
-
-    // console.log({
-    //   totalPrice,
-    //   ongkir,
-    //   information,
-    //   UserId,
-    // });
     const ongkirInt = Number(ongkir);
-    // console.log(totalPrice, ongkirInt, information, UserId);
+    console.log(totalPrice, ongkirInt, information, UserId);
+    // const paid = await Cart.update(
+    //   { isPay: true },
+    //   {
+    //     where: { [Op.and]: [{ isPay: false }, { UserId }] },
+    //   }
+    // );
     const addInvoice = await Invoice.create({
       totalPrice,
       ongkir: ongkirInt,
       information,
       UserId,
     });
+
+    const deleteCart = await Cart.destroy({
+      where: { [Op.and]: [{ isPay: false }, { UserId }] },
+    });
+
     res.status(200).json(addInvoice);
   } catch (err) {
     next(err);
@@ -199,9 +209,9 @@ app.use((err, req, res, next) => {
   } else if (err.name === "JsonWebTokenError") {
     statuscode = 401;
     message = "Invalid token";
-  } else if (err.name === "HERO_NOT_FOUND") {
+  } else if (err.name === "PRODUCT_NOT_FOUND") {
     statuscode = 404;
-    message = "Hero not found";
+    message = "Product not found";
   } else if (err.name === "FORBIDDEN") {
     statuscode = 403;
     message = "You are not authorized";
