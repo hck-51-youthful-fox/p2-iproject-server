@@ -1,12 +1,13 @@
-const express = require(`express`)
-const Controller = require("../controllers/reviewsController")
-const { loginAuthentication } = require("../middlewares/authentication")
-const router = express.Router()
+const express = require(`express`);
+const Controller = require("../controllers/reviewsController");
+const { loginAuthentication } = require("../middlewares/authentication");
+const { postReviewAuthorization } = require("../middlewares/authorization");
+const router = express.Router();
 
-router.get(`/:gameId`, Controller.fetchReviewsByGameId)
+router.get(`/:GameId`, Controller.fetchReviewsByGameId);
 
-router.use(loginAuthentication)
+router.use(loginAuthentication);
 
-router.post(`/:gameId`, Controller.postReview)
+router.post(`/:GameId`, postReviewAuthorization, Controller.postReview);
 
-module.exports = router
+module.exports = router;

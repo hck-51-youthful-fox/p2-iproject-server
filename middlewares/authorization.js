@@ -1,11 +1,11 @@
-const { Games } = require(`../models/`);
+const { Game } = require(`../models/`);
 
 const postReviewAuthorization = async (req, res, next) => {
 	try {
 		const { id: UserId, verified } = req.user;
-		const { id } = req.params;
+		const { GameId: id } = req.params;
 
-		const foundGames = await Games.findByPk(id);
+		const foundGames = await Game.findByPk(id);
 
 		if (!foundGames) {
 			throw { name: `DATA_NOT_FOUND`, id };
@@ -13,9 +13,9 @@ const postReviewAuthorization = async (req, res, next) => {
 
 		if (!verified || verified == "Rejected") {
 			throw { name: `FORBIDDEN` };
-		} else {
-			next();
 		}
+
+		next();
 	} catch (error) {
 		next(error);
 	}
