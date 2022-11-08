@@ -59,6 +59,19 @@ app.use(async (req, res, next) => {
   }
 });
 
+app.get("/products", async (req, res, next) => {
+  try {
+    const products = await Product.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+    res.status(200).json(products);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use((err, req, res, next) => {
   console.log("ihzza");
   let statuscode = 500;
