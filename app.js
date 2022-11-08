@@ -7,6 +7,7 @@ const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
 const { authentification } = require("./middlewares/auth");
+const axios = require("axios");
 
 app.use(cors());
 app.use(express.json());
@@ -117,6 +118,76 @@ app.get("/detail/:id", authentification, async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+app.post("/detail/:id", authentification, async (req, res, next) => {
+  try {
+    const { comment } = req.body;
+    const data = await Comment.create({
+      UserId: req.user.id,
+      HardwareId: req.params.id,
+      comment,
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/news", async (req, res) => {
+  try {
+    const { data } = await axios.get(
+      `https://newsapi.org/v2/top-headlines?country=id&category=technology&apiKey=a461f6286f304f9f86bae3b2817e6439`
+    );
+    const { data: top } = await axios.get(
+      `https://top-computer-parts.p.rapidapi.com/gpu`,
+      {
+        headers: {
+          "X-RapidAPI-Key":
+            "edd710fddbmsh1b70c326f0e172ep16d0f9jsn5c6b7aae0e20",
+          "X-RapidAPI-Host": "top-computer-parts.p.rapidapi.com",
+        },
+      }
+    );
+    const dataVGA = [];
+    const topVGA = top.slice(1, 6);
+    topVGA.forEach((element) => {
+      let data = element.split(",");
+      console.log(data);
+      let obj = {
+        merk: `${data[2]}`,
+        type: `${data[2]} ${data[3]}`,
+        ranking: `${data[4]}`,
+        bechmark: `${data[6]}`,
+        source: `${data[7]}`,
+      };
+      dataVGA.push(obj);
+    });
+
+    const dataNews = data.articles.slice(1, 5);
+    dataNews.forEach((el) => {
+      delete el.source;
+    });
+    res.status(200).json({ topVGA: dataVGA, news: dataNews });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.delete("/detail/:id", authentification, async (req, res, next) => {
+    try {
+      const { comment } = req.body;
+      const data = await Comment.create({
+        UserId: req.user.id,
+        HardwareId: req.params.id,
+        comment,
+      });
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
