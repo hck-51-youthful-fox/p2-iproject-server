@@ -18,6 +18,7 @@ class Controller {
       res.status(201).json({
         id: user.id,
         email: user.email,
+        status: user.status,
       });
     } catch (error) {
       next(error);
@@ -39,10 +40,13 @@ class Controller {
         id: data.dataValues.id,
         username: data.dataValues.username,
         email: data.dataValues.email,
+        status: data.dataValues.status,
       });
       res.status(200).json({
         Code: 200,
         access_token: token,
+        id: data.dataValues.id,
+        status: data.dataValues.status,
         username: data.dataValues.username,
         message: "login success",
       });
@@ -50,16 +54,16 @@ class Controller {
       next(error);
     }
   }
-  async payment(req, res, next) {
+  static async payment(req, res, next) {
     try {
       const midtransClient = require("midtrans-client");
       // Create Snap API instance
       let snap = new midtransClient.Snap({
         // Set to true if you want Production Environment (accept real transaction).
         isProduction: false,
-        serverKey: process.env.SECRET_KEY,
+        serverKey: "SB-Mid-server-jqtK2wRjcPQ5ApBRu0UYaNCL",
       });
-      let random = math.random * 100;
+      let random = Math.random() * 100;
       let parameter = {
         transaction_details: {
           order_id: `YOUR-ORDERID-${random}`,
@@ -75,12 +79,12 @@ class Controller {
       };
 
       snap.createTransaction(parameter).then((transaction) => {
-        // transaction token
         let transactionToken = transaction.token;
-        console.log("transactionToken:", transactionToken);
+
+        res.status(201).json({ transactionToken: transactionToken });
       });
-      res.status(200).json({ transactionToken });
     } catch (error) {
+      // console.log(error, "<<< error payment");
       next(error);
     }
   }
@@ -94,18 +98,18 @@ class Controller {
           where: { id },
         }
       );
-      req.status(200).json({ message: "status success update" });
+      res.status(200).json({ message: "status success update" });
     } catch (error) {
       next(error);
     }
   }
-  static async addNewNotes(req, res, next) {
-    try {
-      const { title, description, date } = req.body;
-    } catch (error) {
-      next(error);
-    }
-  }
+  // static async addNewNotes(req, res, next) {
+  //   try {
+  //     const { title, description, date } = req.body;
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 }
 
 module.exports = Controller;

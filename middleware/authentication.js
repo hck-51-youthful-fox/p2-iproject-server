@@ -1,13 +1,14 @@
-const { verify } = require("jsonwebtoken");
+const { verifyToken } = require("../helpers/jwt");
 const { User } = require("../models");
 
 const authentication = async (req, res, next) => {
   try {
     let { access_token } = req.headers;
+    console.log(access_token);
     if (!access_token) {
       throw { name: "nggak bisa masuk dong" };
     }
-    let payload = verify(access_token);
+    let payload = verifyToken(access_token);
     let user = await User.findByPk(payload.id);
     if (!user) {
       throw { name: "Invalid email or password" };

@@ -7,6 +7,6 @@ router.post("/login", Controller.login);
 
 router.use(authentication);
 router.post("/payments", Controller.payment);
-router.patch("/notes/:id", Controller.premium)
+router.patch("/payments/:id", Controller.premium);
 
 module.exports = router;
