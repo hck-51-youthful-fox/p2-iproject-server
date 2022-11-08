@@ -5,8 +5,21 @@ let searchUrl = "https://api.tvmaze.com/search/shows?";
 class Controller {
   static async fetchShows(req, res, next) {
     try {
+      let { page } = req.query;
+      if (!page) {
+        page = 1;
+      }
       let { data } = await axios.get(showsUrl);
-      res.status(200).json(data);
+      function spliceIntoChunks(arr, chunkSize) {
+        const res = [];
+        while (arr.length > 0) {
+          const chunk = arr.splice(0, chunkSize);
+          res.push(chunk);
+        }
+        return res;
+      }
+      let spliced = spliceIntoChunks(data, 9);
+      res.status(200).json(spliced[page - 1]);
     } catch (error) {
       next(error);
     }
@@ -22,11 +35,11 @@ class Controller {
   }
   static async searchShows(req, res, next) {
     try {
-      let { search } = req.query;
-      if (!search) {
-        return res.redirect(showsUrl);
+      let { q } = req.query;
+      if (!q) {
+        return res.redirect("/");
       }
-      let { data } = await axios.get(`${searchUrl}q=${search}`);
+      let { data } = await axios.get(`${searchUrl}q=${q}`);
       res.status(200).json(data);
     } catch (error) {
       next(error);
