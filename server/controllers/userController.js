@@ -4,6 +4,20 @@ const { comparePassword, createToken } = require('../helpers/index');
 const { User } = require('../models/');
 
 class UserController {
+	static async register (req, res, next) {
+		try {
+			const { email, password } = req.body
+			if (!email) throw { name: 'EMPTY_EMAIL'} 
+			if (!password) throw { name: 'EMPTY_PASSWORD'}
+			const newUser = await User.create({ email, password })
+			res.status(201).json({
+				id: newUser.id,
+				email: newUser.email
+			})
+		} catch (error) {
+			next(error)
+		}
+	}
 	static async login(req, res, next) {
 		try {
 			// find email with email input 
