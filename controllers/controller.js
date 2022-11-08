@@ -1,10 +1,10 @@
 const { comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { User, Note, MyNote } = require("../models");
-const nodemailer = require("../helpers/nodemailer");
+const main = require("../helpers/nodemailer");
 
 class Controller {
-  async registrasi(req, res, next) {
+  static async registrasi(req, res, next) {
     try {
       const { username, email, password } = req.body;
       let user = await User.create({
@@ -13,7 +13,8 @@ class Controller {
         password,
         status: "reguler",
       });
-      nodemailer(email, username);
+      console.log("test");
+      main(email, username);
       res.status(201).json({
         id: user.id,
         email: user.email,
@@ -22,7 +23,7 @@ class Controller {
       next(error);
     }
   }
-  async login(req, res, next) {
+  static async login(req, res, next) {
     try {
       const { email, password } = req.body;
       if (!email || !password) throw { message: "validation is required" };
@@ -34,17 +35,15 @@ class Controller {
       if (!isPasswordMatch) {
         throw { name: "invalid email/password" };
       }
-      const token = generateToken({
+      const token = signToken({
         id: data.dataValues.id,
         username: data.dataValues.username,
         email: data.dataValues.email,
-        role: data.dataValues.role,
       });
       res.status(200).json({
         Code: 200,
         access_token: token,
         username: data.dataValues.username,
-        role: data.dataValues.role,
         message: "login success",
       });
     } catch (error) {
@@ -63,17 +62,15 @@ class Controller {
       let random = math.random * 100;
       let parameter = {
         transaction_details: {
-          order_id: "YOUR-ORDERID-123456",
+          order_id: `YOUR-ORDERID-${random}`,
           gross_amount: 50000,
         },
         credit_card: {
           secure: true,
         },
         customer_details: {
-          first_name: "budi",
-          last_name: "pratama",
-          email: "budi.pra@example.com",
-          phone: "08111222333",
+          Username: `${req.user.username}`,
+          email: `${req.user.email}`,
         },
       };
 
@@ -82,6 +79,29 @@ class Controller {
         let transactionToken = transaction.token;
         console.log("transactionToken:", transactionToken);
       });
+      res.status(200).json({ transactionToken });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async premium(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      await User.update(
+        { status: "premium" },
+        {
+          where: { id },
+        }
+      );
+      req.status(200).json({ message: "status success update" });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async addNewNotes(req, res, next) {
+    try {
+      const { title, description, date } = req.body;
     } catch (error) {
       next(error);
     }
