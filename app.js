@@ -224,6 +224,46 @@ app.post("/add", authentification, async (req, res, next) => {
   }
 });
 
+app.post("/login-google", async (req, res, next) => {
+  const { OAuth2Client } = require("google-auth-library");
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  const { google_token } = request.body;
+  try {
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+        idToken: google_token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      const userid = payload["sub"];
+
+      const [addGoogle, created] = await User.findOrCreate({
+        where: {
+          email: payload.email,
+        },
+        defaults: {
+          username: `${payload.given_name} ${payload.family_name}`,
+          email: payload.email,
+          role: "staff",
+          password: "321sehat",
+          phoneNumber: "12345678",
+          address: "Jalan ABC pedas",
+        },
+      });
+      const newPayload = {
+        id: addGoogle.id,
+        role: addGoogle.role,
+        username: addGoogle.username,
+      };
+      const access_token = createToken(newPayload);
+      respone.status(200).json({ access_token, newPayload });
+    }
+    verify();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
