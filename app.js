@@ -61,6 +61,7 @@ app.use(async (req, res, next) => {
   }
 });
 
+//GET-ALL-PRODUCT
 app.get("/products", async (req, res, next) => {
   try {
     const products = await Product.findAll({
@@ -73,6 +74,37 @@ app.get("/products", async (req, res, next) => {
     next(err);
   }
 });
+
+//CREATE-PRODUCT
+app.post("/products", async (req, res, next) => {
+  try {
+    const { name, price } = req.body;
+    const addProducts = await Product.create({
+      name,
+      price,
+    });
+    res.status(200).json(addProducts);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//DELETE-PRODUCT-IN-CART
+app.delete("/cart/:ProductId", async (req, res, next) => {
+  try {
+    const { ProductId } = req.params;
+    const { UserId } = req.user;
+    const removeProducts = await Cart.destroy({
+      where: { [Op.and]: [{ UserId }, { ProductId }] },
+    });
+    // console.log("data berhasil dihapus");
+    res.status(200).json({ message: "data berhasil dihapus" });
+  } catch (err) {
+    next(err);
+  }
+});
+
+//GET-ALL-PODUCT-IN-CART
 app.get("/cart", async (req, res, next) => {
   try {
     console.log("lontong");
