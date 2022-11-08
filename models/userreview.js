@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
+			UserReview.belongsTo(models.Game)
+			UserReview.belongsTo(models.User)
+
 		}
 	}
 	UserReview.init(
@@ -22,13 +25,13 @@ module.exports = (sequelize, DataTypes) => {
 				},
 			},
 			score: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+				type: DataTypes.INTEGER,
+				allowNull: false,
 				validate: {
 					notNull: { msg: "Review Score cannot be empty" },
 					notEmpty: { msg: "Review Score cannot be empty" },
 				},
-      },
+			},
 			UserId: DataTypes.INTEGER,
 			GameId: DataTypes.INTEGER,
 		},

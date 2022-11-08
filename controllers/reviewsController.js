@@ -1,21 +1,45 @@
-const { UserReview } = require(`../models`);
+const { Game, User, UserReview } = require(`../models`);
 
 class Controller {
-    static async fetchReviewsByGameId() {
-        try {
-            
-        } catch (error) {
-            
-        }
-    }
+	static async fetchReviewsByGameId(req, res, next) {
+		let { GameId } = req.params;
+		try {
+			let reviews = await UserReview.findAll({
+				where: { GameId },
+				include: [
+					{ model: Game },
+					{ model: User, attributes: { exclude: [`password`] } },
+				],
+			});
 
-    static async postReview() {
-        try {
-            
-        } catch (error) {
-            
-        }
-    }
+			res.status(200).json({
+				reviews,
+			});
+		} catch (error) {
+			console.log(error);
+			next(error);
+		}
+	}
+
+	static async postReview(req, res, send) {
+		let { review, score } = req.body;
+		let { GameId } = req.params;
+		let { id: UserId } = req.user;
+		try {
+			await UserReview.create({
+				review,
+				score,
+				GameId,
+				UserId,
+			});
+
+			res.status(201).json({
+				message: "Review posted succesfull!",
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 }
 
 module.exports = Controller;

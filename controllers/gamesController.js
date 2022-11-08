@@ -1,4 +1,4 @@
-const { Game } = require(`../models/`);
+const { Game, Genre } = require(`../models/`);
 const axios = require("axios");
 const { response } = require("express");
 
@@ -11,32 +11,32 @@ class Controller {
 
 			let where = {};
 
-			let games = await Game.findAll()
+			let games = await Game.findAll({ include: Genre });
 
 			res.status(200).json({
-				games
+				games,
 			});
 		} catch (error) {
-            console.log(error)
+			console.log(error);
 			next(error);
 		}
 	}
 
 	static async exploreGames(req, res, next) {
 		try {
-            let { page } = req.params
-            let query = `key=${process.env.RAWG_KEY}&page_size=20`
+			let { page } = req.params;
+			let query = `key=${process.env.RAWG_KEY}&page_size=20`;
 
-            if(page) {
-                query += `&page=${page}`
-            }
+			if (page) {
+				query += `&page=${page}`;
+			}
 
 			let { data } = await axios.get(`${rawg_url}/?${query}`);
-            
-            res.status(200).json({
-                next : data.next,
-                games : data.results
-            })
+
+			res.status(200).json({
+				next: data.next,
+				games: data.results,
+			});
 		} catch (error) {
 			next(error);
 		}
