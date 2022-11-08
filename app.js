@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const { User, Hardware } = require("./models/index");
+const { User, Hardware, Comment } = require("./models/index");
 const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
@@ -82,6 +82,35 @@ app.post("/login", async (req, res) => {
 app.get("/hardwares", authentification, async (req, res, next) => {
   try {
     const data = await Hardware.findAll();
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/comments", authentification, async (req, res, next) => {
+  try {
+    const data = await Comment.findAll();
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/detail/:id", authentification, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await Hardware.findAll({
+      include: {
+        model: Comment,
+        attributes: ["UserId", "comment"],
+      },
+      where: {
+        id: id,
+      },
+    });
     res.status(200).json(data);
   } catch (error) {
     console.log(error);
