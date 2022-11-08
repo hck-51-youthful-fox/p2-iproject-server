@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { hashPassword } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -51,12 +52,28 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: 'Password tidak boleh kosong' },
         notEmpty: { msg: 'Password tidak boleh kosong' },
+        len: {
+          args: [6, 50],
+          msg: 'Password minimal 6 karakter'
+        },
+      },
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: 'Role tidak boleh kosong' },
+        notEmpty: { msg: 'Role tidak boleh kosong' },
       }
-
     },
   }, {
     sequelize,
     modelName: 'User',
   });
+
+  User.beforeCreate((user) => {
+    user.callsign = user.callsign.toUpperCase()
+    user.password = hashPassword(user.password)
+  })
   return User;
 };
