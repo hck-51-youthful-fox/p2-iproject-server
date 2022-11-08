@@ -71,7 +71,22 @@ app.get("/products", async (req, res, next) => {
     next(err);
   }
 });
-
+app.get("/cart", async (req, res, next) => {
+  try {
+    console.log("lontong");
+    const { userId } = req.user;
+    const cart = await Cart.findAll({
+      where: { UserId: userId },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+    console.log("lontong3");
+    res.status(200).json(cart);
+  } catch (err) {
+    next(err);
+  }
+});
 app.use((err, req, res, next) => {
   console.log("ihzza");
   let statuscode = 500;
