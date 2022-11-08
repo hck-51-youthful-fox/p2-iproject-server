@@ -1,5 +1,6 @@
 const { Food, Category, Cart } = require("../models/index");
 const { Op } = require("sequelize");
+const axios = require("axios");
 
 class CartController {
   static async readCart(req, res, next) {
@@ -19,6 +20,45 @@ class CartController {
         ],
       });
       res.status(200).json(cart);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async city(req, res, next) {
+    try {
+      const { data } = await axios.get(
+        `https://api.rajaongkir.com/starter/city?province=6`,
+        {
+          headers: {
+            key: "e66cc4122441762243872586e1fcc672",
+          },
+        }
+      );
+      res.status(200).json(data.rajaongkir.results);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async cost(req, res, next) {
+    try {
+      const destinationCode = req.body.destination;
+      const { data } = await axios.post(
+        `https://api.rajaongkir.com/starter/cost`,
+        {
+          origin: "151",
+          destination: destinationCode,
+          weight: 3,
+          courier: "jne",
+        },
+        {
+          headers: {
+            key: "e66cc4122441762243872586e1fcc672",
+          },
+        }
+      );
+      res.status(200).json(data.rajaongkir.results[0].costs[0].cost);
     } catch (error) {
       next(error);
     }
