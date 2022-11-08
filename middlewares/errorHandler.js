@@ -12,6 +12,9 @@ const errorHandler = async function (err, req, res, next) {
 			code = 401
 			message = "Password dan Repassword tidak sama"
 			break
+		case "InvalidCredentials":
+			message = "Email atau password tidak sama"
+			break
 		default:
 			code = 500
 			message = "Internal Server Error"
