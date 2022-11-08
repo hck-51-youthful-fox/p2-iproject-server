@@ -7,10 +7,10 @@ router.post("/register", AdminController.adminRegister);
 router.post("/login", AdminController.adminLogin);
 
 router.use(authAdmin);
-const categoryRoutes = require("./categories");
+const categoryRoutes = require("./adminCategories");
 router.use("/category", categoryRoutes);
 
-const foodRoutes = require("./foods");
+const foodRoutes = require("./adminFood");
 router.use("/food", foodRoutes);
 
 module.exports = router;
