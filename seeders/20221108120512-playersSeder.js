@@ -18,7 +18,6 @@ module.exports = {
       delete el.id;
       el.updatedAt = el.createdAt = new Date();
     });
-    console.log(data);
     await queryInterface.bulkInsert("Players", data);
   },
 

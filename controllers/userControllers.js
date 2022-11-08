@@ -1,5 +1,6 @@
 const { User } = require("../models/index");
 const { comparedPassword } = require("../helpers/bcrypt");
+const { createToken } = require("../helpers/jwt");
 
 class Controller {
   static async register(req, res, next) {
@@ -38,10 +39,6 @@ class Controller {
 
       const comparePassword = comparedPassword(password, foundUser.password);
 
-      if (foundUser.role !== "User") {
-        throw { name: "invalid_log_role" };
-      }
-
       if (!comparePassword) {
         throw { name: "invalid_credentials" };
       }
@@ -55,7 +52,6 @@ class Controller {
       res.status(200).json({
         access_token: token,
         email: foundUser.email,
-        role: foundUser.role,
         username: foundUser.username,
         id: foundUser.id,
       });
