@@ -51,7 +51,7 @@ app.use(async (req, res, next) => {
     const cektoken = jwt.verify(access_token, "secret");
     const cekid = await User.findByPk(cektoken.id);
     req.user = {
-      userId: cekid.id,
+      UserId: cekid.id,
     };
     next();
   } catch (err) {
@@ -74,19 +74,64 @@ app.get("/products", async (req, res, next) => {
 app.get("/cart", async (req, res, next) => {
   try {
     console.log("lontong");
-    const { userId } = req.user;
+    const { UserId } = req.user;
     const cart = await Cart.findAll({
-      where: { UserId: userId },
+      include: { model: Product, attributes: ["name", "price"] },
+      where: { UserId },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
     });
-    console.log("lontong3");
+    // console.log("lontong3");
     res.status(200).json(cart);
   } catch (err) {
     next(err);
   }
 });
+
+//ADD-PRODUCT-TO-CART
+app.post("/cart/:ProductId", async (req, res, next) => {
+  try {
+    const { ProductId } = req.params;
+    const { UserId } = req.user;
+    const { quantity } = req.body;
+    // const role = "-";
+    const isPay = false;
+    if (!ProductId) {
+      throw { name: "PRODUCT_NOT_FOUND" };
+    }
+    const cekProduct = await Product.findByPk(ProductId);
+    // console.log(cekProduct);
+    const price = quantity * cekProduct.price;
+    console.log(price);
+    if (!cekProduct) {
+      throw { name: "PRODUCT_NOT_FOUND" };
+    }
+    console.log(ProductId, UserId, quantity, isPay, price);
+    const [user, addToCart] = await Cart.findOrCreate({
+      where: { UserId },
+      defaults: {
+        quantity,
+        price,
+        isPay,
+        UserId,
+        ProductId,
+      },
+    });
+    if (addToCart) {
+      res.status(201).json(addToCart);
+    } else {
+      const updateProduct = await Cart.update(
+        { quantity, price },
+        { where: { ProductId } }
+      );
+      res.status(200).json({ message: "Berhasil Update" });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use((err, req, res, next) => {
   console.log("ihzza");
   let statuscode = 500;
