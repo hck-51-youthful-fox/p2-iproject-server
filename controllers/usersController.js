@@ -1,6 +1,6 @@
 const { validatePassword } = require("../helpers/bcrypt");
 const { createToken } = require("../helpers/jwt");
-const { User } = require(`../models`);
+const { User, UserDetail } = require(`../models`);
 const { OAuth2Client } = require("google-auth-library");
 
 class Controller {
@@ -50,16 +50,52 @@ class Controller {
 
 			const access_token = createToken(payload);
 
-			res
-				.status(200)
-				.json({
-					access_token,
-					username: foundUser.username,
-					verified: foundUser.verified,
-				});
+			res.status(200).json({
+				access_token,
+				username: foundUser.username,
+				verified: foundUser.verified,
+			});
 		} catch (error) {
 			next(error);
 		}
+	}
+
+	static async googleLogin(req, res, next) {
+		const client = new OAuth2Client(process.env.GOOGLE_ID);
+		const ticket = await client.verifyIdToken({
+			idToken: req.headers.google_token,
+			audience: process.env.GOOGLE_ID,
+		});
+		const googlePayload = ticket.getPayload();
+
+		const [user, created] = await User.findOrCreate({
+			where: { email: googlePayload.email },
+			defaults: {
+				username: googlePayload.name,
+				email: googlePayload.email,
+				password: `loginwithgoogle`,
+				verified : true
+			},
+			hooks: false,
+		});
+
+		if (created) {
+			const newUserDetails = UserDetail.create({
+				firstName: "",
+				lastName: "",
+				birthDate: "",
+				UserId: user.id,
+			});
+		}
+
+		const payload = { id: user.id };
+		let access_token = createToken(payload);
+
+		res.status(200).json({
+			access_token,
+      username : user.username,
+      verified : user.verified
+		});
 	}
 }
 
