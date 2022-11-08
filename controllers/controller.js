@@ -49,14 +49,15 @@ class Controller {
   static async getPets(req, resp, next) {
     try {
       const { access_token } = await getAccess();
+      const { page, type } = req.query;
       const { data } = await axios({
         method: "get",
         headers: { Authorization: `Bearer ${access_token}` },
         url: "https://api.petfinder.com/v2/animals",
+        params: { page, type },
       });
       resp.status(200).json(data);
     } catch (error) {
-      //   console.log(error);
       next(error);
     }
   }
@@ -72,7 +73,28 @@ class Controller {
       });
       resp.status(200).json(data);
     } catch (error) {
-      console.log(error);
+      next(error);
+    }
+  }
+  static async getTypes(req, resp, next) {
+    try {
+      const { access_token } = await getAccess();
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: `https://api.petfinder.com/v2/types`,
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getRents(req, resp, next) {
+    try {
+      const { id } = req.user;
+      const data = await RentReview.findAll({ where: { UserId: id } });
+      resp.status(200).json(data);
+    } catch (error) {
       next(error);
     }
   }
