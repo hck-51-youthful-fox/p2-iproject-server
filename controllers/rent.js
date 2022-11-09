@@ -54,7 +54,7 @@ class Controller {
         throw { name: "DATA_NOT_FOUND" };
       }
       let deleted = await Rent.destroy({ where: { id } });
-      res.status(200).json(data);
+      res.status(200).json({message: "You have unsubscribed"});
     } catch (error) {
       next(error);
     }

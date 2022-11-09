@@ -11,6 +11,3 @@ router.post("/:ShowId",upload.single('image') ,Controller.addRent);
 router.delete("/:id", authorization, Controller.removeRent);
 
 module.exports = router;
-
-//coba memory storage agar tipe datanya buffer sehingga bisa dikirim ke third party API
-// Baca form data. url encoded tidak bisa file, hanya string. multipart

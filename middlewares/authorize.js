@@ -1,4 +1,5 @@
 const { Rent } = require("../models");
+const { verifyToken } = require("../helpers/jwt")
 
 const authorization = async (req, res, next) => {
   try {
