@@ -57,7 +57,7 @@ class UserController {
 			if (!foundUser) throw { name: 'DATA_NOT_FOUND', model: 'User'}
 			const data = await User.update(
 				{ isPremium: true },
-				{ where: id }
+				{ where: {id} }
 			)
 			res.status(200).json({ 
 				message: 'Successfully upgraded your account to Premium!'
@@ -96,9 +96,23 @@ class UserController {
 			.then((transaction)=>{
 				// transaction token
 				let transactionToken = transaction.token;
-				console.log('transactionToken:',transactionToken);
+			// 	return transaction
+			// }).then((res) => {
+			// 	const data = User.update(
+			// 		{ isPremium: true },
+			// 		{ where: {
+			// 			id: req.params.id
+			// 		} }
+			// 	)
+			// 	res.status(200).json({ 
+			// 		message: 'Your account has been upgraded to Premium!'
+			// 	})
+				res.status(201).json('transactionToken:',transactionToken);
 			})
-			}
+			.catch((err) => {
+				console.log(err);
+			})
+		}
 }
 
 module.exports = {
