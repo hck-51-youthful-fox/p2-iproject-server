@@ -1,10 +1,12 @@
-const { User } = require("../models/index");
+const { User, Product } = require("../models/index");
 const { comparedPassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.googleClientId);
 const nodemailer = require("nodemailer");
 const sendMail = require("../helpers/nodemailer");
+var ImageKit = require("imagekit");
+const fs = require("fs");
 
 class Controller {
   static async register(req, res, next) {
@@ -18,7 +20,7 @@ class Controller {
         address,
         role,
       });
-      sendMail(email);
+      sendMail(email, username);
 
       res.status(201).json({ id: dataUser.id, email: dataUser.email });
     } catch (err) {
@@ -59,7 +61,6 @@ class Controller {
         username: payload.username,
       });
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
@@ -97,6 +98,34 @@ class Controller {
       username: user.username,
       role: user.role,
     });
+  }
+
+  static async addProduct(req, res, next) {
+    try {
+      let { name, description, price } = req.body;
+      console.log(req.file);
+
+      const imagekit = new ImageKit({
+        publicKey: "public_MOW2oPu6MEH1AlsNJdVkcC4QIa8=",
+        privateKey: "private_toUdZafHox3VwvJ3ZJ60FGuHwek=",
+        urlEndpoint: "https://ik.imagekit.io/rakaze",
+      });
+      const image = await imagekit.upload({
+        file: req.file.buffer, //required
+        fileName: req.file.originalname, //required
+      });
+
+      console.log(req.file);
+      let product = await Product.create({
+        name,
+        img: image.url,
+        description,
+        price,
+      });
+      res.status(201).json(product);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 
