@@ -23,7 +23,6 @@ class Controller {
         username: addUser.username,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -92,9 +91,62 @@ class Controller {
   static async getRents(req, resp, next) {
     try {
       const { id } = req.user;
-      const data = await RentReview.findAll({ where: { UserId: id } });
+      const data = await RentReview.findAll({
+        where: { UserId: id },
+        attributes: { exclude: ["updatedAt"] },
+      });
       resp.status(200).json(data);
     } catch (error) {
+      next(error);
+    }
+  }
+  static async rentPet(req, resp, next) {
+    try {
+      const { access_token } = await getAccess();
+      const { id: userId } = req.user;
+      const { id: petId } = req.params;
+      const { data: pet } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: `https://api.petfinder.com/v2/animals/${petId}`,
+      });
+      let [data, created] = await RentReview.findOrCreate({
+        where: {
+          PetId: petId,
+          rented: true,
+          UserId: userId,
+          name: pet.animal.name,
+          imgUrl: pet.animal.photos[0].medium,
+        },
+      });
+      if (!created) throw { name: "rent_exist" };
+      resp.status(201).json({ msg: `You are now renting ${data.name}` });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async review(req, resp, next) {
+    try {
+      const { id } = req.rentReview;
+      let { rating, content } = req.body;
+      if (!rating) rating = 5;
+      if (!content) content = "";
+      let data = await RentReview.update(
+        {
+          rented: false,
+          rentEnd: new Date(),
+          rating,
+          content,
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      resp.status(200).json({ msg: "Review posted" });
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
