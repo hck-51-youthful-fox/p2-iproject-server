@@ -46,6 +46,56 @@ app.post("/login", async (req, res, next) => {
     next(err);
   }
 });
+
+//GET-ALL-PRODUCT
+app.get("/products", async (req, res, next) => {
+  try {
+    let { page, search } = req.query;
+    // console.log(search);
+    // console.log("ihza");
+    page = +page;
+    // console.log(page);
+
+    // console.log(req.query.page);
+    // console.log(req.user);
+    if (!page) {
+      page = 0;
+    }
+
+    // console.log(page);
+    const limit = 10;
+    const offset = page * limit;
+    let option = {
+      limit: limit,
+      offset: offset,
+      order: [["id", "ASC"]],
+      where: {
+        name: { [Op.iLike]: `%%` },
+      },
+    };
+
+    if (search) {
+      option.where.name = { [Op.iLike]: `%${search}%` };
+    }
+    // console.log(req.user.role);
+    console.log(option);
+    console.log("ihza cuy");
+    const allProduct = await Product.findAndCountAll(option);
+    console.log(allProduct);
+    // console.log(allMovies.count);
+    if (allProduct.rows.length === 0) {
+      throw { name: "PRODUCT_NOT_FOUND" };
+    }
+    const totalPages = Math.ceil(allProduct.count / limit);
+    allProduct.totalPage = totalPages;
+    allProduct.currentPage = `${+page + 1}`;
+    res.status(200).json(allProduct);
+  } catch (error) {
+    next(error);
+    // res.status(500).json({msg:"internal Server Error"})
+  }
+});
+
 //authentikasi
 app.use(async (req, res, next) => {
   try {
@@ -60,21 +110,6 @@ app.use(async (req, res, next) => {
     next(err);
   }
 });
-
-//GET-ALL-PRODUCT
-app.get("/products", async (req, res, next) => {
-  try {
-    const products = await Product.findAll({
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-    });
-    res.status(200).json(products);
-  } catch (err) {
-    next(err);
-  }
-});
-
 //CREATE-PRODUCT
 app.post("/products", async (req, res, next) => {
   try {
@@ -219,8 +254,7 @@ app.post("/invoice", async (req, res, next) => {
   }
 });
 
-//Raja Ongkir - GET /CITY
-
+//Raja Ongkir - GET /CITY FROM JAWA TIMUR
 app.get("/city", async (req, res, next) => {
   try {
     console.log("ihza");
@@ -268,9 +302,46 @@ app.post("/cost", async (req, res, next) => {
     next(err);
   }
 });
+//payment
+app.post("/payment", async (req, res, next) => {
+  try {
+    console.log("ihza bubu");
+    const { order_id, gross_amount } = req.body;
 
+    let payload = JSON.stringify({
+      transaction_details: {
+        order_id,
+        gross_amount,
+      },
+      credit_card: {
+        secure: true,
+      },
+    });
+    // console.log("bantalll");
+    // console.log(payload);
+    const { data } = await axios.post(
+      "https://app.midtrans.com/snap/v1/transactions",
+      payload,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization:
+            "Basic TWlkLXNlcnZlci04UWdzNlVwVE80Z3dwcGdkVWFzQmxIVTQ6",
+        },
+      }
+    );
+    // console.log(data);
+    res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//ERROR - HANDLER
 app.use((err, req, res, next) => {
   console.log("ihzza");
+  console.log(err);
   let statuscode = 500;
   let message = "Internal server error";
   console.log(err.name);
