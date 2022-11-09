@@ -2,25 +2,115 @@
   {
     "name": "Nasi Goreng Ayam",
     "imageUrl": "https://www.kitchensanctuary.com/wp-content/uploads/2020/04/Chicken-Fried-Rice-square-FS-.jpg",
-    "price": "45000",
+    "price": 45000,
     "CategoryId": 1
   },
   {
     "name": "Rawon Ayam",
     "imageUrl": "https://kurio-img.kurioapps.com/21/04/12/bfd167e3-3613-4a57-9515-ea4aee8fb25b.jpe",
-    "price": "33000",
+    "price": 33000,
+    "CategoryId": 1
+  },
+  {
+    "name": "Nasi Uduk",
+    "imageUrl": "https://img.kurio.network/P1Obhh7cenTadrAZ6Hc_XPjaVws=/1200x1200/filters:quality(80)/https://kurio-img.kurioapps.com/21/09/01/53606332-ec0c-478c-add9-78815b5cc658.jpe",
+    "price": 1000,
+    "CategoryId": 1
+  },
+  {
+    "name": "Soto Lamongan",
+    "imageUrl": "https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1608983819/iwtinvrdf1iwfzc7y6sr.jpg",
+    "price": 2000,
+    "CategoryId": 1
+  },
+  {
+    "name": "Bubur Ayam",
+    "imageUrl": "https://i0.wp.com/resepkoki.id/wp-content/uploads/2017/04/Resep-Bubur-Ayam.jpg?fit=1536%2C1536&ssl=1",
+    "price": 9000,
+    "CategoryId": 1
+  },
+  {
+    "name": "Udang Saos padang",
+    "imageUrl": "https://resepkoki.id/wp-content/uploads/2016/09/Resep-Udah-Saus-Tiram.jpg",
+    "price": 21000,
     "CategoryId": 1
   },
   {
     "name": "Nutrisasi Nanas",
     "imageUrl": "https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/223e7a70-acea-445b-9788-9f5931f62f5a_Go-Biz_20210408_215735.jpeg",
-    "price": "5000",
+    "price": 3000,
+    "CategoryId": 2
+  },
+  {
+    "name": "Jus Alpukat",
+    "imageUrl": "https://www.masakapahariini.com/wp-content/uploads/2021/03/resep-jus-alpukat.jpg",
+    "price": 9000,
+    "CategoryId": 2
+  },
+  {
+    "name": "Bukan Aqua",
+    "imageUrl": "https://lzd-img-global.slatic.net/g/p/0e8f66bb4da5defb4c45ae4a1aa6c21e.jpg_720x720q80.jpg_.webp",
+    "price": 2000,
+    "CategoryId": 2
+  },
+  {
+    "name": "Pop Ice Keju",
+    "imageUrl": "https://cdn.linkumkm.id/library/4/9/6/3/9/49639_840x576.jpg",
+    "price": 5000,
+    "CategoryId": 2
+  },
+  {
+    "name": "Es Cendol",
+    "imageUrl": "https://img.kurio.network/vXvCSwSDPW32egb3ua8n8aORPl0=/1200x1200/filters:quality(80)/https://kurio-img.kurioapps.com/21/04/09/7fbb8c6a-cb83-401e-8f6b-bce32c4c4d8e.jpe",
+    "price": 4500,
     "CategoryId": 2
   },
   {
     "name": "Vanilla Cake Waffle",
-    "imageUrl": "https://tottstore.com/recipes/wp-content/uploads/sites/2/2017/08/Vanilla-Waffle.jpg",
-    "price": "27000",
+    "imageUrl": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2010/8/30/2/FNM_100110-Try-This-At-Home-016_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539453115.jpeg",
+    "price": 27000,
     "CategoryId": 3
+  },
+  {
+    "name": "Paddle Pop Rainbow",
+    "imageUrl": "https://cf.shopee.co.id/file/35db9d90fa5c18594da30956b2107bed",
+    "price": 1500,
+    "CategoryId": 3
+  },
+  {
+    "name": "Es Kepal Milo",
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9rvFC72KueqFJeaybiXMJeGQ_vOj6F-pDJg&usqp=CAU",
+    "price": 27000,
+    "CategoryId": 3
+  },
+  {
+    "name": "Martabak Manis",
+    "imageUrl": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2010/8/30/2/FNM_100110-Try-This-At-Home-016_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539453115.jpeg",
+    "price": 15000,
+    "CategoryId": 4
+  },
+  {
+    "name": "Kulit Crispy",
+    "imageUrl": "https://www.masakapahariini.com/wp-content/uploads/2020/11/kulit-ayam-goreng-tepung-1024x678.jpg",
+    "price": 19000,
+    "CategoryId": 4
+  },
+  {
+    "name": "Siomay Ratagob",
+    "imageUrl": "https://cdn0-production-images-kly.akamaized.net/juLWEgEdJ_3wfIVe9qaBUX6MChc=/1200x900/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/824632/original/070745900_1425891327-siomay.jpg",
+    "price": 11000,
+    "CategoryId": 4
+  },
+  {
+    "name": "Roti Bakar",
+    "imageUrl": "https://awsimages.detik.net.id/community/media/visual/2020/10/05/roti-bakar-1.jpeg?w=700&q=90",
+    "price": 8000,
+    "CategoryId": 4
+  },
+  {
+    "name": "Kue Klepon",
+    "imageUrl": "https://harianresep.com/wp-content/uploads/2022/01/resep-klepon-ketan-gula-jawa.jpg",
+    "price": 5000,
+    "CategoryId": 4
   }
 ]

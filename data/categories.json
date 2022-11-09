@@ -1,11 +1,14 @@
 [
   {
-    "name": "Main Courses"
+    "name": "Menu Utama"
   },
   {
-    "name": "Drinks"
+    "name": "Minuman"
   },
   {
-    "name": "Desserts"
+    "name": "Es Krim"
+  },
+  {
+    "name": "Cemilan"
   }
 ]
