@@ -27,7 +27,8 @@ const authentication = async (req, res, next) => {
 
     req.user = {
       id: validateToken.id,
-      email: validateToken.email
+      email: validateToken.email,
+      isPremium: validateToken.isPremium,
     };
     next();
   } catch (error) {
