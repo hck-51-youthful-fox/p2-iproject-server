@@ -1,4 +1,4 @@
-const { Library, Game } = require("../models/index");
+const { Library } = require("../models/index");
 
 class Controller {
   // After login and authorization
@@ -41,39 +41,7 @@ class Controller {
       console.log(error);
     }
   }
-  static async addToLibrary(req, res, next) {
-    /**
-     * Desc: Add games to library from homepage
-     * Butuh:
-     * - Sequelize create
-     */
-    try {
-      const GameId = req.params.id;
-      const UserId = req.user.id;
 
-      const findGame = await Game.findByPk(GameId);
-
-      if (!findGame) {
-        throw { name: "DATA_NOT_FOUND" };
-      }
-
-      const [data, created] = await Library.findOrCreate({
-        where: { GameId },
-        defaults: {
-          GameId,
-          UserId,
-          status: "unfinished",
-          favorite: false,
-        },
-      });
-
-      // console.log(data);
-      res.status(201).json(data);
-    } catch (error) {
-      next(error);
-      console.log(error);
-    }
-  }
   static async removeFromLibrary(req, res, next) {
     /**
      * Desc: remove games from library

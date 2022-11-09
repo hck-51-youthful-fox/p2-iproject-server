@@ -34,7 +34,7 @@ async function errorHandler(err, req, res, next) {
       break;
     case "Forbidden":
       code = 403;
-      msg = "You have no access";
+      msg = "Get subscription to add this game!";
       break;
 
     default:

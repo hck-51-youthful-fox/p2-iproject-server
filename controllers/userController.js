@@ -1,6 +1,9 @@
 const { comparePassword } = require("../helpers/bcrypt");
 const { createToken } = require("../helpers/jwt");
 const { User } = require("../models/index");
+const axios = require("axios");
+const ENCRYPTED_MSK = process.env.ENCRYPTED_MSK;
+const midtransUrl = "https://app.sandbox.midtrans.com/snap/v1/transactions";
 
 class Controller {
   static async register(req, res, next) {
@@ -104,6 +107,37 @@ class Controller {
      * Butuh:
      * - Midtrans package
      */
+    /**
+     * Accept: application/json
+      Content-Type: application/json
+      Authorization: Basic AUTH_STRING
+
+      https://app.sandbox.midtrans.com/snap/v1/transactions
+     */
+    const config = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Basic ${ENCRYPTED_MSK}`,
+      },
+    };
+    const body = {
+      transaction_details: {
+        order_id: "ORDER-104", // id order // increment
+        gross_amount: 10000, // total price
+      },
+      credit_card: {
+        secure: true,
+      },
+    };
+    const { data } = await axios.post(midtransUrl, body, config);
+    console.log(data);
+    res.status(200).json({ data });
+    try {
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   }
 }
 
