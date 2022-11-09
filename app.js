@@ -19,7 +19,7 @@ app.get("/news/:id", Controller.getNewsById);
 
 app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);
-app.post("/user/post/:id", Controller.getUserPost);
+app.get("/user/post", Controller.getUserPost);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
 app.put("/user/edit/:id", editAuthorization, Controller.editPost);
 app.post("/user/comment/:postId", Controller.commentPost);

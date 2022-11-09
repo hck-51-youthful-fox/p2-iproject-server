@@ -303,12 +303,12 @@ class Controller {
             },
           },
           {
-            model: User
-          }
+            model: User,
+          },
         ],
       });
 
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (error) {}
   }
 }
