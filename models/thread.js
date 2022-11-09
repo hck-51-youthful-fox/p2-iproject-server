@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Hardware extends Model {
+  class Thread extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,21 +13,20 @@ module.exports = (sequelize, DataTypes) => {
       //   through: "Comment",
       //   foreignKey: "HardwareId",
       // });
-      Hardware.hasMany(models.Comment);
+      Thread.hasMany(models.Comment);
     }
   }
-  Hardware.init(
+  Thread.init(
     {
       name: DataTypes.STRING,
-      merk: DataTypes.STRING,
       rating: DataTypes.INTEGER,
-      imgUrl: DataTypes.STRING,
-      description: DataTypes.STRING,
+      thread: DataTypes.STRING,
+      like: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Hardware",
+      modelName: "Thread",
     }
   );
-  return Hardware;
+  return Thread;
 };

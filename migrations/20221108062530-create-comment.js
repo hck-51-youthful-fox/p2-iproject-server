@@ -18,10 +18,10 @@ module.exports = {
         onUpdate: "cascade",
         onDelete: "cascade",
       },
-      HardwareId: {
+      ThreadId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Hardware",
+          model: "Thread",
           key: "id",
         },
         onUpdate: "cascade",

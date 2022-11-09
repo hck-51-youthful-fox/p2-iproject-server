@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Comment.belongsTo(models.User);
-      Comment.belongsTo(models.Hardware);
+      Comment.belongsTo(models.Thread);
     }
   }
   Comment.init(
