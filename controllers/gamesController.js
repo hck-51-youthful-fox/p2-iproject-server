@@ -1,21 +1,82 @@
-const { Game, Genre, GameGenre } = require(`../models/`);
+const { Game, User, Genre, GameGenre, UserReview } = require(`../models/`);
 const axios = require("axios");
+const { Op } = require("sequelize");
 
 const rawg_url = "https://api.rawg.io/api/games";
 
 class Controller {
 	static async fetchGames(req, res, next) {
+		let offset = 0;
+		let limit = 10;
+		let { search, page } = req.query;
 		try {
-			let { genre } = req.params;
 
-			let where = {};
+			let options = {
+				include: {
+					model: Genre,
+				},
+				where: {},
+			};
 
-			let games = await Game.findAll({ include: Genre });
+			if (search) {
+				options.where = {
+					...options.where,
+					name: { [Op.iLike]: `%${search}%` },
+				};
+			}
 
-			res.status(200).json({
-				games,
-			});
+			if (typeof +page !== "number") {
+				page = 1;
+			}
+
+			if (page && page > 1) {
+				offset = limit * (page - 1);
+			} else {
+				page = 1;
+			}
+
+			options = {
+				...options,
+				limit,
+				offset,
+			};
+
+			let games = await Game.findAll(options);
+
+			console.log(games)
+
+			res.status(200).json({ games, currentPage: page });
 		} catch (error) {
+			console.log(error)
+			next(error);
+		}
+	}
+
+	static async fetchGameById(req, res, next) {
+		try {
+			let options = {
+				include: [
+					Genre,
+					{
+						model: UserReview,
+						include: {
+							model: User,
+							attributes: {
+								exclude: ["password"],
+							},
+						},
+					},
+				],
+			};
+			let { id } = req.params;
+
+			let foundGame = await Game.findByPk(id, options);
+
+			console.log(foundGame);
+
+			res.status(200).json(foundGame);
+		} catch (error) {
+			console.log(error);
 			next(error);
 		}
 	}
@@ -30,6 +91,8 @@ class Controller {
 			}
 
 			let { data } = await axios.get(`${rawg_url}?${query}`);
+
+			console.log(data);
 
 			let genreList = await Genre.findAll();
 
@@ -52,29 +115,27 @@ class Controller {
 				})
 			);
 
-			let GameGenres = await Promise.all(
-				data.results.map((game) => {
-					return game.genres.map((genre) => {
-						let foundGenre = genreList.find((el) => genre.name == el.name);
-						return GameGenre.findOrCreate({
+			let promises = [];
+
+			data.results.forEach((game, index) => {
+				game.genres.forEach((genre) => {
+					let foundGenre = genreList.find((el) => genre.name == el.name);
+					promises.push(
+						GameGenre.findOrCreate({
 							where: {
-								GameId: game.id,
+								GameId: games[index].id,
 								GenreId: foundGenre.id,
 							},
 							defaults: {
-								GameId: game.id,
+								GameId: games[index].id,
 								GenreId: foundGenre.id,
 							},
-						})
-						.then((result) => {
-							return result[0];
-						})
-						.catch((error) => {})
-					});
-				})
-			);
+						})[0]
+					);
+				});
+			});
 
-			console.log(GameGenres);
+			await Promise.all(promises);
 
 			res.status(200).json({
 				next: data.next,

@@ -9,6 +9,9 @@ class Controller {
 	static async userRegister(req, res, next) {
 		try {
 			const { username, email, password } = req.body;
+
+			console.log(req.body);
+
 			let newUser = await User.create({
 				username,
 				email,
@@ -59,11 +62,22 @@ class Controller {
 
 			res.status(200).json({
 				access_token,
-				username : foundUser.username,
-				verified : foundUser.verified
+				username: foundUser.username,
+				verified: foundUser.verified,
 			});
 		} catch (error) {
 			next(error);
+		}
+	}
+
+	static async fetchUserDetails(req, res, next) {
+		let { id } = req.user;
+		try {
+			const userDetail = await UserDetail.findOne({ where: { UserId: id }, attributes : {exclude :['id',`UserId`,]} });
+
+			res.status(200).json(userDetail)
+		} catch (error) {
+			next(error)
 		}
 	}
 
@@ -71,9 +85,8 @@ class Controller {
 		let { firstName, lastName, birthDate } = req.body;
 		let { id } = req.user;
 		try {
-
-			if(birthDate) {
-				birthDate = new Date(birthDate)
+			if (birthDate) {
+				birthDate = new Date(birthDate);
 			}
 
 			await UserDetail.update(
@@ -82,7 +95,7 @@ class Controller {
 			);
 
 			res.status(200).json({
-				message: "User Verified!",
+				message: "Edit user detail successful!",
 			});
 		} catch (error) {
 			next(error);
@@ -92,22 +105,28 @@ class Controller {
 	static async verifyUser(req, res, next) {
 		let { id, verified } = req.user;
 		try {
-			if(verified == "Verified") {
-				throw {name: "ALREADY_VERIFIED", message: "User already verified!"}
+			if (verified == "Verified") {
+				throw { name: "ALREADY_VERIFIED", message: "User already verified!" };
 			}
 			let foundUserDetail = await UserDetail.findOne({ where: { UserId: id } });
 
-			if (!foundUserDetail.firstName || !foundUserDetail.lastName || !foundUserDetail.birthDate) {
+			if (
+				!foundUserDetail.firstName ||
+				!foundUserDetail.lastName ||
+				!foundUserDetail.birthDate
+			) {
 				throw {
 					name: "INCOMPLETE_DETAILS",
 					message: "Please fill in your user details first!",
 				};
 			}
 
+			let foundUser = await User.findByPk(id)
+
 			const options = {
 				method: "GET",
 				url: "https://mailcheck.p.rapidapi.com/",
-				params: { domain: "mailinator.com" },
+				params: { domain: foundUser.email.slice('@')[1] },
 				headers: {
 					"X-RapidAPI-Key":
 						"22f66d6d8amsh3d45c913971d1aap1528bcjsne9b7e46036ea",
@@ -115,20 +134,23 @@ class Controller {
 				},
 			};
 
+			console.log("sampai sini")
+
 			let { data } = await axios.request(options);
 
 			if (!data.valid) {
 				await User.update({ verified: "Rejected" }, { where: { id } });
-				throw { name: "INVALID_EMAIL", message: "Verification rejected!" };
+				throw { name: "INVALID_EMAIL", message: `Verification rejected! ${data.reason}!` };
 			}
 
 			await User.update({ verified: "Verified" }, { where: { id } });
 
 			res.status(200).json({
-				message: "User details updated succesfully",
+				message: "Email verification successful!",
 			});
 		} catch (error) {
-			next(error)
+			console.log(error)
+			next(error);
 		}
 	}
 

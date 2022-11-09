@@ -9,6 +9,7 @@ router.post(`/google-login`, Controller.googleLogin)
 
 router.use(loginAuthentication)
 
+router.get(`/details`, Controller.fetchUserDetails)
 router.put(`/details`, Controller.editUserDetails)
 router.patch('/details/verify', Controller.verifyUser)
 
