@@ -25,6 +25,8 @@ class Controller {
 				};
 			}
 
+			console.log(page)
+
 			if (typeof +page !== "number") {
 				page = 1;
 			}
@@ -42,8 +44,6 @@ class Controller {
 			};
 
 			let games = await Game.findAll(options);
-
-			console.log(games)
 
 			res.status(200).json({ games, currentPage: page });
 		} catch (error) {
