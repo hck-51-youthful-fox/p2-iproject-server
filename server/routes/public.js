@@ -1,7 +1,7 @@
-const { VideoController } = require('../controllers/videoController');
+const { YoutubeController } = require('../controllers/youtubeController');
 const router = require('express').Router();
 
-router.get('/videos', VideoController.findAll)
-router.get('/videos/:id', VideoController.findOne)
+router.get('/videos', YoutubeController.findAll)
+router.get('/videos/:id', YoutubeController.findOne)
 
 module.exports = router;
