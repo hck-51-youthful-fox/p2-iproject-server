@@ -8,10 +8,11 @@ const headers = {
 class YoutubeController {
 	static async findAll (req, res, next) {
 		try {
+			const {keyword} = req.query
 			const { data } = await axios({
 				method: 'GET',
 				url: 'https://youtube138.p.rapidapi.com/search/',
-				params: {q: 'blacpink'},
+				params: {q: keyword},
 				headers
 			})
 			let videos = data.contents.map(el => {
@@ -19,10 +20,11 @@ class YoutubeController {
 				el.canonicalBaseUrl = el.video?.author?.canonicalBaseUrl
 				el.channelId = el.video?.author?.channelId
 				el.badges = el.video?.author?.badges.type
-				el.titleChannel = el.video?.author?.title
+				el.channel = el.video?.author?.title
 				el.description = el.video?.descriptionSnippet
 				el.views = el.video?.stats?.views
-				el.thumbnailUrl = el.video?.thumbnails[0]?.url
+				el.link = el.video?.thumbnails[0]?.url
+				el.publishedDate = el.video?.publishedTimeText
 				el.title = el.video?.title
 				el.videoId = el.video?.videoId
 				return el
@@ -52,6 +54,7 @@ class YoutubeController {
 				thumbnails: data.thumbnails[0]?.url,
 				videoId: data.videoId,
 				title: data.title,
+				keywords: data.keywords,
 				publishedDate: data.publishedDate,
 				commentsCount: data.stats.comments,
 				likesCount: data.stats.likes,
