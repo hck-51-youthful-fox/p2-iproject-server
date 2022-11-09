@@ -16,6 +16,7 @@ app.get("/api/news/search", Controller.searchNews);
 
 app.use(authentication);
 
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
