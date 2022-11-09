@@ -5,10 +5,12 @@ const foodRoutes = require("./customerFood");
 const cartRoutes = require("./customerCart");
 const transactionRoutes = require("./customerTransaction");
 const { authCustomer } = require("../middleware/authentication");
+const CategoryController = require("../Controllers/categoryController");
 
 router.post("/register", CustomerController.customerRegister);
 router.post("/login", CustomerController.customerLogin);
 router.use("/food", foodRoutes);
+router.get("/categories", CategoryController.findAllCategories);
 
 router.use(authCustomer);
 
