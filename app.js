@@ -193,17 +193,33 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
 });
 
 app.get("/detail", async (req, res, next) => {
-  const { name } = req.query;
   try {
-    const data = await Thread.findAll({
-      where: {
-        name: { [Op.iLike]: `%${name}%` },
-      },
-    });
-    res.status(200).json({ data });
+    let { page, name } = req.query;
+    if (!page) {
+      page = 1;
+    }
+    if (page === 0) {
+      page = 1;
+    }
+    if (!name) {
+      name = "";
+    }
+    const limit = 6;
+    let options = {
+      order: [["id", "ASC"]],
+      limit,
+      offset: limit * page,
+    };
+
+    if (name) {
+      options.where = { name: { [Op.iLike]: `%${name}%` } };
+    }
+    const data = await Thread.findAndCountAll(options);
+    const totalPages = Math.ceil(data.count / limit);
+    data.totalPages = totalPages;
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Internal server error" });
   }
 });
 
