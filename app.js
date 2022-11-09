@@ -11,12 +11,10 @@ app.use(express.json());
 
 app.post("/register", Controller.registerUser);
 app.post("/login", Controller.loginUser);
+app.get('/api/news', Controller.fetchDataFromApi)
 
 app.use(authentication);
 
-app.get('/check', (req, res) => {
-  res.send("Aaaaaa")
-})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

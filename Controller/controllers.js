@@ -64,6 +64,10 @@ class Controller {
       }
     }
   }
+
+  static async fetchDataFromApi(req, res) {
+    
+  }
 }
 
 module.exports = Controller;
