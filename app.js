@@ -23,6 +23,7 @@ app.get("/user/post", Controller.getUserPost);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
 app.put("/user/edit/:id", editAuthorization, Controller.editPost);
 app.post("/user/comment/:postId", Controller.commentPost);
+app.delete("/user/delete/:postId", Controller.deletePost);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

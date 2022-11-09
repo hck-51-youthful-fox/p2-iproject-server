@@ -279,14 +279,37 @@ class Controller {
   }
 
   static async getUserPost(req, res) {
-    try {
-      let data = await Post.findAll({
-        where: {
-          UserId: req.user.id,
-        },
-      });
+    const query = {};
+    let limit = 20;
+    let offset;
+    const getPagingData = (data, page, limit) => {
+      const { count: totalItems, rows: rows } = data;
+      // console.log(data);
+      const currentPage = page ? +page : 0;
+      const totalPages = Math.ceil(totalItems / limit);
 
-      res.status(200).json(data);
+      return { totalItems, rows, totalPages, currentPage };
+    };
+
+    const { page } = req.query;
+    if (page !== "" && typeof page !== "undefined") {
+      offset = page * limit - limit;
+      query.offset = offset;
+      query.limit = limit;
+    } else {
+      limit = 20;
+      offset = 0;
+      query.limit = limit;
+      query.offset = offset;
+    }
+
+    query.where = {
+      UserId: req.user.id,
+    };
+    try {
+      let data = await Post.findAndCountAll(query);
+
+      res.status(200).json(getPagingData(data, page, limit));
     } catch (error) {
       console.log(error);
     }
@@ -311,6 +334,24 @@ class Controller {
 
       res.status(200).json(data);
     } catch (error) {}
+  }
+
+  static async deletePost(req, res) {
+    let { postId } = req.params;
+    try {
+      await Post.destroy({
+        where: {
+          UserId: req.user.id,
+          id: postId,
+        },
+      });
+
+      res.status(200).json({
+        message: "Post Delete Successfully!"
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
