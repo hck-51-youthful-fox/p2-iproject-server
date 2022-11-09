@@ -8,9 +8,9 @@ const authentication = require("../middlewares/authentication");
 const errorHandler = require("../middlewares/errorHandler");
 
 router.use("/users", usersRouter);
-router.use("/pets", authentication, petsRouter);
-router.use("/rents", authentication, rentsRouter);
-router.use("/reviews", authentication, reviewsRouter);
+// router.use("/pets", petsRouter);
+// router.use("/rents", authentication, rentsRouter);
+// router.use("/reviews", authentication, reviewsRouter);
 router.use(errorHandler);
 
 module.exports = router;
