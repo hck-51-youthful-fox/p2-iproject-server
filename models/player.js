@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Player.hasMany(models.Position);
     }
   }
   Player.init(
