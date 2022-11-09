@@ -123,7 +123,7 @@ class Controller {
     };
     const body = {
       transaction_details: {
-        order_id: "ORDER-104", // id order // increment
+        order_id: "ORDER-109", // id order // increment
         gross_amount: 10000, // total price
       },
       credit_card: {
