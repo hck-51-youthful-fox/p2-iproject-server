@@ -16,12 +16,12 @@ class Controller {
 				reviews,
 			});
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	}
 
-	static async postReview(req, res, send) {
+	static async postReview(req, res, next) {
+		console.log("disini")
 		let { review, score } = req.body;
 		let { GameId } = req.params;
 		let { id: UserId } = req.user;
@@ -37,6 +37,7 @@ class Controller {
 				message: "Review posted succesfull!",
 			});
 		} catch (error) {
+			console.log(error)
 			next(error);
 		}
 	}
