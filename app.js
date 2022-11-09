@@ -6,12 +6,12 @@ const { WebSocket } = require("ws");
 const { initializeApp } = require("firebase/app");
 const { getDatabase } = require("firebase/database");
 
-const fireApp = initializeApp(firebaseConfig);
-const { ref, set } = require("firebase/database");
-
 const firebaseConfig = {
   databaseURL: "https://investr-12fcc-default-rtdb.firebaseio.com",
 };
+const fireApp = initializeApp(firebaseConfig);
+const { ref, set } = require("firebase/database");
+
 const webSocket = new WebSocket(
   "wss://ws.finnhub.io?token=cdl1rqiad3i4r9fur7d0cdl1rqiad3i4r9fur7dg"
 );
@@ -26,7 +26,7 @@ function appendData(s, p, t) {
   set(ref(db, "stocks/" + s + "/" + t), {
     p,
   });
-  //   console.log("updated");
+  console.log("updated");
 }
 
 webSocket.on("open", function open() {
