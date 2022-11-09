@@ -106,11 +106,30 @@ class Controller {
   static async readAllNotes(req, res, next) {
     try {
       let notes = await Note.findAll({
-        include: [User, Category],
+        include: [
+          {
+            model: User,
+            attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+          },
+          {
+            model: Category,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
         order: [["createdAt", "DESC"]],
       });
       if (!notes) throw { name: "Notes Not Found" };
       res.status(200).json(notes);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async readCategory(req, res, next) {
+    try {
+      let categories = await Category.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+      res.status(200).json(categories);
     } catch (error) {
       next(error);
     }
