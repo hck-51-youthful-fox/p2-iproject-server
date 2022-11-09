@@ -26,7 +26,7 @@ function appendData(s, p, t) {
   set(ref(db, "stocks/" + s + "/" + t), {
     p,
   });
-  console.log("updated");
+  // console.log("updated");
 }
 
 webSocket.on("open", function open() {
@@ -35,16 +35,14 @@ webSocket.on("open", function open() {
   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "MSFT" }));
   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "TSLA" }));
   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "AMZN" }));
-  webSocket.send(
-    JSON.stringify({ type: "subscribe", symbol: "BINANCE:BTCUSDT" })
-  );
+
   console.log("connected");
 });
 
 webSocket.on("message", function message(data) {
   const input = JSON.parse(data);
   if (input.data) {
-    // console.log(input.data);
+    console.log(input.data);
     const tes = input.data.map((el) => {
       appendData(el.s, el.p, el.t);
     });
