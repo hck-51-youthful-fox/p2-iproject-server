@@ -86,6 +86,7 @@ class CartController {
         where: {
           CustomerId,
           FoodId: foodId,
+          isPaid: false,
         },
         defaults: {
           CustomerId,

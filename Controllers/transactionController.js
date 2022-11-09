@@ -1,5 +1,6 @@
 const { Food, Category, Cart, Transaction } = require("../models/index");
 const { Op } = require("sequelize");
+const axios = require("axios");
 
 class TransactionController {
   static async readAllTransaction(req, res, next) {
@@ -71,7 +72,33 @@ class TransactionController {
         }
       );
 
-      res.status(200).json(transaction);
+      let idOrder = `ORDER-2${CustomerId}${transaction.id}-${Math.random()
+        .toString()
+        .slice(2, 12)}`;
+      const dataInput = JSON.stringify({
+        transaction_details: {
+          order_id: idOrder,
+          gross_amount: totalPrice + TotalShippingCost,
+        },
+        credit_card: {
+          secure: true,
+        },
+      });
+
+      const { data } = await axios.post(
+        `https://app.midtrans.com/snap/v1/transactions`,
+        dataInput,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization:
+              "Basic TWlkLXNlcnZlci00RWJ3TXFTeUxIaV9HTVlab0ZJcUhZcDM6",
+          },
+        }
+      );
+
+      res.status(200).json({ transaction, data, order_id: idOrder });
     } catch (error) {
       next(error);
     }
