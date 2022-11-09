@@ -9,7 +9,7 @@ class LikeController {
 			const videoYtbId = req.params.videoId //videoYtbId diganti dari videoId tadinya, diganti biar ga ketuker sm FK
 			const { title, link, channel, views, publishedDate, isVerified } = req.body
 			let [video, createdVid] = await Video.findOrCreate({
-				where: { link },
+				where: { videoYtbId }, // identifier 
 				defaults: {
 					title, link, channel, views, publishedDate, isVerified, videoYtbId
 				}
