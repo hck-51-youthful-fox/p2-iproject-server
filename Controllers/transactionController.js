@@ -63,15 +63,6 @@ class TransactionController {
         CustomerId,
       });
 
-      // const isPaid = true;
-
-      // await Cart.update(
-      //   { isPaid, CustomerId },
-      //   {
-      //     where: { [Op.and]: [{ isPaid: false }, { CustomerId }] },
-      //   }
-      // );
-
       let idOrder = `ORDER-2${CustomerId}${transaction.id}-${Math.random()
         .toString()
         .slice(2, 12)}`;

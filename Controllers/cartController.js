@@ -62,7 +62,6 @@ class CartController {
       );
       res.status(200).json(data.rajaongkir.results[0].costs[0].cost[0].value);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -72,7 +71,7 @@ class CartController {
       const { foodId } = req.params;
       let { quantity } = req.body;
       const CustomerId = req.customer.id;
-      const isPaid = false;
+      let isPaid = false;
 
       let FoodId = foodId;
       let checkCart = await Cart.findByPk(+foodId);
@@ -122,6 +121,30 @@ class CartController {
         );
         return res.status(200).json({ message: "Quantity Food Updated" });
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async updateCartStatusAfterPayment(req, res, next) {
+    try {
+      const CustomerId = req.customer.id;
+      const cart = await Cart.findAll({
+        include: Food,
+        where: {
+          [Op.and]: [{ isPaid: false }, { CustomerId }],
+        },
+      });
+      let isPaid = true;
+      if (cart) {
+        await Cart.update(
+          { isPaid, CustomerId },
+          {
+            where: { [Op.and]: [{ isPaid: false }, { CustomerId }] },
+          }
+        );
+      }
+      res.status(200).json({ message: "Transaction Paid" });
     } catch (error) {
       next(error);
     }
