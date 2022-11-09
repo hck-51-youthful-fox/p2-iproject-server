@@ -1,13 +1,11 @@
 const axios = require('axios');
-const e = require('express');
-const { Video } = require('../models');
 const headers = {
 	"X-RapidAPI-Key": "372d7cc145msh41c6b2e31b70ea7p1dbeadjsnb961c1f07162",
     "X-RapidAPI-Host": "youtube138.p.rapidapi.com",
 }
 // const { Op } = require('sequelize');
 
-class VideoController {
+class YoutubeController {
 	static async findAll (req, res, next) {
 		try {
 			const { data } = await axios({
@@ -67,5 +65,5 @@ class VideoController {
 }
 
 module.exports = {
-	VideoController
+	YoutubeController
 };
