@@ -11,11 +11,13 @@ const authenticate = async (req, res, next) => {
 			let payload = verifyToken(access_token)
 			let user = await User.findByPk(payload.id)
 			if (!user) throw { name: "UNAUTHORIZED" } 
+			// console.log('meong');
 			req.user = {
 				id: user.id, 
 				email: user.email,
-				isPremium: user.isPremium
+				// isPremium: user.isPremium
 			}
+			// console.log(req.user);
 			next()
 		}
 	} catch (error) {

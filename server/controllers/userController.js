@@ -38,7 +38,7 @@ class UserController {
 			// create token, params in createToken is called payload
 			const access_token = createToken({
 				id: foundUser.id,
-				isPremium: foundUser.isPremium
+				// isPremium: foundUser.isPremium
 			})
 			res.status(200).json({ 
 				access_token, 
@@ -77,7 +77,8 @@ class UserController {
 		let snap = new midtransClient.Snap({
 				// Set to true if you want Production Environment (accept real transaction).
 				isProduction : false,
-				serverKey : process.env.MIDTRANS_SERVER_KEY
+				// serverKey : process.env.MIDTRANS_SERVER_KEY
+				serverKey : "Mid-server-skHRQIBfPYkF4TX08y_uMSed"
 			});
 
 		let orderId = new Date().valueOf();
