@@ -19,7 +19,7 @@ async function errors(error, req, res, next) {
       break;
     case "bad_request_login":
       code = 400;
-      message = "input email and password required for login";
+      message = "Email and password required for login";
       break;
     case "DATA_NOT_FOUND":
       code = 404;

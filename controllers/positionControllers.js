@@ -84,7 +84,7 @@ class Controller {
         PlayerId: ST,
       });
 
-      console.log(dataGK);
+      // console.log(dataGK);
 
       const dataReal = await Position.findAll({
         where: {
@@ -95,6 +95,23 @@ class Controller {
 
       res.status(201).json(dataReal);
     } catch (error) {
+      next(error);
+    }
+  }
+
+  static async viewAllPositions(req, res, next) {
+    console.log(req.user.id);
+    try {
+      const UserId = req.user.id;
+      const data = await Position.findAll({
+        where: {
+          UserId,
+        },
+      });
+      console.log(data);
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
