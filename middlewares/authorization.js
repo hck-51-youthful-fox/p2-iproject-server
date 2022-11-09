@@ -81,8 +81,9 @@ const editAuthorization = async (req, res, next) => {
       res.status(404).json({
         message: "Post Not Found!",
       });
+    } else {
+      res.status(403).json(error);
     }
-    res.status(403).json(error);
   }
 };
 

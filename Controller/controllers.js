@@ -175,6 +175,39 @@ class Controller {
       console.log(error);
     }
   }
+
+  static async editPost(req, res) {
+    // console.log('aaaaaa');
+    let { title, content, imageUrl, tag } = req.body;
+    let PostId = req.params.id;
+    try {
+      if (!title || !content || !imageUrl || !tag) {
+        throw { name: "DATA_NOT_COMPLETE" };
+      }
+      let { data } = await Post.update(
+        {
+          title: title,
+          content: content,
+          imageUrl: imageUrl,
+          tag: tag,
+          UserId: req.user.id,
+        },
+        {
+          where: {
+            id: PostId,
+          },
+        }
+      );
+
+      // res.status(201).json(data)
+      res.status(201).json({ message: "Post Edit Successfully!" });
+    } catch (error) {
+      if (error.name === "DATA_NOT_COMPLETE") {
+        res.status(403).json({ message: "Please Fill All the Fields!" });
+      }
+      console.log(error);
+    }
+  }
 }
 
 module.exports = Controller;
