@@ -57,7 +57,7 @@ class UserController {
 			if (!foundUser) throw { name: 'DATA_NOT_FOUND', model: 'User'}
 			const data = await User.update(
 				{ isPremium: true },
-				{ where: id }
+				{ where: {id} }
 			)
 			res.status(200).json({ 
 				message: 'Successfully upgraded your account to Premium!'
@@ -66,6 +66,53 @@ class UserController {
 			next(error)
 		}
 	}
+
+	static payment(req, res, next) {
+		const midtransClient = require('midtrans-client');
+		// Create Snap API instance
+		let snap = new midtransClient.Snap({
+				// Set to true if you want Production Environment (accept real transaction).
+				isProduction : false,
+				serverKey : process.env.MIDTRANS_SERVER_KEY
+			});
+
+		let orderId = new Date().valueOf();
+		
+		let parameter = {
+			"transaction_details": {
+				"order_id": `YOUR-ORDERID-${orderId}`,
+				"gross_amount": 34990
+			},
+			"credit_card":{
+				"secure" : true
+			},
+			"customer_details": {
+				"email": req.user.email,
+				"username": req.user.email.split('@')[0]
+			}
+		};
+		
+		snap.createTransaction(parameter)
+			.then((transaction)=>{
+				// transaction token
+				let transactionToken = transaction.token;
+			// 	return transaction
+			// }).then((res) => {
+			// 	const data = User.update(
+			// 		{ isPremium: true },
+			// 		{ where: {
+			// 			id: req.params.id
+			// 		} }
+			// 	)
+			// 	res.status(200).json({ 
+			// 		message: 'Your account has been upgraded to Premium!'
+			// 	})
+				res.status(201).json('transactionToken:',transactionToken);
+			})
+			.catch((err) => {
+				console.log(err);
+			})
+		}
 }
 
 module.exports = {

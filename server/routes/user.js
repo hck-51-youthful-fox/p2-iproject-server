@@ -1,9 +1,11 @@
 const { UserController } = require('../controllers/userController');
+const { authenticate } = require('../middlewares/authenticate');
 const router = require('express').Router();
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-router.patch('/:id', UserController.updateStatus)
-
+router.post('/premium', authenticate, UserController.payment)
+router.post('/premium/:id', UserController.updateStatus)
+// router.patch('/premium/:id', UserController.updateStatus)
 
 module.exports = router;
