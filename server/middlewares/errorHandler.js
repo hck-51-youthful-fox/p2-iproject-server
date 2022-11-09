@@ -30,6 +30,10 @@ const errorHandler = (err, req, res, next) => {
 			code = 403;
 			msg = `You have no access to ${err.action} this product`;
 			break;
+		case 'NOT_PREMIUM':
+			code = 403;
+			msg = `Subscribe to our premium plan to access this page`;
+			break;
 		case 'DATA_NOT_FOUND':
 			code = 404;
 			msg = `Cannot find ${err.model}`;

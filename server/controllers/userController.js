@@ -38,11 +38,13 @@ class UserController {
 			// create token, params in createToken is called payload
 			const access_token = createToken({
 				id: foundUser.id,
+				isPremium: foundUser.isPremium
 			})
 			res.status(200).json({ 
 				access_token, 
 				email: foundUser.email,
 				id: foundUser.id,
+				isPremium: foundUser.isPremium
 			})
 		} catch (error) {
 			next(error)
