@@ -134,8 +134,6 @@ class Controller {
 				},
 			};
 
-			console.log("sampai sini")
-
 			let { data } = await axios.request(options);
 
 			if (!data.valid) {
@@ -161,7 +159,6 @@ class Controller {
 			audience: process.env.GOOGLE_ID,
 		});
 		const googlePayload = ticket.getPayload();
-
 		const [user, created] = await User.findOrCreate({
 			where: { email: googlePayload.email },
 			defaults: {
@@ -175,15 +172,14 @@ class Controller {
 
 		if (created) {
 			await UserDetail.create({
-				firstName: "",
-				lastName: "",
-				birthDate: "",
+				firstName: googlePayload.given_name || '',
+				lastName: googlePayload.family_name || '',
 				UserId: user.id,
 			});
 		}
 
 		const payload = { id: user.id };
-		let access_token = createToken(payload);
+		let access_token = signToken(payload);
 
 		res.status(200).json({
 			access_token,
