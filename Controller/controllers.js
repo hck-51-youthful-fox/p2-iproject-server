@@ -23,7 +23,14 @@ class Controller {
         username: data.username,
       });
     } catch (error) {
-      console.log(error);
+      if (
+        error.name === "SequelizeValidationError" ||
+        error.name === "SequelizeUniqueConstraintError"
+      ) {
+        error.errors.map((el) => {
+          res.status(401).json({ message: el.message });
+        });
+      }
     }
   }
 

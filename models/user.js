@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Post);
-      User.hasMany(models.Comment)
+      User.hasMany(models.Comment);
       // User.belongsToMany(models.Post, {
       //   through: models.Comment,
       // });
@@ -20,9 +20,33 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      username: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: { msg: "Username already Taken!" },
+        validate: {
+          notEmpty: { msg: "Username cannot be Null" },
+          notNull: { msg: "Username cannot Empty" },
+        },
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: { msg: "Email already Taken!" },
+        validate: {
+          notEmpty: { msg: "Email cannot be Null" },
+          notNull: { msg: "Email cannot Empty" },
+          isEmail: { msg: "Must Be Email Format!" },
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: "Password cannot be Null" },
+          notNull: { msg: "Password cannot Empty" },
+        },
+      },
       isPremium: DataTypes.BOOLEAN,
     },
     {
