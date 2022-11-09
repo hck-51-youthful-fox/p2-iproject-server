@@ -1,5 +1,5 @@
 const { verifyToken } = require("../helpers/jwt");
-const { User } = require("../models/index");
+const { User, Game, Library } = require("../models/index");
 
 async function authentication(req, res, next) {
   try {
@@ -25,25 +25,26 @@ async function authentication(req, res, next) {
     next(error);
   }
 }
-async function authenticationPub(req, res, next) {
+
+async function authorization(req, res, next) {
   try {
-    let access_token = req.headers.access_token;
-    if (!access_token) {
-      throw { name: "Unauthorized" };
+    const { status } = req.user;
+    const GameId = req.params.id;
+
+    const findGame = await Game.findByPk(GameId);
+
+    if (!findGame) {
+      throw { name: "DATA_NOT_FOUND" };
     }
-    let payload = verifyToken(access_token);
-    let user = await PubUser.findByPk(payload.id);
-    if (!user) {
-      throw { name: "Unauthorized" };
+
+    if (status !== "subscription") {
+      throw { name: "Forbidden" };
     }
-    req.user = {
-      id: user.id,
-      email: user.email,
-    };
+
     next();
   } catch (error) {
     next(error);
   }
 }
 
-module.exports = { authentication, authenticationPub };
+module.exports = { authentication, authorization };
