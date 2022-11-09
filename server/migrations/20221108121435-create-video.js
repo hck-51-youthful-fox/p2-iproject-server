@@ -22,7 +22,7 @@ module.exports = {
         }
       },
       link: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
         validate: {
           notNull: {
@@ -57,20 +57,32 @@ module.exports = {
           }
         }
       },
-      dateUpload: {
+      publishedDate: {
         type: Sequelize.DATE,
         allowNull: false,
         validate: {
           notNull: {
-            msg: 'Upload Date is required'
+            msg: 'Published Date is required'
           },
           notEmpty: {
-            msg: 'Upload Date is required'
+            msg: 'Published Date is required'
           }
         }
       },
       isVerified: {
         type: Sequelize.BOOLEAN
+      },
+      videoYtbId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'VideoYtbId status is required'
+          },
+          notEmpty: {
+            msg: 'VideoYtbId status is required'
+          },
+        }
       },
       createdAt: {
         allowNull: false,
