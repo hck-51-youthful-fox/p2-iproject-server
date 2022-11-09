@@ -89,7 +89,8 @@ class Controller {
   }
 
   static async searchNews(req, res) {
-    let { search } = req.body;
+    // let { search } = req.body;
+    let { page, search } = req.query;
     const options = {
       method: "GET",
       url: "https://newscatcher.p.rapidapi.com/v1/search_enterprise",
@@ -97,9 +98,9 @@ class Controller {
         q: `${search}`,
         lang: "id",
         sort_by: "relevancy",
-        page: "1",
+        page: `${page}`,
         media: "True",
-        page_size: "5",
+        page_size: "20",
       },
       headers: {
         "X-RapidAPI-Key": "832bfe4441msha6c9d57ff9ea7f5p1087cfjsn9563c7304789",
