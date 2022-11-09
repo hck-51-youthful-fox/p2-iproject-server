@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const { User, Hardware, Comment } = require("./models/index");
+const { User, Thread, Comment } = require("./models/index");
 const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
@@ -81,9 +81,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/hardwares", authentification, async (req, res, next) => {
+app.get("/thread", authentification, async (req, res, next) => {
   try {
-    const data = await Hardware.findAll();
+    const data = await Thread.findAll();
     res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -104,7 +104,7 @@ app.get("/comments", authentification, async (req, res, next) => {
 app.get("/detail/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = await Hardware.findAll({
+    const data = await Thread.findAll({
       include: {
         model: Comment,
         attributes: ["UserId", "comment", "imgUrl"],
@@ -126,7 +126,7 @@ app.post("/detail/:id", authentification, async (req, res, next) => {
     const imgUrl = "-";
     const data = await Comment.create({
       UserId: req.user.id,
-      HardwareId: req.params.id,
+      ThreadId: req.params.id,
       comment,
       imgUrl,
     });
@@ -182,7 +182,7 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
     const data = await Comment.destroy({
       where: {
         UserId: req.user.id,
-        HardwareId: +req.params.id,
+        ThreadId: +req.params.id,
       },
     });
     res.status(200).json({ message: `Comment ${data} deleted` });
@@ -195,7 +195,7 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
 app.get("/detail", async (req, res, next) => {
   const { name } = req.query;
   try {
-    const data = await Hardware.findAll({
+    const data = await Thread.findAll({
       where: {
         name: { [Op.iLike]: `%${name}%` },
       },
@@ -208,14 +208,14 @@ app.get("/detail", async (req, res, next) => {
 });
 
 app.post("/add", authentification, async (req, res, next) => {
-  const { name, merk, rating, imgUrl, description } = req.body;
+  const like = 0;
+  const { name, rating, thread } = req.body;
   try {
-    const data = await Hardware.create({
+    const data = await Thread.create({
       name,
-      merk,
       rating,
-      imgUrl,
-      description,
+      thread,
+      like,
     });
     res.status(200).json({ data });
   } catch (error) {

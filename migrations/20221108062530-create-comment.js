@@ -21,7 +21,7 @@ module.exports = {
       ThreadId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Thread",
+          model: "Threads",
           key: "id",
         },
         onUpdate: "cascade",
