@@ -101,26 +101,48 @@ class Controller {
     }
   }
 
-  // static async getStats(req, res, next) {
-  //   try {
-  //     const { data } = await axios({
-  //       method: "GET",
-  //       url: `${apiURL}/games/statistics?id`,
-  //       headers: {
-  //         "X-RapidAPI-Key": "6b3a7fc344ef953f3e20aaf69a143e9a",
-  //         "X-RapidAPI-host": "v2.nba.api-sports.io",
-  //       },
-  //     });
+  static async payment(req, res, next) {
+    try {
+      const midtransClient = require("midtrans-client");
+      // Create Core API instance
+      let snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey: "SB-Mid-server-SdyC59OJPbGhdSUTaGMK5xLD",
+      });
+      const randomOrder = Math.floor(Math.random() * 1000);
+      let parameter = {
+        transaction_details: {
+          order_id: `Premium-User-Account-${randomOrder}`,
+          gross_amount: 200000,
+        },
+        customerDetails: {
+          email: req.user.email,
+        },
+        credit_card: {
+          secure: true,
+        },
+      };
+      const transaction = await snap.createTransaction(parameter);
+      res.status(201).json({ transactionToken: transaction.token });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  //     let dataGames = data.response;
-  //     let result = dataGames.map((el) => ({
-  //       team: el.team.name,
-  //       statistics: el.statistics,
-  //     }));
-  //     res.status(200).json(result);
+  // static async statusUpdate(req, res, next) {
+  //   try {
+  //     let user = req.user.id;
+  //     await User.update(
+  //       { status: "premium" },
+  //       {
+  //         where: {
+  //           id: user,
+  //         },
+  //       }
+  //     );
+  //     res.status(200).json({ msg: "update sucess" });
   //   } catch (error) {
   //     console.log(error);
-  //     next(error);
   //   }
   // }
 }
