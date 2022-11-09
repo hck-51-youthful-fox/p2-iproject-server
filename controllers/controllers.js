@@ -1,19 +1,20 @@
 const { User } = require("../models/index");
-const { comparePassword } = require("../helpers/bcrypt");
-const { createToken } = require("../helpers/jwt");
+const { comparedPassword } = require("../helpers/bcrypt");
+const { signToken } = require("../helpers/jwt");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.googleClientId);
 
 class Controller {
   static async register(req, res, next) {
     try {
-      let { username, email, password, phoneNumber, address } = req.body;
+      let { username, email, password, phoneNumber, address, role } = req.body;
       let dataUser = await User.create({
         username,
         email,
         password,
         phoneNumber,
         address,
+        role,
       });
       res.status(201).json({ id: dataUser.id, email: dataUser.email });
     } catch (err) {
@@ -34,9 +35,9 @@ class Controller {
         throw { name: "invalid_credentials" };
       }
 
-      const comparedPassword = comparePassword(password, foundUser.password);
+      const comparePassword = comparedPassword(password, foundUser.password);
 
-      if (!comparedPassword) {
+      if (!comparePassword) {
         throw { name: "invalid_credentials" };
       }
 
@@ -45,7 +46,7 @@ class Controller {
         username: foundUser.username,
       };
 
-      const access_token = createToken(payload);
+      const access_token = signToken(payload);
 
       res.status(200).json({
         access_token: access_token,
@@ -53,6 +54,7 @@ class Controller {
         username: payload.username,
       });
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }

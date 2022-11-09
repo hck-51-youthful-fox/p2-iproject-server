@@ -83,6 +83,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      role: DataTypes.STRING,
     },
     {
       sequelize,
