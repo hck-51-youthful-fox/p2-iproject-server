@@ -127,6 +127,50 @@ class Controller {
       next(err);
     }
   }
+
+  static async productList(req, res, next) {
+    try {
+      const query = {};
+      let limit = 8;
+      let offset;
+
+      const paging = (data, page, limit) => {
+        const { count: totalProduct, rows: rows } = data;
+        const currentPage = page ? +page : 0;
+        const totalPages = Math.ceil(totalProduct / limit);
+
+        return { totalProduct, rows, totalPages, currentPage };
+      };
+
+      const { page, filterProduct } = req.query;
+
+      if (filterProduct !== "" && typeof filterProduct !== "undefined") {
+        let productQuery = filterProduct.split(",").map((product) => ({
+          [Op.eq]: product,
+        }));
+
+        query.where = {
+          companyId: { [Op.or]: productQuery },
+        };
+      }
+
+      if (page !== "" && typeof page !== "undefined") {
+        offset = page * limit - limit;
+        query.offset = offset;
+        query.limit = limit;
+      } else {
+        limit = 8;
+        offset = 0;
+        query.offset = offset;
+        query.limit = limit;
+      }
+
+      let dataProduct = await Product.findAndCountAll(query);
+      res.status(200).json(paging(dataProduct, page, limit));
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = Controller;

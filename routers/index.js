@@ -11,6 +11,7 @@ const upload = multer({ storage: storage });
 router.post("/register", Controller.register);
 router.post("/login", Controller.login);
 router.post("/google-sign-in", Controller.googleSignIn);
+router.get("/product", Controller.productList);
 
 router.use(authUser);
 router.post("/product", upload.single("img"), Controller.addProduct);
