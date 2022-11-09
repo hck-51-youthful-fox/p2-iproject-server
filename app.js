@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const cors = require("cors");
-const { User, Hardware, Comment } = require("./models/index");
+const { User, Thread, Comment } = require("./models/index");
 const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
@@ -81,9 +81,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/hardwares", authentification, async (req, res, next) => {
+app.get("/thread", authentification, async (req, res, next) => {
   try {
-    const data = await Hardware.findAll();
+    const data = await Thread.findAll();
     res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -104,7 +104,7 @@ app.get("/comments", authentification, async (req, res, next) => {
 app.get("/detail/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = await Hardware.findAll({
+    const data = await Thread.findAll({
       include: {
         model: Comment,
         attributes: ["UserId", "comment", "imgUrl"],
@@ -126,7 +126,7 @@ app.post("/detail/:id", authentification, async (req, res, next) => {
     const imgUrl = "-";
     const data = await Comment.create({
       UserId: req.user.id,
-      HardwareId: req.params.id,
+      ThreadId: req.params.id,
       comment,
       imgUrl,
     });
@@ -182,7 +182,7 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
     const data = await Comment.destroy({
       where: {
         UserId: req.user.id,
-        HardwareId: +req.params.id,
+        ThreadId: +req.params.id,
       },
     });
     res.status(200).json({ message: `Comment ${data} deleted` });
@@ -193,12 +193,45 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
 });
 
 app.get("/detail", async (req, res, next) => {
-  const { name } = req.query;
   try {
-    const data = await Hardware.findAll({
-      where: {
-        name: { [Op.iLike]: `%${name}%` },
-      },
+    let { page, name } = req.query;
+    if (!page) {
+      page = 1;
+    }
+    if (page === 0) {
+      page = 1;
+    }
+    if (!name) {
+      name = "";
+    }
+    const limit = 6;
+    let options = {
+      order: [["id", "ASC"]],
+      limit,
+      offset: limit * page,
+    };
+
+    if (name) {
+      options.where = { name: { [Op.iLike]: `%${name}%` } };
+    }
+    const data = await Thread.findAndCountAll(options);
+    const totalPages = Math.ceil(data.count / limit);
+    data.totalPages = totalPages;
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post("/add", authentification, async (req, res, next) => {
+  const like = 0;
+  const { name, rating, thread } = req.body;
+  try {
+    const data = await Thread.create({
+      name,
+      rating,
+      thread,
+      like,
     });
     res.status(200).json({ data });
   } catch (error) {
@@ -207,20 +240,43 @@ app.get("/detail", async (req, res, next) => {
   }
 });
 
-app.post("/add", authentification, async (req, res, next) => {
-  const { name, merk, rating, imgUrl, description } = req.body;
+app.post("/login-google", async (req, res, next) => {
+  const { OAuth2Client } = require("google-auth-library");
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  const { google_token } = request.body;
   try {
-    const data = await Hardware.create({
-      name,
-      merk,
-      rating,
-      imgUrl,
-      description,
-    });
-    res.status(200).json({ data });
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+        idToken: google_token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      const userid = payload["sub"];
+
+      const [addGoogle, created] = await User.findOrCreate({
+        where: {
+          email: payload.email,
+        },
+        defaults: {
+          username: `${payload.given_name} ${payload.family_name}`,
+          email: payload.email,
+          role: "staff",
+          password: "321sehat",
+          phoneNumber: "12345678",
+          address: "Jalan ABC pedas",
+        },
+      });
+      const newPayload = {
+        id: addGoogle.id,
+        role: addGoogle.role,
+        username: addGoogle.username,
+      };
+      const access_token = createToken(newPayload);
+      respone.status(200).json({ access_token, newPayload });
+    }
+    verify();
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
 });
 

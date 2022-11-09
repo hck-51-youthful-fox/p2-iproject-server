@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Comment.belongsTo(models.User);
-      Comment.belongsTo(models.Hardware);
+      Comment.belongsTo(models.Thread);
     }
   }
   Comment.init(
     {
       UserId: DataTypes.INTEGER,
-      HardwareId: DataTypes.INTEGER,
+      ThreadId: DataTypes.INTEGER,
       comment: DataTypes.TEXT,
       imgUrl: DataTypes.STRING,
     },

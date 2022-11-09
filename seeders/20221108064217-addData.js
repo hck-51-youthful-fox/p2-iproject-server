@@ -15,7 +15,7 @@ module.exports = {
     data.forEach((el) => {
       delete el.id, (el.createdAt = new Date()), (el.updatedAt = new Date());
     });
-    await queryInterface.bulkInsert("Hardware", data, {});
+    await queryInterface.bulkInsert("Threads", data, {});
   },
 
   async down(queryInterface, Sequelize) {
@@ -25,6 +25,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete("Hardware", null, {});
+    await queryInterface.bulkDelete("Threads", null, {});
   },
 };
