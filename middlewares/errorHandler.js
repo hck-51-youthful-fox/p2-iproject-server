@@ -12,10 +12,16 @@ const errorHandler = (err, req, resp, next) => {
       resp.status(400).json({ msg: "Data must be unique!" });
       break;
 
-    case "favorite_exist":
-      resp
-        .status(400)
-        .json({ msg: "This movie has already been added to your favorites!" });
+    case "rent_exist":
+      resp.status(400).json({ msg: "This pet is currently being rented!" });
+      break;
+
+    case "AxiosError":
+      resp.status(404).json({ msg: "Pet data not found" });
+      break;
+
+    case "pet_not_found":
+      resp.status(404).json({ msg: "Pet data not found" });
       break;
 
     case "user_input_missing":

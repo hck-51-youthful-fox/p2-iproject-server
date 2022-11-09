@@ -11,7 +11,7 @@ const authorization = async (req, resp, next) => {
     if (foundUser.id !== foundItem.UserId) {
       throw { name: "forbidden" };
     }
-    // req.rentReview =
+    req.rentReview = { id: foundItem.id };
     next();
   } catch (error) {
     next(error);
