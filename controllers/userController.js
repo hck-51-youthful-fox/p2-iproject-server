@@ -17,7 +17,7 @@ class UserController {
         phoneNumber,
         address,
       });
-      //mailer(newRegister.email);
+      mailer(newRegister.email);
       res.status(201).json({
         msg: "Register successful",
         data: {
@@ -89,6 +89,32 @@ class UserController {
       });
     } catch (error) {
       console.log(error);
+      next(error);
+    }
+  }
+
+  static async statusJobs(req, res, next) {
+    try {
+      let { status } = req.user;
+      let id = req.params.id;
+      let temp = await User.findByPk(id);
+      let data = await User.update(
+        {
+          status,
+        },
+        {
+          where: { id: req.params.id },
+        }
+      );
+      if (!data) throw { name: "DATA_NOT_FOUND", id };
+      let updated = await History.create({
+        title: temp.title,
+        description: `Job with id ${req.params.id} status updated`,
+        updatedBy: req.user.email,
+      });
+      res.status(200).json({ msg: "Successfull Updated Status", updated });
+    } catch (error) {
+      //console.log(error);
       next(error);
     }
   }
