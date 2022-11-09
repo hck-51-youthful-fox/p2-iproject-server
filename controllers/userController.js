@@ -3,7 +3,9 @@ const { createToken } = require("../helpers/jwt");
 const { User } = require("../models/index");
 const axios = require("axios");
 const ENCRYPTED_MSK = process.env.ENCRYPTED_MSK;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 const midtransUrl = "https://app.sandbox.midtrans.com/snap/v1/transactions";
+const nodemailer = require("nodemailer");
 
 class Controller {
   static async register(req, res, next) {
@@ -16,6 +18,7 @@ class Controller {
      * - after register kalo username null, user's username jadi random string + random integer atau null dulu aja
      * - after register, user's profile pic akan menjadi placeholder
      */
+
     try {
       const { email, password } = req.body;
       const username = "";
@@ -33,6 +36,29 @@ class Controller {
       res.status(201).json({
         id: newUser.id,
         email: newUser.email,
+      });
+
+      // Nodemailer
+      const ogEmail = "overgamepass@outlook.com";
+      const transporter = nodemailer.createTransport({
+        service: "hotmail",
+        auth: {
+          user: ogEmail,
+          pass: EMAIL_PASS,
+        },
+      });
+
+      const options = {
+        from: ogEmail,
+        to: email,
+        subject: `Welcome to Over Games, ${newUser.email.split("@")[0].charAt(0).toUpperCase() + newUser.email.split("@")[0].slice(1)}!`,
+        text: "Thanks for joining Over Games, the only game platform that provides a wide range of games online. Now that you have signed up, go play games that are on our collection!",
+      };
+
+      transporter.sendMail(options, (err, info) => {
+        if (err) {
+          return res.status(500).json({ message: "Internal Server Error" });
+        }
       });
     } catch (error) {
       next(error);
@@ -62,9 +88,6 @@ class Controller {
       //* if email & password match
       const payload = {
         id: foundUser.id,
-        // email: foundUser.email,
-        // username: foundUser.username,
-        // status: foundUser.status,
       };
       const access_token = createToken(payload);
       res.status(200).json({ access_token });
@@ -81,13 +104,6 @@ class Controller {
      * - package google (?)
      * Logic:
      * - sama kaya register biasa
-     */
-  }
-  static async nodemailer(req, res, next) {
-    /**
-     * Desc: Email user setelah register
-     * Butuh:
-     * - package nodemailer
      */
   }
 
@@ -114,6 +130,7 @@ class Controller {
 
       https://app.sandbox.midtrans.com/snap/v1/transactions
      */
+    const randomId = Math.floor(Math.random() * 1000);
     const config = {
       headers: {
         Accept: "application/json",
@@ -123,7 +140,7 @@ class Controller {
     };
     const body = {
       transaction_details: {
-        order_id: "ORDER-1010", // id order // increment
+        order_id: `PASS-${randomId}`, // id order // increment
         gross_amount: 10000, // total price
       },
       credit_card: {
