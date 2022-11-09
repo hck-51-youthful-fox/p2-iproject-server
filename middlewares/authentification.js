@@ -4,10 +4,13 @@ const { User } = require("../models");
 const authUser = async (req, res, next) => {
   try {
     let access_token = req.headers.access_token;
+
     if (!access_token) {
       throw { name: "Unauthorized" };
     }
+
     let payload = verifyToken(access_token);
+    console.log(payload);
     let user = await User.findByPk(payload.id);
     if (!user) {
       throw { name: "Unauthorized" };
@@ -16,6 +19,7 @@ const authUser = async (req, res, next) => {
       id: payload.id,
       username: payload.username,
     };
+
     next();
   } catch (err) {
     next(err);

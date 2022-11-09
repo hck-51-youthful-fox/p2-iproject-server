@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = (email) => {
+const sendMail = (email, username) => {
   let message = {
     from: process.env.AUTH_EMAIL, // sender address
     to: `${email}`, // list of receivers
