@@ -8,7 +8,7 @@ function mailer(data) {
     secure: true,
     auth: {
       user: "wus140196@gmail.com",
-      pass: "elglvhnrgiobouhg",
+      pass: process.env.EMAIL_PASS,
       //   elglvhnrgiobouhg
     },
     tls: {

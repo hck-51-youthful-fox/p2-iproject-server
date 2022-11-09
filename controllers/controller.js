@@ -9,8 +9,7 @@ class Controller {
         method: "GET",
         url: `${apiURL}/games?live=all`,
         headers: {
-          "X-RapidAPI-Key":
-            "690fd02180msh5d6aced04d3de4bp196137jsna1c955141768",
+          "X-RapidAPI-Key": process.env.API_KEY_NBA,
           "X-RapidAPI-host": "api-nba-v1.p.rapidapi.com",
         },
       });
@@ -48,8 +47,7 @@ class Controller {
         method: "GET",
         url: `${apiURL}/games?league=standard&season=${year}&date=${pastDate}`,
         headers: {
-          "X-RapidAPI-Key":
-            "690fd02180msh5d6aced04d3de4bp196137jsna1c955141768",
+          "X-RapidAPI-Key": process.env.API_KEY_NBA,
           "X-RapidAPI-host": "api-nba-v1.p.rapidapi.com",
         },
       });
@@ -80,8 +78,7 @@ class Controller {
         method: "GET",
         url: `${apiURL}/standings?league=standard&season=2022`,
         headers: {
-          "X-RapidAPI-Key":
-            "690fd02180msh5d6aced04d3de4bp196137jsna1c955141768",
+          "X-RapidAPI-Key": process.env.API_KEY_NBA,
           "X-RapidAPI-host": "api-nba-v1.p.rapidapi.com",
         },
       });
@@ -107,7 +104,7 @@ class Controller {
       // Create Core API instance
       let snap = new midtransClient.Snap({
         isProduction: false,
-        serverKey: "SB-Mid-server-SdyC59OJPbGhdSUTaGMK5xLD",
+        serverKey: process.env.SERVER_KEY,
       });
       const randomOrder = Math.floor(Math.random() * 1000);
       let parameter = {
