@@ -67,16 +67,20 @@ class CartController {
   static async addFoodToCart(req, res, next) {
     try {
       const { foodId } = req.params;
-      const { quantity } = req.body;
+      let { quantity } = req.body;
       const CustomerId = req.customer.id;
-      let totalPrice = 0;
       const isPaid = false;
+
+      if (!quantity) {
+        quantity = 1;
+      }
 
       let checkFood = await Food.findByPk(foodId);
 
       if (!checkFood) {
         throw { name: "FOOD_NOT_FOUND", model: "Food" };
       }
+      let totalPrice = +quantity * +checkFood.price;
 
       let [food, addToCart] = await Cart.findOrCreate({
         where: {
