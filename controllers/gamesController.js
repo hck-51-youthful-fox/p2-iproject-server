@@ -10,7 +10,6 @@ class Controller {
 		let limit = 10;
 		let { search, page } = req.query;
 		try {
-
 			let options = {
 				include: {
 					model: Genre,
@@ -25,7 +24,7 @@ class Controller {
 				};
 			}
 
-			console.log(page)
+			console.log(page);
 
 			if (typeof +page !== "number") {
 				page = 1;
@@ -43,11 +42,13 @@ class Controller {
 				offset,
 			};
 
-			let games = await Game.findAll(options);
+			let data = await Game.findAndCountAll(options);
 
-			res.status(200).json({ games, currentPage: page });
+			res
+				.status(200)
+				.json({ totalGame: data.count, currentPage: page, games: data.rows });
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			next(error);
 		}
 	}
