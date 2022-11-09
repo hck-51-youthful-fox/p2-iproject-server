@@ -19,6 +19,7 @@ app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
 app.post("/user/edit/:id", editAuthorization, Controller.editPost);
+app.post("/user/comment/:postId", Controller.commentPost);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

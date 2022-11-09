@@ -158,7 +158,7 @@ class Controller {
       if (!title || !content || !imageUrl || !tag) {
         throw { name: "DATA_NOT_COMPLETE" };
       }
-      let { data } = await Post.create({
+      let data = await Post.create({
         title: title,
         content: content,
         imageUrl: imageUrl,
@@ -184,7 +184,7 @@ class Controller {
       if (!title || !content || !imageUrl || !tag) {
         throw { name: "DATA_NOT_COMPLETE" };
       }
-      let { data } = await Post.update(
+      let data = await Post.update(
         {
           title: title,
           content: content,
@@ -207,6 +207,22 @@ class Controller {
       }
       console.log(error);
     }
+  }
+
+  static async commentPost(req, res) {
+    let PostId = req.params.postId;
+    let { comment } = req.body
+    try {
+      let data = await Comment.create({
+        UserId: req.user.id,
+        PostId: PostId,
+        comment: comment
+      });
+
+      res.status(201).json({
+        message: "Comment Add Successfully"
+      })
+    } catch (error) {}
   }
 }
 
