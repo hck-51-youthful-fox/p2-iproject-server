@@ -104,9 +104,14 @@ class Controller {
 
   static async getReviews(req, resp, next) {
     try {
+      let { id } = req.params;
       const data = await RentReview.findAll({
-        where: { rented: false },
+        where: { rented: false, PetId: id },
         attributes: { exclude: ["updatedAt"] },
+        include: {
+          model: User,
+          attributes: ["username"],
+        },
       });
       resp.status(200).json(data);
     } catch (error) {
