@@ -4,6 +4,7 @@ const { User, Comment, Post } = require("../models/index");
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const { Readability } = require("@mozilla/readability");
+const midtransClient = require("midtrans-client");
 
 class Controller {
   static async registerUser(req, res) {
@@ -107,6 +108,48 @@ class Controller {
       .catch(function (error) {
         console.error(error);
       });
+  }
+
+  static async userPayment(req, res) {
+    // Create Snap API instance
+    let snap = new midtransClient.Snap({
+      // Set to true if you want Production Environment (accept real transaction).
+      isProduction: false,
+      serverKey: "SB-Mid-server-nU1WKAwolq2Zzv-eKVov7L65",
+    });
+
+    let parameter = {
+      transaction_details: {
+        order_id: "YOUR-ORDERID-" + Math.floor(Math.random() * 500000),
+        gross_amount: 3000,
+      },
+      credit_card: {
+        secure: true,
+      },
+      customer_details: {
+        email: req.user.email,
+      },
+    };
+
+    snap.createTransaction(parameter).then((transaction) => {
+      // transaction token
+      let transactionToken = transaction.token;
+      let transactionUrl = transaction.redirect_url;
+      // console.log("transactionToken:", transactionToken);
+      res.status(200).json({
+        transactionToken: transactionToken,
+        redirect_url: transactionUrl,
+      });
+    });
+
+    await User.update(
+      { isPremium: true },
+      {
+        where: {
+          id: req.user.id,
+        },
+      }
+    );
   }
 }
 
