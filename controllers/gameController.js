@@ -15,10 +15,23 @@ class Controller {
      * - Search (name or publisher)
      */
     try {
+      const query = {
+        key: RAWG_SECRET,
+      };
+      const { page } = req.query;
+      const pageSize = req.query["page_size"];
+      const { search } = req.query;
+      const { publishers } = req.query;
+      const { genres } = req.query;
+
+      query.page = page;
+      query["page_size"] = pageSize;
+      query.search = search;
+      query.publisher = publishers;
+      query.genres = genres;
+
       const { data } = await axios.get(`${rawgUrl}/games`, {
-        params: {
-          key: RAWG_SECRET,
-        },
+        params: query,
       });
       res.status(200).json(data);
     } catch (error) {
@@ -35,7 +48,8 @@ class Controller {
      */
     try {
       const { data } = await axios.get(`${ftgUrl}/games`);
-      res.status(200).json(data);
+      const filteredData = data.slice(0, 8);
+      res.status(200).json(filteredData);
     } catch (error) {
       console.log(error);
       next(error);
