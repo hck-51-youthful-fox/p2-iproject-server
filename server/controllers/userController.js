@@ -66,6 +66,39 @@ class UserController {
 			next(error)
 		}
 	}
+
+	static payment(req, res, next) {
+		const midtransClient = require('midtrans-client');
+		// Create Snap API instance
+		let snap = new midtransClient.Snap({
+				// Set to true if you want Production Environment (accept real transaction).
+				isProduction : false,
+				serverKey : process.env.MIDTRANS_SERVER_KEY
+			});
+
+		let orderId = new Date().valueOf();
+		
+		let parameter = {
+			"transaction_details": {
+				"order_id": `YOUR-ORDERID-${orderId}`,
+				"gross_amount": 34990
+			},
+			"credit_card":{
+				"secure" : true
+			},
+			"customer_details": {
+				"email": req.user.email,
+				"username": req.user.email.split('@')[0]
+			}
+		};
+		
+		snap.createTransaction(parameter)
+			.then((transaction)=>{
+				// transaction token
+				let transactionToken = transaction.token;
+				console.log('transactionToken:',transactionToken);
+			})
+			}
 }
 
 module.exports = {
