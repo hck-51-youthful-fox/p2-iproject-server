@@ -46,6 +46,15 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "Fill in the Username" },
         },
       },
+      verified: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      uniqueStr: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
       address: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
     },
@@ -54,8 +63,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
-  User.beforeCreate((user)=>{
-    return user.password = hashPassword(user.password)
-  })
+  User.beforeCreate((user) => {
+    return (user.password = hashPassword(user.password));
+  });
   return User;
 };
