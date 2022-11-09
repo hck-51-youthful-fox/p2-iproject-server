@@ -13,11 +13,11 @@ const authenticate = async (req, res, next) => {
 			if (!user) throw { name: "UNAUTHORIZED" } 
 			req.user = {
 				id: user.id, 
-				email: user.email
+				email: user.email,
+				isPremium: user.isPremium
 			}
 			next()
 		}
-		
 	} catch (error) {
 		next(error)
 	}
