@@ -3,6 +3,8 @@ const { comparedPassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.googleClientId);
+const nodemailer = require("nodemailer");
+const sendMail = require("../helpers/nodemailer");
 
 class Controller {
   static async register(req, res, next) {
@@ -16,8 +18,11 @@ class Controller {
         address,
         role,
       });
+      sendMail(email);
+
       res.status(201).json({ id: dataUser.id, email: dataUser.email });
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }

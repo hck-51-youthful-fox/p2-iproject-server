@@ -1,2 +1,4 @@
 SECRET=
-googleClientId= 
+googleClientId=
+AUTH_EMAIL=
+AUTH_PASS=
