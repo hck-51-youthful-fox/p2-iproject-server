@@ -12,6 +12,7 @@ app.use(express.json());
 app.post("/register", Controller.registerUser);
 app.post("/login", Controller.loginUser);
 app.get('/api/news', Controller.fetchDataFromApi)
+app.get("/api/news/search", Controller.searchNews);
 
 app.use(authentication);
 

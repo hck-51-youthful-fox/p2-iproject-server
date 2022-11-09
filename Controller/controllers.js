@@ -78,6 +78,36 @@ class Controller {
       console.log(error);
     }
   }
+
+  static async searchNews(req, res) {
+    let { search } = req.body;
+    const options = {
+      method: "GET",
+      url: "https://newscatcher.p.rapidapi.com/v1/search_enterprise",
+      params: {
+        q: `${search}`,
+        lang: "id",
+        sort_by: "relevancy",
+        page: "1",
+        media: "True",
+        page_size: "5",
+      },
+      headers: {
+        "X-RapidAPI-Key": "832bfe4441msha6c9d57ff9ea7f5p1087cfjsn9563c7304789",
+        "X-RapidAPI-Host": "newscatcher.p.rapidapi.com",
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        // console.log(response.data);
+        res.status(200).json(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
 }
 
 module.exports = Controller;
