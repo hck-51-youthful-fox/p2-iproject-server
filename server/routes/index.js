@@ -12,7 +12,7 @@ const likeRouter = require('./like'); // favorites buat premium acc
 
 router.use('/', userRouter)
 router.use('/pub', publicRouter)
-router.use(authenticate)
+// router.use(authenticate)
 router.use('/likes', likeRouter)
 
 module.exports = router;

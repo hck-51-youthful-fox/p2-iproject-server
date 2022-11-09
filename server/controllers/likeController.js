@@ -1,6 +1,33 @@
 const { Like, Video } = require('../models');
+const { VideoController } = require('./videoController');
 
 class LikeController {
+	static async findOrCreate (req, res, next) {
+		try {
+			// const userId = req.user.id
+			const userId = 1
+			const videoYtbId = req.params.videoId //videoYtbId diganti dari videoId tadinya, diganti biar ga ketuker sm FK
+			const { title, link, channel, views, publishedDate, isVerified } = req.body
+			let [video, createdVid] = await Video.findOrCreate({
+				where: { link },
+				defaults: {
+					title, link, channel, views, publishedDate, isVerified, videoYtbId
+				}
+			})
+			let [like, createdLike] = await Like.findOrCreate({
+				 where: { userId, videoId: video.id },
+					defaults: {
+						userId, videoId: video.id
+					}
+			})
+			res.status(201).json({
+				video,
+				message: "Video has been added to your list!"
+			})
+		} catch (err) {
+			next(err)
+		}
+	}
 	static async findAll (req, res, next) {
 		try {
 			const userId = req.user.id
@@ -12,23 +39,6 @@ class LikeController {
 				order: [['createdAt', 'DESC']]
 			})
 			res.status(201).json(data)
-		} catch (err) {
-			next(err)
-		}
-	}
-	static async findOrCreate (req, res, next) {
-		try {
-			const userId = req.user.id
-			const {videoId} = req.params
-			let [like, created] = await Like.findOrCreate({
-				 where: { userId, videoId },
-					defaults: {
-						userId, videoId
-					}
-			})
-			res.status(201).json({
-				message: "Video has been added to your list!"
-			})
 		} catch (err) {
 			next(err)
 		}

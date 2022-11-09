@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     link: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         notNull: {
@@ -66,15 +66,15 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
-    dateUpload: {
+    publishedDate: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Upload Date is required'
+          msg: 'Published Date is required'
         },
         notEmpty: {
-          msg: 'Upload Date is required'
+          msg: 'Published Date is required'
         },
       }
     },
@@ -87,6 +87,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         notEmpty: {
           msg: 'Verified status is required'
+        },
+      }
+    },
+    videoYtbId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'VideoYtbId status is required'
+        },
+        notEmpty: {
+          msg: 'VideoYtbId status is required'
         },
       }
     }
