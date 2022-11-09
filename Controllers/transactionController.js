@@ -97,7 +97,6 @@ class TransactionController {
           },
         }
       );
-
       res.status(200).json({ transaction, data, order_id: idOrder });
     } catch (error) {
       next(error);
