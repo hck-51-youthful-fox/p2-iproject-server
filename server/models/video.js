@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
+    avatarUrl: {
+      type: DataTypes.TEXT,
+      defaultValue: "https://www.purina.com/sites/g/files/auxxlc196/files/dogBreedPlaceholder.png"
+    },
     channel: {
       type: DataTypes.STRING,
       allowNull: false,

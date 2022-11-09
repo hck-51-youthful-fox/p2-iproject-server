@@ -41,6 +41,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      avatar: {
+        type: Sequelize.TEXT,
+        defaultValue: "https://st3.depositphotos.com/6672868/13801/v/600/depositphotos_138013506-stock-illustration-user-profile-group.jpg"
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

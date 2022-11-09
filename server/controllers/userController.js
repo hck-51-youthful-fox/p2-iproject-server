@@ -6,13 +6,14 @@ const { User } = require('../models/');
 class UserController {
 	static async register (req, res, next) {
 		try {
-			const { email, password } = req.body
+			const { email, password, avatar } = req.body
 			if (!email) throw { name: 'EMPTY_EMAIL'} 
 			if (!password) throw { name: 'EMPTY_PASSWORD'}
-			const newUser = await User.create({ email, password })
+			const newUser = await User.create({ email, password, avatar })
 			res.status(201).json({
 				id: newUser.id,
-				email: newUser.email
+				email: newUser.email,
+				avatar: newUser.avatar
 			})
 		} catch (error) {
 			next(error)

@@ -44,7 +44,7 @@ class YoutubeController {
 				headers
 			});
 			let video = {
-				avatar: data.author?.avatar[0]?.url,
+				avatarUrl: data.author?.avatar[0]?.url,
 				badges: data.author?.badges?.type,
 				channelId: data.author?.channelId,
 				subscribers: data.author?.stats?.subscribersTex,
