@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Note.hasMany(models.MyNote, { foreignKey: "noteId" });
+      Note.belongsTo(models.User, {foreignKey: "userId"})
+      Note.belongsTo(models.Category, {foreignKey: "categoryId"})
+
     }
   }
   Note.init(
@@ -47,6 +49,30 @@ module.exports = (sequelize, DataTypes) => {
           },
           notNull: {
             msg: "Date is required",
+          },
+        },
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: {
+            msg: "userId is required",
+          },
+          notNull: {
+            msg: "userId is required",
+          },
+        },
+      },
+      categoryId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: {
+            msg: "categoryId is required",
+          },
+          notNull: {
+            msg: "categoryId is required",
           },
         },
       },

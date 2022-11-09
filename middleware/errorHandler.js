@@ -2,7 +2,7 @@ const ErrorHandler = async (error, req, res, next) => {
   let code = 500;
   let message = "Internal Server Error";
 
-  console.log(error, "<-- dari error handler");
+  // console.log(error, "<-- dari error handler");
 
   if (
     error.name === "SequelizeValidationError" ||
@@ -30,16 +30,16 @@ const ErrorHandler = async (error, req, res, next) => {
     message = "Invalid email or password";
   } else if (error.name === "forbidden") {
     code = 403;
-    message = "Cannot delete this product";
+    message = "Unauthorized";
   } else if (error.name === "User not found") {
     code = 404;
     message = "User Not Found";
   } else if (error.name === "Not Found") {
     code = 404;
-    message = "Product not found";
-  } else if (error.name === "product not found") {
+    message = "Notes not found";
+  } else if (error.name === "Notes Not Found") {
     code = 404;
-    message = "Cant read this product";
+    message = "Cant read this Notes";
   }
 
   res.status(code).json({ error: { message: message } });

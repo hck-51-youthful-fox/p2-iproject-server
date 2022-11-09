@@ -1,6 +1,6 @@
 const { comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
-const { User, Note, MyNote } = require("../models");
+const { User, Note, Category } = require("../models");
 const main = require("../helpers/nodemailer");
 
 class Controller {
@@ -103,13 +103,70 @@ class Controller {
       next(error);
     }
   }
-  // static async addNewNotes(req, res, next) {
-  //   try {
-  //     const { title, description, date } = req.body;
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  static async readAllNotes(req, res, next) {
+    try {
+      let notes = await Note.findAll({
+        include: [User, Category],
+        order: [["createdAt", "DESC"]],
+      });
+      if (!notes) throw { name: "Notes Not Found" };
+      res.status(200).json(notes);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async addNewNotes(req, res, next) {
+    try {
+      const { title, description, date, categoryId } = req.body;
+      const { id } = req.user;
+      let data = await Note.create({
+        title: title,
+        description: description,
+        date: date,
+        userId: id,
+        categoryId: +categoryId,
+      });
+      res.status(201).json({
+        code: 201,
+        message: `${data.title} successfull added`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deleteNotes(req, res, next) {
+    try {
+      let data = await Note.findByPk(req.params.id);
+      if (!data) throw { name: "Not Found" };
+      await Note.destroy({
+        where: { id: req.params.id },
+      });
+      res.status(200).json({ message: ` ${data.title} successfull to delete` });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async updateNote(req, res, next) {
+    try {
+      const { title, description, date, categoryId } = req.body;
+      const { id } = req.user;
+      let data = await Note.update(
+        {
+          title: title,
+          description: description,
+          date: date,
+          categoryId: +categoryId,
+          userId: +id,
+        },
+        {
+          where: { id: req.params.id },
+        }
+      );
+      res.status(200).json({ message: "success update notes" });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = Controller;

@@ -21,9 +21,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      status: {
+      userId: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+      },
+      categoryId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Categories",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,
