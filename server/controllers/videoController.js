@@ -1,4 +1,5 @@
 const axios = require('axios');
+const e = require('express');
 const { Video } = require('../models');
 const headers = {
 	"X-RapidAPI-Key": "372d7cc145msh41c6b2e31b70ea7p1dbeadjsnb961c1f07162",
@@ -9,43 +10,56 @@ const headers = {
 class VideoController {
 	static async findAll (req, res, next) {
 		try {
-			const { data } = await axios.get({
+			const { data } = await axios({
 				method: 'GET',
-				url: 'https://youtube138.p.rapidapi.com/search?q=blackpink',
+				url: 'https://youtube138.p.rapidapi.com/search/',
+				params: {q: 'blacpink'},
 				headers
 			})
 			let videos = data.contents.map(el => {
 				el.avatarUrl = el.video?.author?.avatar[0]?.url
-				el.type = el.type
 				el.canonicalBaseUrl = el.video?.author?.canonicalBaseUrl
 				el.channelId = el.video?.author?.channelId
+				el.badges = el.video?.author?.badges.type
 				el.titleChannel = el.video?.author?.title
 				el.description = el.video?.descriptionSnippet
-				el.thumbnailUrl = el.video?.thumbnails[0]?.url
 				el.views = el.video?.stats?.views
+				el.thumbnailUrl = el.video?.thumbnails[0]?.url
+				el.title = el.video?.title
 				el.videoId = el.video?.videoId
-				el.titleVideo = el.video?.title
+				return el
 			})
-			res.status(200).json(data)
+			res.status(200).json(videos)
 		} catch (err) {
 			next(err)
 		}
 	}
 	static async findOne (req, res, next) {
-		const id = req.params.id
 		try {
-			const Video = await Video.findByPk(id, {
-				include: {
-					model: Category
-				}
-			})
-			const { data:qrcode } = await axios.get(`https://api.happi.dev/v1/qrcode?data=https://ikea-client-facing.web.app/Videos/${id}&apikey=${process.env.HAPPI_API_KEY}`)
-			if (!Video) {
-				throw { name: 'DATA_NOT_FOUND', id, model: 'Video'}
-			}
-			res.status(200).json({
-				Video, qrcode
-			})
+			const id = req.params.id;
+			const { data } = await axios({
+				method: "GET",
+				url: 'https://youtube138.p.rapidapi.com/video/details/',
+  				params: {id},
+				headers
+			});
+			let video = {
+				avatar: data.author?.avatar[0]?.url,
+				badges: data.author?.badges?.type,
+				channelId: data.author?.channelId,
+				subscribers: data.author?.stats?.subscribersTex,
+				channel: data.author?.title,
+				category: data.category,
+				description: data.description,
+				thumbnails: data.thumbnails[0]?.url,
+				videoId: data.videoId,
+				title: data.title,
+				publishedDate: data.publishedDate,
+				commentsCount: data.stats.comments,
+				likesCount: data.stats.likes,
+				viewsCount: data.stats.views,
+			};
+			res.status(200).json(video);
 		} catch (err) {
 			next(err)
 		}
