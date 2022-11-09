@@ -45,12 +45,13 @@ class CartController {
   static async cost(req, res, next) {
     try {
       const destinationCode = req.body.destination;
+      console.log(destinationCode, "<< ini kepri");
       const { data } = await axios.post(
         `https://api.rajaongkir.com/starter/cost`,
         {
           origin: "151",
           destination: destinationCode,
-          weight: 3,
+          weight: 4,
           courier: "jne",
         },
         {
@@ -59,8 +60,9 @@ class CartController {
           },
         }
       );
-      res.status(200).json(data.rajaongkir.results[0].costs[0].cost);
+      res.status(200).json(data.rajaongkir.results[0].costs[0].cost[0].value);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -72,26 +74,33 @@ class CartController {
       const CustomerId = req.customer.id;
       const isPaid = false;
 
-      if (!quantity) {
-        quantity = 1;
+      let FoodId = foodId;
+      let checkCart = await Cart.findByPk(+foodId);
+      if (!checkCart) {
+        FoodId = foodId;
+      } else {
+        FoodId = checkCart.FoodId;
       }
-
-      let checkFood = await Food.findByPk(foodId);
+      let checkFood = await Food.findByPk(FoodId);
 
       if (!checkFood) {
         throw { name: "FOOD_NOT_FOUND", model: "Food" };
+      }
+
+      if (!quantity) {
+        quantity = 1;
       }
       let totalPrice = +quantity * +checkFood.price;
 
       let [food, addToCart] = await Cart.findOrCreate({
         where: {
           CustomerId,
-          FoodId: foodId,
+          FoodId: checkFood.id,
           isPaid: false,
         },
         defaults: {
           CustomerId,
-          FoodId: foodId,
+          FoodId: checkFood.id,
           quantity,
           totalPrice,
           isPaid,
@@ -107,7 +116,7 @@ class CartController {
           {
             where: {
               CustomerId,
-              FoodId: foodId,
+              FoodId: checkFood.id,
             },
           }
         );
@@ -118,15 +127,32 @@ class CartController {
     }
   }
 
+  static async deleteCategory(req, res, next) {
+    try {
+      let { id } = req.params;
+      let data = await Category.destroy({
+        where: { id },
+      });
+      if (!data) {
+        throw { name: "DATA_NOT_FOUND", model: "Category", id };
+      }
+      res.status(200).json({
+        message: `Success delete id: ${id}`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async deleteFoodInCart(req, res, next) {
     try {
       const { foodId } = req.params;
       const data = await Cart.destroy({
         where: {
-          CustomerId: req.customer.id,
-          FoodId: foodId,
+          id: foodId,
         },
       });
+
       if (!data) {
         throw { name: "DATA_NOT_FOUND", model: "Food", id: foodId };
       }

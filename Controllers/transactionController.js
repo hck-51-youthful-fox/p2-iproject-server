@@ -57,20 +57,20 @@ class TransactionController {
       const TotalShippingCost = +shippingCost;
 
       const transaction = await Transaction.create({
-        totalPrice,
+        totalPrice: totalPrice + TotalShippingCost,
         shippingCost: TotalShippingCost,
         cartInformation,
         CustomerId,
       });
 
-      const isPaid = true;
+      // const isPaid = true;
 
-      await Cart.update(
-        { isPaid, CustomerId },
-        {
-          where: { [Op.and]: [{ isPaid: false }, { CustomerId }] },
-        }
-      );
+      // await Cart.update(
+      //   { isPaid, CustomerId },
+      //   {
+      //     where: { [Op.and]: [{ isPaid: false }, { CustomerId }] },
+      //   }
+      // );
 
       let idOrder = `ORDER-2${CustomerId}${transaction.id}-${Math.random()
         .toString()
@@ -98,6 +98,16 @@ class TransactionController {
         }
       );
       res.status(200).json({ transaction, data, order_id: idOrder });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async detailTransaction(req, res, next) {
+    try {
+      const { id } = req.params;
+      const oneTransaction = await Transaction.findByPk(id);
+      res.status(200).json(oneTransaction);
     } catch (error) {
       next(error);
     }
