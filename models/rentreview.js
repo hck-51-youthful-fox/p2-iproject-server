@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   RentReview.init(
     {
+      name: DataTypes.STRING,
+      imgUrl: DataTypes.STRING,
       content: DataTypes.TEXT,
       rating: DataTypes.INTEGER,
       rented: DataTypes.BOOLEAN,
-      rentStart: DataTypes.DATE,
       rentEnd: DataTypes.DATE,
       PetId: DataTypes.INTEGER,
       UserId: DataTypes.INTEGER,

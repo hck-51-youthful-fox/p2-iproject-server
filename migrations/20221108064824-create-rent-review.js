@@ -9,11 +9,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      name: {
+        type: Sequelize.STRING,
+      },
+      imgUrl: {
+        type: Sequelize.STRING,
+      },
       content: {
         type: Sequelize.TEXT,
       },
       rating: {
         type: Sequelize.INTEGER,
+      },
+      rented: {
+        type: Sequelize.BOOLEAN,
       },
       rentEnd: {
         type: Sequelize.DATE,

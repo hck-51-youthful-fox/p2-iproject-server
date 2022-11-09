@@ -2,7 +2,10 @@ const { User, RentReview } = require("../models/index");
 const { inputStatus } = require("../helpers/bcrypt");
 const { getToken, tokenVerif } = require("../helpers/jwt");
 const { Op } = require("sequelize");
+const getAccess = require("../helpers/access");
+const axios = require("axios");
 // const { OAuth2Client } = require("google-auth-library");
+
 class Controller {
   static async register(req, resp, next) {
     try {
@@ -39,6 +42,58 @@ class Controller {
         email: foundUser.email,
         username: foundUser.username,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getPets(req, resp, next) {
+    try {
+      const { access_token } = await getAccess();
+      const { page, type } = req.query;
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: "https://api.petfinder.com/v2/animals",
+        params: { page, type },
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getPetDetails(req, resp, next) {
+    try {
+      const { id } = req.params;
+      const { access_token } = await getAccess();
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: `https://api.petfinder.com/v2/animals/${id}`,
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getTypes(req, resp, next) {
+    try {
+      const { access_token } = await getAccess();
+      const { data } = await axios({
+        method: "get",
+        headers: { Authorization: `Bearer ${access_token}` },
+        url: `https://api.petfinder.com/v2/types`,
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getRents(req, resp, next) {
+    try {
+      const { id } = req.user;
+      const data = await RentReview.findAll({ where: { UserId: id } });
+      resp.status(200).json(data);
     } catch (error) {
       next(error);
     }
