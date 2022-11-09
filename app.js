@@ -15,11 +15,13 @@ app.post("/login", Controller.loginUser);
 app.get("/api/news", Controller.fetchDataFromApi);
 app.get("/api/news/search", Controller.searchNews);
 app.get("/news", Controller.fetchNewsFromDB);
+app.get("/news/:id", Controller.getNewsById);
 
 app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);
+app.post("/user/post/:id", Controller.getUserPost);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
-app.post("/user/edit/:id", editAuthorization, Controller.editPost);
+app.put("/user/edit/:id", editAuthorization, Controller.editPost);
 app.post("/user/comment/:postId", Controller.commentPost);
 
 app.listen(port, () => {

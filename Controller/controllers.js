@@ -77,9 +77,10 @@ class Controller {
   }
 
   static async fetchDataFromApi(req, res) {
+    let { page } = req.query;
     try {
       let { data } = await axios.get(
-        "https://www.newsapi.ai/api/v1/article/getArticles?query=%7B%22%24query%22%3A%7B%22%24and%22%3A%5B%7B%22locationUri%22%3A%22http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FIndonesia%22%7D%2C%7B%22dateStart%22%3A%222022-11-05%22%2C%22dateEnd%22%3A%222022-11-09%22%2C%22lang%22%3A%22ind%22%7D%5D%7D%2C%22%24filter%22%3A%7B%22dataType%22%3A%5B%22news%22%5D%7D%7D&resultType=articles&articlesSortBy=date&articlesCount=10&articleBodyLen=-1&apiKey=1ac04d32-99c0-4172-a7d0-c2b7b1988e95&articlesPage=1"
+        `https://www.newsapi.ai/api/v1/article/getArticles?query=%7B%22%24query%22%3A%7B%22%24and%22%3A%5B%7B%22locationUri%22%3A%22http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FIndonesia%22%7D%2C%7B%22dateStart%22%3A%222022-11-05%22%2C%22dateEnd%22%3A%222022-11-09%22%2C%22lang%22%3A%22ind%22%7D%5D%7D%2C%22%24filter%22%3A%7B%22dataType%22%3A%5B%22news%22%5D%7D%7D&resultType=articles&articlesSortBy=date&articlesCount=20&articleBodyLen=-1&apiKey=1ac04d32-99c0-4172-a7d0-c2b7b1988e95&articlesPage=${page}`
       );
       res.status(200).json(data);
     } catch (error) {
@@ -148,6 +149,7 @@ class Controller {
         redirect_url: transactionUrl,
       });
     });
+    // res.redirect(200, transactionUrl);
 
     await User.update(
       { isPremium: true },
@@ -233,8 +235,66 @@ class Controller {
   }
 
   static async fetchNewsFromDB(req, res) {
+    const query = {};
+    let limit = 20;
+    let offset;
+    const getPagingData = (data, page, limit) => {
+      const { count: totalItems, rows: rows } = data;
+      console.log(data);
+      const currentPage = page ? +page : 0;
+      const totalPages = Math.ceil(totalItems / limit);
+
+      return { totalItems, rows, totalPages, currentPage };
+    };
+
+    const { page } = req.query;
+    if (page !== "" && typeof page !== "undefined") {
+      offset = page * limit - limit;
+      query.offset = offset;
+      query.limit = limit;
+    } else {
+      limit = 20;
+      offset = 0;
+      query.limit = limit;
+      query.offset = offset;
+    }
+
+    query.include = [
+      {
+        model: Comment,
+        include: {
+          model: User,
+        },
+      },
+    ];
+
+    try {
+      let data = await Post.findAndCountAll(query);
+
+      res.status(200).json(getPagingData(data, page, limit));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async getUserPost(req, res) {
     try {
       let data = await Post.findAll({
+        where: {
+          UserId: req.user.id,
+        },
+      });
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async getNewsById(req, res) {
+    let { id } = req.params;
+    try {
+      let data = await Post.findByPk(id, {
         include: [
           {
             model: Comment,
@@ -242,13 +302,14 @@ class Controller {
               model: User,
             },
           },
+          {
+            model: User
+          }
         ],
       });
 
-      res.status(200).json(data);
-    } catch (error) {
-      console.log(error);
-    }
+      res.status(200).json(data)
+    } catch (error) {}
   }
 }
 
