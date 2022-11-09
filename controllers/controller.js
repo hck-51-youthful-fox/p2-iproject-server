@@ -52,7 +52,7 @@ class Controller {
       const { data } = await axios({
         method: "get",
         headers: { Authorization: `Bearer ${access_token}` },
-        url: "https://api.petfinder.com/v2/animals",
+        url: "https://api.petfinder.com/v2/animals?sort=random&limit=10",
         params: { page, type },
       });
       resp.status(200).json(data);
@@ -65,12 +65,13 @@ class Controller {
     try {
       const { id } = req.params;
       const { access_token } = await getAccess();
+
       const { data } = await axios({
         method: "get",
         headers: { Authorization: `Bearer ${access_token}` },
         url: `https://api.petfinder.com/v2/animals/${id}`,
       });
-      resp.status(200).json(data);
+      resp.status(200).json(data.animal);
     } catch (error) {
       next(error);
     }
@@ -93,6 +94,18 @@ class Controller {
       const { id } = req.user;
       const data = await RentReview.findAll({
         where: { UserId: id },
+        attributes: { exclude: ["updatedAt"] },
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getReviews(req, resp, next) {
+    try {
+      const data = await RentReview.findAll({
+        where: { rented: false },
         attributes: { exclude: ["updatedAt"] },
       });
       resp.status(200).json(data);
@@ -130,7 +143,7 @@ class Controller {
       const { id } = req.rentReview;
       let { rating, content } = req.body;
       if (!rating) rating = 5;
-      if (!content) content = "";
+      if (!content) content = "Im really shy UwU";
       let data = await RentReview.update(
         {
           rented: false,
