@@ -18,6 +18,7 @@ app.get("/api/news/search", Controller.searchNews);
 app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
+app.post("/user/edit/:id", addAuthorization, Controller.addPost);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

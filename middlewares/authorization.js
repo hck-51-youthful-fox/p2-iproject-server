@@ -57,24 +57,31 @@ const editAuthorization = async (req, res, next) => {
   try {
     // console.log(req.user);
     const { id, isPremium } = req.user;
+    let PostId = req.params.id;
     // console.log(role.toUpperCase());
     console.log(req.user);
     const findUser = await User.findByPk(id);
+    const findPost = await Post.findByPk(PostId);
 
-    if (findUser) {
-      if (isPremium === true) {
+    if (findPost) {
+      if (isPremium === true && findPost.UserId === id) {
         next();
       } else {
-        throw { message: "You Need Premium to Access this Feature!" };
+        throw { message: "You Dont Have Access to this Post!" };
       }
     }
 
-    if (!findUser) {
+    if (!findPost) {
       throw { name: "DATA_NOT_FOUND" };
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     // next(error);
+    if (error.name === "DATA_NOT_FOUND") {
+      res.status(404).json({
+        message: "Post Not Found!",
+      });
+    }
     res.status(403).json(error);
   }
 };
@@ -82,4 +89,5 @@ const editAuthorization = async (req, res, next) => {
 module.exports = {
   paymentAuthorization,
   addAuthorization,
+  editAuthorization,
 };
