@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const SECRET = "MEONG"
-// const SECRET = process.env.SECRET
+// const SECRET = "MEONG"
+const SECRET = process.env.SECRET
 
 // to hash a password
 const salt = bcrypt.genSaltSync(10)

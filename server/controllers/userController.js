@@ -51,14 +51,16 @@ class UserController {
 
 	static async updateStatus(req, res, next) {
 		try {
-			const id = req.params.id
+			const id = req.user.id
+			// console.log(req.user);
 			// const { isPremium } = req.body
-			const foundUser = await User.findByPk(id)
+			const foundUser = await User.findByPk(+id)
 			if (!foundUser) throw { name: 'DATA_NOT_FOUND', model: 'User'}
 			const data = await User.update(
 				{ isPremium: true },
 				{ where: {id} }
 			)
+			console.log('success');
 			res.status(200).json({ 
 				message: 'Successfully upgraded your account to Premium!'
 			})
@@ -79,16 +81,18 @@ class UserController {
 		let orderId = new Date().valueOf();
 		
 		let parameter = {
-			"transaction_details": {
-				"order_id": `YOUR-ORDERID-${orderId}`,
-				"gross_amount": 34990
+			transaction_details: {
+				order_id: `order-${orderId}-${req.user.email.slice(0,3)}`,
+				gross_amount: 34990
 			},
-			"credit_card":{
-				"secure" : true
+			credit_card:{
+				secure : true
 			},
-			"customer_details": {
-				"email": req.user.email,
-				"username": req.user.email.split('@')[0]
+			customer_details: {
+				email: req.user.email,
+				username: req.user.email.split('@')[0]
+				// email: 'ivanjisoo@gmail.com',
+				// username: 'ivanxjisoo'
 			}
 		};
 		
@@ -96,21 +100,12 @@ class UserController {
 			.then((transaction)=>{
 				// transaction token
 				let transactionToken = transaction.token;
-			// 	return transaction
-			// }).then((res) => {
-			// 	const data = User.update(
-			// 		{ isPremium: true },
-			// 		{ where: {
-			// 			id: req.params.id
-			// 		} }
-			// 	)
-			// 	res.status(200).json({ 
-			// 		message: 'Your account has been upgraded to Premium!'
-			// 	})
-				res.status(201).json('transactionToken:',transactionToken);
+				// console.log(transaction);
+				res.status(201).json({transactionToken});
 			})
 			.catch((err) => {
 				console.log(err);
+				next(err);
 			})
 		}
 }
