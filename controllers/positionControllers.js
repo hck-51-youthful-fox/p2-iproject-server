@@ -99,7 +99,7 @@ class Controller {
     }
   }
 
-  static async viewAllPositions(req, res, next) {
+  static async viewPositions(req, res, next) {
     console.log(req.user.id);
     try {
       const UserId = req.user.id;
@@ -107,6 +107,7 @@ class Controller {
         where: {
           UserId,
         },
+        include: Player,
       });
       console.log(data);
       res.status(200).json(data);
