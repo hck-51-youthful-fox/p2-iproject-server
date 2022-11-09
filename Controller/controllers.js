@@ -151,6 +151,30 @@ class Controller {
       }
     );
   }
+
+  static async addPost(req, res) {
+    let { title, content, imageUrl, tag } = req.body;
+    try {
+      if (!title || !content || !imageUrl || !tag) {
+        throw { name: "DATA_NOT_COMPLETE" };
+      }
+      let { data } = await Post.create({
+        title: title,
+        content: content,
+        imageUrl: imageUrl,
+        tag: tag,
+        UserId: req.user.id,
+      });
+
+      // res.status(201).json(data)
+      res.status(201).json({ message: "Post Add Successfully!" });
+    } catch (error) {
+      if (error.name === "DATA_NOT_COMPLETE") {
+        res.status(403).json({ message: "Please Fill All the Fields!" });
+      }
+      console.log(error);
+    }
+  }
 }
 
 module.exports = Controller;
