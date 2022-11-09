@@ -35,6 +35,7 @@ class CartController {
           },
         }
       );
+
       res.status(200).json(data.rajaongkir.results);
     } catch (error) {
       next(error);
@@ -86,6 +87,7 @@ class CartController {
         where: {
           CustomerId,
           FoodId: foodId,
+          isPaid: false,
         },
         defaults: {
           CustomerId,
