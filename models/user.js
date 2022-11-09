@@ -11,10 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Post);
-      User.belongsToMany(models.Post, {
-        through: models.Comment,
-      });
-      User.hasMany(models.Comment);
+      User.hasMany(models.Comment)
+      // User.belongsToMany(models.Post, {
+      //   through: models.Comment,
+      // });
+      // // User.hasMany(models.Comment);
     }
   }
   User.init(

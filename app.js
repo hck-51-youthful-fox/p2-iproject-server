@@ -14,6 +14,7 @@ app.post("/register", Controller.registerUser);
 app.post("/login", Controller.loginUser);
 app.get("/api/news", Controller.fetchDataFromApi);
 app.get("/api/news/search", Controller.searchNews);
+app.get("/news", Controller.fetchNewsFromDB);
 
 app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);

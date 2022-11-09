@@ -211,18 +211,37 @@ class Controller {
 
   static async commentPost(req, res) {
     let PostId = req.params.postId;
-    let { comment } = req.body
+    let { comment } = req.body;
     try {
       let data = await Comment.create({
         UserId: req.user.id,
         PostId: PostId,
-        comment: comment
+        comment: comment,
       });
 
       res.status(201).json({
-        message: "Comment Add Successfully"
-      })
+        message: "Comment Add Successfully",
+      });
     } catch (error) {}
+  }
+
+  static async fetchNewsFromDB(req, res) {
+    try {
+      let data = await Post.findAll({
+        include: [
+          {
+            model: Comment,
+            include: {
+              model: User,
+            },
+          },
+        ],
+      });
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
