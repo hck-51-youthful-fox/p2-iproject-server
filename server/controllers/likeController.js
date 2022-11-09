@@ -7,11 +7,11 @@ class LikeController {
 			// const userId = req.user.id
 			const userId = 1
 			const videoYtbId = req.params.videoId //videoYtbId diganti dari videoId tadinya, diganti biar ga ketuker sm FK
-			const { title, link, channel, views, publishedDate, isVerified } = req.body
+			const { title, link, avatarUrl, channel, views, publishedDate, isVerified } = req.body
 			let [video, createdVid] = await Video.findOrCreate({
 				where: { videoYtbId }, // identifier 
 				defaults: {
-					title, link, channel, views, publishedDate, isVerified, videoYtbId
+					title, link, avatarUrl, channel, views, publishedDate, isVerified, videoYtbId
 				}
 			})
 			let [like, createdLike] = await Like.findOrCreate({

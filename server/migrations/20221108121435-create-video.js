@@ -33,6 +33,10 @@ module.exports = {
           }
         }
       },
+      avatarUrl: {
+        type: Sequelize.TEXT,
+        defaultValue: "https://www.purina.com/sites/g/files/auxxlc196/files/dogBreedPlaceholder.png"
+      },
       channel: {
         type: Sequelize.STRING,
         allowNull: false,
