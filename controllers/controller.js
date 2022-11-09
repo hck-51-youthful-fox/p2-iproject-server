@@ -129,22 +129,22 @@ class Controller {
     }
   }
 
-  // static async statusUpdate(req, res, next) {
-  //   try {
-  //     let user = req.user.id;
-  //     await User.update(
-  //       { status: "premium" },
-  //       {
-  //         where: {
-  //           id: user,
-  //         },
-  //       }
-  //     );
-  //     res.status(200).json({ msg: "update sucess" });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  static async statusUpdate(req, res, next) {
+    try {
+      let user = req.user.id;
+      await User.update(
+        { status: "premium" },
+        {
+          where: {
+            id: user,
+          },
+        }
+      );
+      res.status(200).json({ msg: "update sucess" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = Controller;
