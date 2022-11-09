@@ -15,6 +15,7 @@ class Controller {
 					model: Genre,
 				},
 				where: {},
+				distinct: true,
 			};
 
 			if (search) {
@@ -23,8 +24,6 @@ class Controller {
 					name: { [Op.iLike]: `%${search}%` },
 				};
 			}
-
-			console.log(page);
 
 			if (typeof +page !== "number") {
 				page = 1;
@@ -73,8 +72,6 @@ class Controller {
 
 			let foundGame = await Game.findByPk(id, options);
 
-			console.log(foundGame);
-
 			res.status(200).json(foundGame);
 		} catch (error) {
 			console.log(error);
@@ -92,8 +89,6 @@ class Controller {
 			}
 
 			let { data } = await axios.get(`${rawg_url}?${query}`);
-
-			console.log(data);
 
 			let genreList = await Genre.findAll();
 
