@@ -18,6 +18,15 @@ module.exports = {
       information: {
         type: Sequelize.JSON,
       },
+      url_payment: {
+        type: Sequelize.STRING,
+      },
+      token_payment: {
+        type: Sequelize.STRING,
+      },
+      isPay: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

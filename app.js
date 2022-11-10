@@ -145,11 +145,15 @@ app.get("/cart", async (req, res, next) => {
     console.log("lontong");
     const { UserId } = req.user;
     const cart = await Cart.findAll({
-      include: { model: Product, attributes: ["name", "price"] },
+      include: {
+        model: Product,
+        attributes: ["name", "price", "imageUrl", "id"],
+      },
       where: { UserId },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
+      order: [["id", "DESC"]],
     });
     // console.log("lontong3");
     res.status(200).json(cart);
@@ -164,6 +168,7 @@ app.post("/cart/:ProductId", async (req, res, next) => {
     const { ProductId } = req.params;
     const { UserId } = req.user;
     const { quantity } = req.body;
+    console.log(quantity, ProductId);
     // const role = "-";
     const isPay = false;
     if (!ProductId) {
@@ -209,7 +214,7 @@ app.post("/cart/:ProductId", async (req, res, next) => {
 app.post("/invoice", async (req, res, next) => {
   try {
     const { UserId } = req.user;
-    const { ongkir } = req.body;
+    const { ongkir, url_payment, token_payment } = req.body;
     // console.log(UserId);
     const unpaid = await Cart.findAll({
       include: Product,
@@ -241,6 +246,9 @@ app.post("/invoice", async (req, res, next) => {
       totalPrice,
       ongkir: ongkirInt,
       information,
+      url_payment,
+      token_payment,
+      isPay: "PENDING",
       UserId,
     });
 
@@ -249,6 +257,48 @@ app.post("/invoice", async (req, res, next) => {
     });
 
     res.status(200).json(addInvoice);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//GET INVOICE
+app.get("/invoice", async (req, res, next) => {
+  try {
+    console.log("ihza");
+    // const { province } = req.query;
+    // const { key } = req.headers;
+    // console.log(key);
+    const { UserId } = req.user;
+    const dataInvoice = await User.findOne({
+      include: Invoice,
+      where: { id: UserId },
+    });
+    console.log(dataInvoice);
+    // console.log(data.rajaongkir.results);
+    // console.log(data.rajaongkir.results);
+
+    res.status(200).json(dataInvoice);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//UPDATE STATUS INVOICE
+app.post("/invoice/:invoiceId", async (req, res, next) => {
+  try {
+    const { UserId } = req.user;
+    const { invoiceId } = req.params;
+
+    const updateInvoice = await Invoice.update(
+      {
+        isPay: "LUNAS",
+      },
+      { where: { id: invoiceId } }
+    );
+
+    // console.log("lonotng");
+    res.status(200).json({ msg: `invoive id:${invoiceId} LUNAS` });
   } catch (err) {
     next(err);
   }
@@ -281,6 +331,7 @@ app.post("/cost", async (req, res, next) => {
   try {
     console.log("ihza");
     const { origin, destination, weight, courier } = req.body;
+    console.log(req.body);
     const { data } = await axios.post(
       `https://api.rajaongkir.com/starter/cost`,
       {
@@ -297,7 +348,7 @@ app.post("/cost", async (req, res, next) => {
     // console.log(data.rajaongkir.results);
     // console.log(data.rajaongkir.results[0].costs);
 
-    res.status(200).json(data.rajaongkir.results[0].costs);
+    res.status(200).json(data.rajaongkir.results[0].costs[0].cost[0].value);
   } catch (err) {
     next(err);
   }
@@ -305,20 +356,22 @@ app.post("/cost", async (req, res, next) => {
 //payment
 app.post("/payment", async (req, res, next) => {
   try {
-    console.log("ihza bubu");
-    const { order_id, gross_amount } = req.body;
-
+    // console.log("ihza bubu");
+    const { gross_amount } = req.body;
+    // console.log(req.body);
+    // console.log(new Date().toISOString());
     let payload = JSON.stringify({
       transaction_details: {
-        order_id,
+        order_id: `ORDER - ${new Date().toISOString()}`,
         gross_amount,
       },
       credit_card: {
         secure: true,
       },
     });
+
     // console.log("bantalll");
-    // console.log(payload);
+    console.log(payload);
     const { data } = await axios.post(
       "https://app.midtrans.com/snap/v1/transactions",
       payload,
@@ -341,7 +394,7 @@ app.post("/payment", async (req, res, next) => {
 //ERROR - HANDLER
 app.use((err, req, res, next) => {
   console.log("ihzza");
-  console.log(err);
+  //   console.log(err);
   let statuscode = 500;
   let message = "Internal server error";
   console.log(err.name);
