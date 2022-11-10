@@ -6,7 +6,6 @@ class AdminController {
   static async adminRegister(req, res, next) {
     try {
       const { email, password } = req.body;
-      console.log(email, password);
       const createdAdmin = await Admin.create({
         email,
         password,

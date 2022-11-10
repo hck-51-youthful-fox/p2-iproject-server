@@ -45,7 +45,6 @@ class CartController {
   static async cost(req, res, next) {
     try {
       const destinationCode = req.body.destination;
-      console.log(destinationCode, "<< ini kepri");
       const { data } = await axios.post(
         `https://api.rajaongkir.com/starter/cost`,
         {

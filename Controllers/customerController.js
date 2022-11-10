@@ -37,7 +37,6 @@ class CustomerController {
         email: customer.email,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -84,6 +83,7 @@ class CustomerController {
         username: payload.username,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
