@@ -45,7 +45,7 @@ class Controller {
       //console.log(futureDate, pastDate);
       const { data } = await axios({
         method: "GET",
-        url: `${apiURL}/games?league=standard&season=${year}&date=${pastDate}`,
+        url: `${apiURL}/games?league=standard&season=${year}&date=${pastDate}&date=${futureDate}`,
         headers: {
           "X-RapidAPI-Key": process.env.API_KEY_NBA,
           "X-RapidAPI-host": "api-nba-v1.p.rapidapi.com",
