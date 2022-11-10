@@ -8,8 +8,6 @@ const { authentication } = require("../middlewares/auth");
 
 router.use("/users", userRotures);
 router.use("/games", gameRoutes);
-router.use(authentication);
-//! butuh autentikasi juga ini ya!
 router.use("/libraries", libraryRoutes);
 router.use(errorHandler);
 

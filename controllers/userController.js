@@ -33,11 +33,6 @@ class Controller {
         profileImgUrl,
       });
 
-      res.status(201).json({
-        id: newUser.id,
-        email: newUser.email,
-      });
-
       // Nodemailer
       const ogEmail = "overgamepass@outlook.com";
       const transporter = nodemailer.createTransport({
@@ -57,8 +52,12 @@ class Controller {
 
       transporter.sendMail(options, (err, info) => {
         if (err) {
-          return res.status(500).json({ message: "Internal Server Error" });
+          // return res.status(500).json({ message: "Internal Server Error" });
         }
+      });
+      res.status(201).json({
+        id: newUser.id,
+        email: newUser.email,
       });
     } catch (error) {
       next(error);
@@ -90,7 +89,7 @@ class Controller {
         id: foundUser.id,
       };
       const access_token = createToken(payload);
-      res.status(200).json({ access_token });
+      res.status(200).json({ id: foundUser.id, access_token, email: foundUser.email, username: foundUser.username, status: foundUser.status });
     } catch (error) {
       next(error);
     }
@@ -148,12 +147,33 @@ class Controller {
       },
     };
     const { data } = await axios.post(midtransUrl, body, config);
-    console.log(data);
-    res.status(200).json({ data });
+    // console.log(data);
+    res.status(200).json(data);
     try {
     } catch (error) {
       console.log(error);
       next(error);
+    }
+  }
+  static async paymentSuccess(req, res, next) {
+    console.log(req.query, ">>>>>>>>>>>>>>>>>>>>>>");
+
+    console.log("MASUK KE SINI KOK");
+    console.log("MASUK KE SINI KOK");
+    console.log("MASUK KE SINI KOK");
+    console.log("MASUK KE SINI KOK");
+    try {
+      const { id } = req.user;
+      console.log(id);
+      const updateStatus = await User.update(
+        { status: "subscription" },
+        {
+          where: { id },
+        }
+      );
+      console.log(updateStatus);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
