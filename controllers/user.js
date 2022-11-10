@@ -3,7 +3,8 @@ const { signToken } = require("../helpers/jwt");
 const { User } = require("../models/index");
 const { OAuth2Client } = require("google-auth-library");
 const nodemailer = require("nodemailer");
-let baseUrl = "http://localhost:3000";
+// let baseUrl = "http://localhost:3000";
+let baseUrl = "https://bopflix.herokuapp.com";
 
 class Controller {
   static async register(req, res, next) {
