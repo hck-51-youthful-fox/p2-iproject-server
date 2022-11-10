@@ -228,7 +228,8 @@ _200 - Ok_
 
 ### Description
 
-- Update logged user Verified status.
+- Update logged user Verified status, verified using Third-Party API (E-mail check).
+- https://rapidapi.com/Top-Rated/api/e-mail-check-invalid-or-disposable-domain/
 
 ### Request
 
@@ -323,7 +324,8 @@ _200 - OK_
 
 ### Description
 
-- Get game data from third party API and integrates it into database.
+- Get game data from Third-Party API (rawg.io) and integrates it into database.
+- https://rawg.io/apidocs
 
 ### Request
 
@@ -454,7 +456,8 @@ _201 - Created_
 
 ### Description
 
-- Post a review of game with GameId, by logged user
+- Post a review of game with GameId, by logged user, before review is posted to database, it's checked by Third-Party API (Purgo Malum).
+- https://rapidapi.com/community/api/purgomalum-1/
 
 ### Request
 
