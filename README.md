@@ -2,9 +2,9 @@
 Individual Project - Server
 
 List of Available Endpoints:
-- `GET /movies`
-- `GET /movies/:id`
-- `POST /movies`
+- `GET /pets`
+- `GET /pets/id`
+- `POST /pets/id`
 - `DELETE /movies/:id`
 - `GET /genres`
 - `POST /users/register`
