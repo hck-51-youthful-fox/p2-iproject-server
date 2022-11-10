@@ -8,9 +8,16 @@ List of Available Endpoints:
 - `GET /pub/food/:id`
 - `POST /pub/register`
 - `POST /pub/login`
-- `GET /categories`
-- `GET /cart`
-- `Get /transaction`
+- `GET /pub/categories`
+- `GET /pub/cart`
+- `PATCH /pub/cart`
+- `GET /transaction`
+- `GET /pub/city`
+- `GET /pub/cost`
+- `POST /pub/cart/:foodId`
+- `DELETE /pub/cart/:foodId`
+- `GET /pub/transaction`
+- `POST /pub/transaction`
 
 &nbsp;
 
