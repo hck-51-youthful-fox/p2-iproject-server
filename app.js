@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 var axios = require("axios");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
