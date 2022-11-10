@@ -17,11 +17,11 @@ class YoutubeController {
 			})
 			let videos = data.contents.map(el => {
 				el.avatarUrl = el.video?.author?.avatar[0]?.url
-				el.canonicalBaseUrl = el.video?.author?.canonicalBaseUrl
-				el.channelId = el.video?.author?.channelId
-				el.badges = el.video?.author?.badges.type
+				// el.canonicalBaseUrl = el.video?.author?.canonicalBaseUrl
+				// el.channelId = el.video?.author?.channelId
+				// el.badges = el.video?.author?.badges.type
 				el.channel = el.video?.author?.title
-				el.description = el.video?.descriptionSnippet
+				// el.description = el.video?.descriptionSnippet
 				el.views = el.video?.stats?.views
 				el.link = el.video?.thumbnails[0]?.url
 				el.publishedDate = el.video?.publishedTimeText
@@ -45,11 +45,11 @@ class YoutubeController {
 			});
 			let video = {
 				avatarUrl: data.author?.avatar[0]?.url,
-				badges: data.author?.badges?.type,
-				channelId: data.author?.channelId,
+				// badges: data.author?.badges?.type,
+				// channelId: data.author?.channelId,
 				subscribers: data.author?.stats?.subscribersTex,
 				channel: data.author?.title,
-				category: data.category,
+				// category: data.category,
 				description: data.description,
 				thumbnails: data.thumbnails[0]?.url,
 				videoId: data.videoId,

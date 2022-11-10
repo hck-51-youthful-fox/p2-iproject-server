@@ -4,8 +4,7 @@ const { VideoController } = require('./videoController');
 class LikeController {
 	static async findOrCreate (req, res, next) {
 		try {
-			// const userId = req.user.id
-			const userId = 1
+			const userId = req.user.id
 			const videoYtbId = req.params.videoId //videoYtbId diganti dari videoId tadinya, diganti biar ga ketuker sm FK
 			const { title, link, avatarUrl, channel, views, publishedDate, isVerified } = req.body
 			let [video, createdVid] = await Video.findOrCreate({
@@ -21,7 +20,7 @@ class LikeController {
 					}
 			})
 			res.status(201).json({
-				video,
+				// video,
 				message: "Video has been added to your list!"
 			})
 		} catch (err) {
@@ -43,27 +42,27 @@ class LikeController {
 			next(err)
 		}
 	}
-	static async destroy (req, res, next) {
-		try {
-			const { id } = req.params // dpt idnya like
-			const userId = req.user.id
+	// static async destroy (req, res, next) {
+	// 	try {
+	// 		const { id } = req.params // dpt idnya like
+	// 		const userId = req.user.id
 
-			const foundLike = await Like.findByPk(id)
-			if (!foundLike) throw { name: 'DATA_NOT_FOUND', model: 'Video' }
-			const data = await Like.destroy({ 
-				where: {
-					id
-					// [Op.and]: [{ userId }, { videoId }],
-					// userId, videoId
-				} 
-			})
-			res.status(200).json({
-				message: 'Successfully remove video from your list!'
-			})
-		} catch (err) {
-			next(err)
-		}
-	}
+	// 		const foundLike = await Like.findByPk(id)
+	// 		if (!foundLike) throw { name: 'DATA_NOT_FOUND', model: 'Video' }
+	// 		const data = await Like.destroy({ 
+	// 			where: {
+	// 				id
+	// 				// [Op.and]: [{ userId }, { videoId }],
+	// 				// userId, videoId
+	// 			} 
+	// 		})
+	// 		res.status(200).json({
+	// 			message: 'Successfully remove video from your list!'
+	// 		})
+	// 	} catch (err) {
+	// 		next(err)
+	// 	}
+	// }
 }
 
 module.exports = {
