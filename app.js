@@ -278,8 +278,6 @@ app.get("/invoice", async (req, res, next) => {
       where: { id: UserId },
     });
     console.log(dataInvoice);
-    // console.log(data.rajaongkir.results);
-    // console.log(data.rajaongkir.results);
 
     res.status(200).json(dataInvoice);
   } catch (err) {
@@ -301,7 +299,7 @@ app.post("/invoice/:invoiceId", async (req, res, next) => {
     );
 
     // console.log("lonotng");
-    res.status(200).json({ msg: `invoive id:${invoiceId} LUNAS` });
+    res.status(200).json({ msg: `invoice id:${invoiceId} LUNAS` });
   } catch (err) {
     next(err);
   }
@@ -356,6 +354,7 @@ app.post("/cost", async (req, res, next) => {
     next(err);
   }
 });
+
 //payment
 app.post("/payment", async (req, res, next) => {
   try {
