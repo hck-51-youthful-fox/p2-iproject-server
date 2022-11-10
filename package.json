@@ -4,7 +4,7 @@
   "description": "Individual Project - Server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "db:dev": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "test": "jest --runInBand --forceExit --testTimeout=1000",
     "db:test": "npx sequelize-cli --env test db:drop && npx sequelize-cli --env test db:create && npx sequelize-cli --env test db:migrate"
