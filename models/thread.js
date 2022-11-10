@@ -18,9 +18,31 @@ module.exports = (sequelize, DataTypes) => {
   }
   Thread.init(
     {
-      name: DataTypes.STRING,
-      rating: DataTypes.INTEGER,
-      thread: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: { message: "Topic is required" },
+          notEmpty: { message: "Topic is required" },
+        },
+      },
+
+      rating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: { message: "Rating is required" },
+          notEmpty: { message: "Rating is required" },
+        },
+      },
+      thread: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+          notNull: { message: "Thread is required" },
+          notEmpty: { message: "Thread is required" },
+        },
+      },
       like: DataTypes.INTEGER,
     },
     {
