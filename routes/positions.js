@@ -5,6 +5,4 @@ router.post("/", Controller.addPositions);
 
 router.get("/", Controller.viewPositions);
 
-router.delete('/', Controller.deletePosition)
-
 module.exports = router;

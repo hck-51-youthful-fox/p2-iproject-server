@@ -117,18 +117,18 @@ class Controller {
     }
   }
 
-  static async deletePosition(req, res, next) {
-    try {
-      const deleted = await Position.destroy({
-        where: {
-          UserId: req.user.id,
-        },
-      });
-      res.status(deleted);
-    } catch (error) {
-      next(error);
-    }
-  }
+  // static async deletePosition(req, res, next) {
+  //   try {
+  //     const deleted = await Position.destroy({
+  //       where: {
+  //         UserId: req.user.id,
+  //       },
+  //     });
+  //     res.status(deleted);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 }
 
 module.exports = Controller;
