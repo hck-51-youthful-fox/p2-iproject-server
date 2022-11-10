@@ -4,7 +4,7 @@ const { getToken, tokenVerif } = require("../helpers/jwt");
 const { Op } = require("sequelize");
 const getAccess = require("../helpers/access");
 const axios = require("axios");
-// const { OAuth2Client } = require("google-auth-library");
+const { OAuth2Client } = require("google-auth-library");
 
 class Controller {
   static async register(req, resp, next) {
@@ -76,6 +76,7 @@ class Controller {
         username: data.username,
       });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
