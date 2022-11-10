@@ -2,6 +2,7 @@
 
 const { comparePassword, createToken } = require('../helpers/index');
 const { User } = require('../models/');
+const { sendMail } = require('../helpers/nodemailer');
 
 class UserController {
 	static async register (req, res, next) {
@@ -45,8 +46,9 @@ class UserController {
 				access_token, 
 				email: foundUser.email,
 				id: foundUser.id,
-				isPremium: foundUser.isPremium
-			})
+				isPremium: foundUser.isPremium,
+				avatar: foundUser.avatar
+			}) 
 		} catch (error) {
 			next(error)
 		}
@@ -63,7 +65,8 @@ class UserController {
 				{ isPremium: true },
 				{ where: {id} }
 			)
-			console.log('success');
+			// console.log('success');
+			sendMail(req.user.email)
 			res.status(200).json({ 
 				message: 'Successfully upgraded your account to Premium!'
 			})
@@ -77,10 +80,9 @@ class UserController {
 		// Create Snap API instance
 		let snap = new midtransClient.Snap({
 				// Set to true if you want Production Environment (accept real transaction).
-				isProduction : false,
-				// serverKey : process.env.MIDTRANS_SERVER_KEY
-				serverKey : "Mid-server-skHRQIBfPYkF4TX08y_uMSed"
-			});
+				isProduction: false,
+				serverKey: process.env.MIDTRANS_SERVER_KEY
+		});
 
 		let orderId = new Date().valueOf();
 		
@@ -95,16 +97,12 @@ class UserController {
 			customer_details: {
 				email: req.user.email,
 				username: req.user.email.split('@')[0]
-				// email: 'ivanjisoo@gmail.com',
-				// username: 'ivanxjisoo'
 			}
 		};
 		
 		snap.createTransaction(parameter)
 			.then((transaction)=>{
-				// transaction token
 				let transactionToken = transaction.token;
-				// console.log(transaction);
 				res.status(201).json({transactionToken});
 			})
 			.catch((err) => {

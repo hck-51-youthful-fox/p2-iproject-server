@@ -17,7 +17,7 @@ const authenticate = async (req, res, next) => {
 				email: user.email,
 				// isPremium: user.isPremium
 			}
-			// console.log(req.user);
+			console.log(req.user);
 			next()
 		}
 	} catch (error) {
