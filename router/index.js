@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Controller = require("../controllers/controller");
 const authentication = require("../middleware/authentication");
 const authorization = require("../middleware/authorization");
-
+router.get('/', Controller.home)
 router.post("/register", Controller.registrasi);
 router.post("/login", Controller.login);
 

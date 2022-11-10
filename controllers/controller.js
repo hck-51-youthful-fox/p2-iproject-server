@@ -2,10 +2,30 @@ const { comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const { User, Note, Category } = require("../models");
 const main = require("../helpers/nodemailer");
+const axios = require("axios");
 
 class Controller {
+  static async home(req, res, next) {
+    try {
+      res.status(401).json({ message: "Unauthorization" });
+    } catch (error) {
+      next(error);
+    }
+  }
   static async registrasi(req, res, next) {
     try {
+      let data = await axios({
+        url: "https://spott.p.rapidapi.com/places/ip/me",
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key":
+            "256ac24aa6msh57c067af38b630ap1bed48jsn2e875a17a093",
+          "X-RapidAPI-Host": "spott.p.rapidapi.com",
+        },
+      });
+
+      let lokasi = data.data.name;
+      // console.log(lokasi, "ini lokasi");
       const { username, email, password } = req.body;
       let user = await User.create({
         username,
@@ -14,7 +34,7 @@ class Controller {
         status: "reguler",
       });
       console.log("test");
-      main(email, username);
+      main(email, username, lokasi);
       res.status(201).json({
         id: user.id,
         email: user.email,
@@ -138,12 +158,13 @@ class Controller {
     try {
       const { title, description, date, categoryId } = req.body;
       const { id } = req.user;
+      // console.log(categoryId, "<<<ini userId");
       let data = await Note.create({
         title: title,
         description: description,
         date: date,
-        userId: id,
-        categoryId: +categoryId,
+        userId: +id,
+        categoryId: categoryId,
       });
       res.status(201).json({
         code: 201,

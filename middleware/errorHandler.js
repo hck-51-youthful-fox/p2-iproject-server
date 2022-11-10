@@ -2,7 +2,7 @@ const ErrorHandler = async (error, req, res, next) => {
   let code = 500;
   let message = "Internal Server Error";
 
-  // console.log(error, "<-- dari error handler");
+  console.log(error, "<-- dari error handler");
 
   if (
     error.name === "SequelizeValidationError" ||

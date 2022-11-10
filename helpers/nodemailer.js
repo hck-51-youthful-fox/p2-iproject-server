@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 ("use strict");
 
-async function main(email, username) {
+async function main(email, username, lokasi) {
   let transporter = await nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -16,12 +16,12 @@ async function main(email, username) {
     to: email,
     subject: "Hello ✔", // Subject line
     text: "Hello!", // plain text body
-    html: `"<b>Hello html</b>", // html body
+    html: `"<b>Hello ${username}</b>",
 
-
+    location: ${lokasi}
     <p>Hi, <b>${username}!</b> Your account has been created!</p>`,
   });
-  console.log(info, "<<<<");
+  // console.log(info, "<<<<");
 }
 
 module.exports = main;
