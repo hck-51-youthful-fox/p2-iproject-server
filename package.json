@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "@mozilla/readability": "^0.4.2",
+    "axios": "^1.1.3",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsdom": "^20.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "midtrans-client": "^1.3.1",
+    "pg": "^8.8.0",
+    "sequelize": "^6.25.5"
+  },
+  "name": "p2-iproject-server",
+  "description": "Individual Project - Server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdhhauzan/p2-iproject-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdhhauzan/p2-iproject-server/issues"
+  },
+  "homepage": "https://github.com/rdhhauzan/p2-iproject-server#readme"
+}
