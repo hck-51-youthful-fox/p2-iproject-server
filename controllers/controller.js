@@ -45,6 +45,41 @@ class Controller {
       next(error);
     }
   }
+
+  static async googleLogin(req, resp, next) {
+    try {
+      let { google_token } = req.headers;
+      const client = new OAuth2Client(process.env.GOOGLE_ID);
+      const ticket = await client.verifyIdToken({
+        idToken: google_token,
+        audience: process.env.GOOGLE_ID,
+      });
+      const payload = ticket.getPayload();
+      const userid = payload["sub"];
+      const [data, created] = await User.findOrCreate({
+        where: {
+          email: payload.email,
+        },
+        defaults: {
+          username: payload.given_name,
+          email: payload.email,
+          password: "googlelogin123",
+          phoneNumber: "080808080808",
+          address: "googlebased",
+        },
+        hooks: false,
+      });
+      const access_token = getToken({ id: data.id });
+      resp.status(200).json({
+        access_token,
+        email: data.email,
+        username: data.username,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async getPets(req, resp, next) {
     try {
       const { access_token } = await getAccess();
@@ -93,7 +128,20 @@ class Controller {
     try {
       const { id } = req.user;
       const data = await RentReview.findAll({
-        where: { UserId: id },
+        where: { UserId: id, rented: true },
+        attributes: { exclude: ["updatedAt"] },
+      });
+      resp.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getRecentRents(req, resp, next) {
+    try {
+      const { id } = req.user;
+      const data = await RentReview.findAll({
+        where: { UserId: id, rented: false },
         attributes: { exclude: ["updatedAt"] },
       });
       resp.status(200).json(data);
@@ -162,6 +210,17 @@ class Controller {
           },
         }
       );
+      await axios({
+        method: "POST",
+        url: "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send",
+        headers: {
+          "content-type": "application/json",
+          "X-RapidAPI-Key":
+            "c9fa7c2cc8msh4b6f4d653bb3eaep17c0bajsnec2453606e00",
+          "X-RapidAPI-Host": "rapidprod-sendgrid-v1.p.rapidapi.com",
+        },
+        data: `{"personalizations":[{"to":[{"email":"${req.user.email}"}],"subject":"Thank you for using our service!"}],"from":{"email":"Rent-A-Pet@gmail.net"},"content":[{"type":"text/plain","value":"Thank you!"}]}`,
+      });
       resp.status(200).json({ msg: "Review posted" });
     } catch (error) {
       console.log(error);

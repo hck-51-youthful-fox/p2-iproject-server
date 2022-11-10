@@ -5,6 +5,7 @@ const authorization = require("../middlewares/authorization");
 const router = express.Router();
 
 router.get("/", Controller.getRents);
-router.put("/:id", authentication, authorization, Controller.review);
+router.get("/recent", Controller.getRecentRents);
+router.put("/:id", authorization, Controller.review);
 
 module.exports = router;

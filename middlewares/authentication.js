@@ -8,7 +8,7 @@ const authentication = async (req, resp, next) => {
     if (!data) throw { name: "invalid_access" };
     const foundUser = await User.findByPk(data.id);
     if (!foundUser) throw { name: "not_found" };
-    req.user = { id: data.id, username: data.username };
+    req.user = { id: data.id, username: data.username, email: foundUser.email };
     next();
   } catch (error) {
     next(error);
