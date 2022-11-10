@@ -17,7 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       UserId: DataTypes.INTEGER,
       ThreadId: DataTypes.INTEGER,
-      comment: DataTypes.TEXT,
+      comment: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+          notNull: { message: "Comment cannot blank" },
+          notEmpty: { message: "Comment cannot blank" },
+        },
+      },
       imgUrl: DataTypes.STRING,
     },
     {

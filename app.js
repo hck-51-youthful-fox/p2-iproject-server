@@ -55,7 +55,6 @@ app.post("/register", async (req, res, next) => {
     });
     res.status(201).json({ id: data.id, email: data.email });
   } catch (error) {
-    console.log(error);
     let message;
     if (error.name === "SequelizeValidationError") {
       message = error.errors[0].message;
@@ -101,23 +100,18 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// app.get("/thread", async (req, res, next) => {
-//   try {
-//     const data = await Thread.findAll();
-//     res.status(200).json(data);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// });
-
 app.get("/comments", authentification, async (req, res, next) => {
   try {
     const data = await Comment.findAll();
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    let message;
+    if (error.name === "SequelizeValidationError") {
+      message = error.errors[0].message;
+    }
+    if (error.name === "SequelizeUniqueConstrainError") {
+      message = error.errors[0].message;
+    }
   }
 });
 
@@ -139,7 +133,6 @@ app.get("/detail/:id", async (req, res, next) => {
     });
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -147,6 +140,9 @@ app.get("/detail/:id", async (req, res, next) => {
 app.post("/comments/:id", authentification, async (req, res, next) => {
   try {
     const { comment } = req.body;
+    if (!comment) {
+      return res.status(400).json({ message: "Comment cannot blank" });
+    }
     const imgUrl = "-";
     const data = await Comment.create({
       UserId: req.user.id,
@@ -156,8 +152,13 @@ app.post("/comments/:id", authentification, async (req, res, next) => {
     });
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    let message;
+    if (error.name === "SequelizeValidationError") {
+      message = error.errors[0].message;
+    }
+    if (error.name === "SequelizeUniqueConstrainError") {
+      message = error.errors[0].message;
+    }
   }
 });
 
@@ -251,6 +252,15 @@ app.get("/thread", async (req, res, next) => {
 app.post("/add", authentification, async (req, res, next) => {
   const like = 0;
   const { name, rating, thread } = req.body;
+  if (!name) {
+    return res.status(400).json({ message: "Topic is required" });
+  }
+  if (!rating) {
+    return res.status(400).json({ message: "Rating is required" });
+  }
+  if (!thread) {
+    return res.status(400).json({ message: "Rating is required" });
+  }
   try {
     const data = await Thread.create({
       name,
@@ -258,10 +268,15 @@ app.post("/add", authentification, async (req, res, next) => {
       thread,
       like,
     });
-    res.status(200).json({ data });
+    res.status(201).json({ data });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    let message;
+    if (error.name === "SequelizeValidationError") {
+      message = error.errors[0].message;
+    }
+    if (error.name === "SequelizeUniqueConstrainError") {
+      message = error.errors[0].message;
+    }
   }
 });
 
