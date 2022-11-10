@@ -179,7 +179,7 @@ class Controller {
   static async fetchUserDetail(req, res, next) {
     try {
       const { id } = req.params;
-      const data = User.findByPk(id);
+      const data = await User.findByPk(id);
       console.log(data);
       res.status(200).json(data);
     } catch (error) {
