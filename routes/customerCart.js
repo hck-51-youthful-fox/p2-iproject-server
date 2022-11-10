@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const CartController = require("../controllers/cartController");
+const CartController = require("../Controllers/cartController");
 
 router.get("/", CartController.readCart);
 router.patch("/", CartController.updateCartStatusAfterPayment);
