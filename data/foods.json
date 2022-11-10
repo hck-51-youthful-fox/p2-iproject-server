@@ -50,7 +50,7 @@
   {
     "name": "Bukan Aqua",
     "imageUrl": "https://lzd-img-global.slatic.net/g/p/0e8f66bb4da5defb4c45ae4a1aa6c21e.jpg_720x720q80.jpg_.webp",
-    "price": 2000,
+    "price": 50,
     "CategoryId": 2
   },
   {
@@ -110,7 +110,7 @@
   {
     "name": "Kue Klepon",
     "imageUrl": "https://harianresep.com/wp-content/uploads/2022/01/resep-klepon-ketan-gula-jawa.jpg",
-    "price": 5000,
+    "price": 100,
     "CategoryId": 4
   }
 ]
