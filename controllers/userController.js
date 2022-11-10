@@ -176,6 +176,16 @@ class Controller {
       console.log(error);
     }
   }
+  static async fetchUserDetail(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = User.findByPk(id);
+      console.log(data);
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = Controller;
