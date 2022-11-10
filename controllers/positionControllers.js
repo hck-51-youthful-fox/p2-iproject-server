@@ -109,10 +109,23 @@ class Controller {
         },
         include: Player,
       });
-      console.log(data);
+      console.log(data, "ini data");
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
+      next(error);
+    }
+  }
+
+  static async deletePosition(req, res, next) {
+    try {
+      const deleted = await Position.destroy({
+        where: {
+          UserId: req.user.id,
+        },
+      });
+      res.status(deleted);
+    } catch (error) {
       next(error);
     }
   }
