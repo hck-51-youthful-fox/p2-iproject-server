@@ -2,12 +2,102 @@
   {
     "name": "rinso",
     "price": 2000,
-    "imageUrl": "balbalablaba"
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "kayu manis",
+    "price": 1200,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "tumbar",
+    "price": 2500,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "abc kapal api",
+    "price": 5000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "teh pucuk",
+    "price": 1500,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "ichi ocha",
+    "price": 100,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "boneka",
+    "price": 3000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "baygon",
+    "price": 90000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "aice",
+    "price": 1000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "golda",
+    "price": 100,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "dacow",
+    "price": 500,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "brambang",
+    "price": 1000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "brambang",
+    "price": 12000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "terigu",
+    "price": 3000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "boba",
+    "price": 600,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "nata de cooc",
+    "price": 1000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "santan",
+    "price": 1000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "kacang",
+    "price": 5000,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
+  },
+  {
+    "name": "beras",
+    "price": 400,
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
   },
 
   {
-    "name": "lontong",
+    "name": "gula",
     "price": 2000,
-    "imageUrl": "bldsadjsa"
+    "imageUrl": "https://cf.shopee.co.id/file/a405787b9c9705e804db00a6d060c240"
   }
 ]
