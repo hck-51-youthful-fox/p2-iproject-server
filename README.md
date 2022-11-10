@@ -4,22 +4,382 @@ Individual Project - Server
 List of Available Endpoints:
 - `GET /pets`
 - `GET /pets/id`
+- `GET /types`
+- `GET /rents`
+- `GET /rents/recent`
+- `GET /reviews`
 - `POST /pets/id`
-- `DELETE /movies/:id`
-- `GET /genres`
+- `PUT /rents/:id`
 - `POST /users/register`
 - `POST /users/login`
 - `POST /users/google-login`
 
-## GET /movies
+## GET /pets
 ### Description
-- get all movies data
+- get all pets data
+
+### response
+_200 - OK_
+
+- Body
+```json
+{
+    "animals": [
+        {
+            "id": 52506866,
+            "organization_id": "NJ927",
+            "url": "https://www.petfinder.com/cat/jimma-52506866/nj/toms-river/all-fur-one-pet-rescue-and-adoptions-inc-nj927/?referrer_id=08c1583b-3ed9-4941-8f88-1ca738c30f43",
+            "type": "Cat",
+            "species": "Cat",
+            "breeds": {
+                "primary": "Domestic Short Hair",
+                "secondary": null,
+                "mixed": false,
+                "unknown": false
+            },
+            "colors": {
+                "primary": "Black & White / Tuxedo",
+                "secondary": null,
+                "tertiary": null
+            },
+            "age": "Young",
+            "gender": "Female",
+            "size": "Small",
+            "coat": null,
+            "attributes": {
+                "spayed_neutered": false,
+                "house_trained": false,
+                "declawed": false,
+                "special_needs": false,
+                "shots_current": false
+            },
+            "environment": {
+                "children": true,
+                "dogs": null,
+                "cats": true
+            },
+            "tags": [
+                "Social and Friendly"
+            ],
+            "name": "Jimma",
+            "description": "The ultimate momma, Jimma, is a love bug! She is a part of the Ethiopia litter with her babes. Jimma...",
+            "organization_animal_id": "19436",
+            "photos": [
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751"
+                },
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/2/?bust=1667897730&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/2/?bust=1667897730&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/2/?bust=1667897730&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/2/?bust=1667897730"
+                },
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/3/?bust=1667897731&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/3/?bust=1667897731&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/3/?bust=1667897731&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/3/?bust=1667897731"
+                },
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/4/?bust=1667897720&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/4/?bust=1667897720&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/4/?bust=1667897720&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/4/?bust=1667897720"
+                },
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/5/?bust=1667897730&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/5/?bust=1667897730&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/5/?bust=1667897730&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/5/?bust=1667897730"
+                },
+                {
+                    "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/6/?bust=1667897729&width=100",
+                    "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/6/?bust=1667897729&width=300",
+                    "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/6/?bust=1667897729&width=600",
+                    "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/6/?bust=1667897729"
+                }
+            ],
+            "primary_photo_cropped": {
+                "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=300",
+                "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=450",
+                "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751&width=600",
+                "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/52506866/1/?bust=1667975751"
+            },
+            "videos": [],
+            "status": "adoptable",
+            "status_changed_at": "2021-09-29T16:05:38+0000",
+            "published_at": "2021-07-29T11:09:42+0000",
+            "distance": null,
+            "contact": {
+                "email": "Adoptions@allfurone.org",
+                "phone": "(732) 255-3871",
+                "address": {
+                    "address1": "1747 Hooper Avenue",
+                    "address2": "Suite 11",
+                    "city": "Toms River",
+                    "state": "NJ",
+                    "postcode": "08753",
+                    "country": "US"
+                }
+            },
+            "_links": {
+                "self": {
+                    "href": "/v2/animals/52506866"
+                },
+                "type": {
+                    "href": "/v2/types/cat"
+                },
+                "organization": {
+                    "href": "/v2/organizations/nj927"
+                }
+            }
+        },
+        ...
+    ]
+}
+```
+
+--------------------------------------------
+
+## GET /pets/:id
+### Description
+- one pets data
+
+
+
+### response
+_200 - OK_
+
+- Body
+```json
+{
+    "id": 58788734,
+    "organization_id": "TN478",
+    "url": "https://www.petfinder.com/dog/hercules-58788734/tn/chattanooga/mckamey-animal-center-tn478/?referrer_id=08c1583b-3ed9-4941-8f88-1ca738c30f43",
+    "type": "Dog",
+    "species": "Dog",
+    "breeds": {
+        "primary": "Boxer",
+        "secondary": null,
+        "mixed": false,
+        "unknown": false
+    },
+    "colors": {
+        "primary": "Brindle",
+        "secondary": null,
+        "tertiary": null
+    },
+    "age": "Adult",
+    "gender": "Male",
+    "size": "Large",
+    "coat": null,
+    "attributes": {
+        "spayed_neutered": true,
+        "house_trained": false,
+        "declawed": null,
+        "special_needs": false,
+        "shots_current": true
+    },
+    "environment": {
+        "children": null,
+        "dogs": false,
+        "cats": null
+    },
+    "tags": [
+        "Food Motivated",
+        "Leash Walk Me",
+        "Loves Squeaker Toys",
+        "Loves Stuffed Toys",
+        "Loves Tennis Balls",
+        "Seems Housetrained",
+        "Shy at First",
+        "Single Dog Home"
+    ],
+    "name": "Hercules",
+    "description": null,
+    "organization_animal_id": "MACT-A-100114",
+    "photos": [
+        {
+            "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=100",
+            "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=300",
+            "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=600",
+            "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532"
+        },
+        {
+            "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/2/?bust=1667943932&width=100",
+            "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/2/?bust=1667943932&width=300",
+            "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/2/?bust=1667943932&width=600",
+            "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/2/?bust=1667943932"
+        },
+        {
+            "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/3/?bust=1667943933&width=100",
+            "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/3/?bust=1667943933&width=300",
+            "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/3/?bust=1667943933&width=600",
+            "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/3/?bust=1667943933"
+        },
+        {
+            "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/4/?bust=1667943931&width=100",
+            "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/4/?bust=1667943931&width=300",
+            "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/4/?bust=1667943931&width=600",
+            "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/4/?bust=1667943931"
+        },
+        {
+            "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/5/?bust=1667943931&width=100",
+            "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/5/?bust=1667943931&width=300",
+            "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/5/?bust=1667943931&width=600",
+            "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/5/?bust=1667943931"
+        }
+    ],
+    "primary_photo_cropped": {
+        "small": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=300",
+        "medium": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=450",
+        "large": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532&width=600",
+        "full": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58788734/1/?bust=1667878532"
+    },
+    "videos": [],
+    "status": "adoptable",
+    "status_changed_at": "2022-11-08T03:25:22+0000",
+    "published_at": "2022-11-08T03:25:22+0000",
+    "distance": null,
+    "contact": {
+        "email": "adoptions@mckameyanimalcenter.org",
+        "phone": "(423) 305-6514",
+        "address": {
+            "address1": "4500 N. Access Road",
+            "address2": null,
+            "city": "Chattanooga",
+            "state": "TN",
+            "postcode": "37415",
+            "country": "US"
+        }
+    },
+    "_links": {
+        "self": {
+            "href": "/v2/animals/58788734"
+        },
+        "type": {
+            "href": "/v2/types/dog"
+        },
+        "organization": {
+            "href": "/v2/organizations/tn478"
+        }
+    }
+}
+```
+### response
+_404 - Not found_
+
+ Body
+```json
+{"msg":"Pet data not found!"}
+```
+
+--------------------------------------------
+
+## GET /types
+### Description
+- get all types data
+
+### response
+_200 - OK_
+
+- Body
+```json
+{
+    "types": [
+        {
+            "name": "Dog",
+            "coats": [
+                "Hairless",
+                "Short",
+                "Medium",
+                "Long",
+                "Wire",
+                "Curly"
+            ],
+            "colors": [
+                "Apricot / Beige",
+                "Bicolor",
+                "Black",
+                "Brindle",
+                "Brown / Chocolate",
+                "Golden",
+                "Gray / Blue / Silver",
+                "Harlequin",
+                "Merle (Blue)",
+                "Merle (Red)",
+                "Red / Chestnut / Orange",
+                "Sable",
+                "Tricolor (Brown, Black, & White)",
+                "White / Cream",
+                "Yellow / Tan / Blond / Fawn"
+            ],
+            "genders": [
+                "Male",
+                "Female"
+            ],
+            "_links": {
+                "self": {
+                    "href": "/v2/types/dog"
+                },
+                "breeds": {
+                    "href": "/v2/types/dog/breeds"
+                }
+            }
+        },
+        ...
+    ]
+}
+```
+
+--------------------------------------------
+## GET /rents
+### Description
+- get all active rents data
+
 
 ### request
 - headers
 ```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
+{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY3OTUwOTU3fQ.OdiX5FgUDEEB0dgOSCk0c7IDhz30oub73LS8hsEJVE4"}
 ```
+
+
+### response
+_200 - OK_
+
+- Body
+```json
+[
+    {
+        "id": 9,
+        "name": "Remy ",
+        "imgUrl": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56519063/2/?bust=1659576621&width=300",
+        "content": null,
+        "rating": null,
+        "rented": true,
+        "rentEnd": null,
+        "PetId": 56519063,
+        "UserId": 1,
+        "createdAt": "2022-11-10T04:24:18.402Z"
+    }
+]
+```
+--------------------------------------------
+## GET /rents/recent
+### Description
+- get recent rents data
+
+
+### request
+- headers
+```json
+{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY3OTUwOTU3fQ.OdiX5FgUDEEB0dgOSCk0c7IDhz30oub73LS8hsEJVE4"}
+```
+
 
 ### response
 _200 - OK_
@@ -29,104 +389,29 @@ _200 - OK_
 [
     {
         "id": 1,
-        "title": "Kara No Kyokai: Paradox Bridge",
-        "synopsis": "Illidge",
-        "trailerUrl": "https://www.youtube.com/watch?v=_OeIWIkDXvk",
-        "imgUrl": "https://cdn.myanimelist.net/images/anime/1574/112838.jpg",
-        "rating": 9,
-        "authorId": 5,
-        "genreId": 2,
-        "createdAt": "2022-10-17T11:05:42.151Z",
-        "updatedAt": "2022-10-17T11:05:42.151Z",
-        "Genre": {
-            "id": 2,
-            "name": "Adventure",
-            "createdAt": "2022-10-17T11:05:40.026Z",
-            "updatedAt": "2022-10-17T11:05:40.026Z"
-        },
-        "User": {
-            "id": 5,
-            "username": "awelbrock4",
-            "email": "rloughrey4@usatoday.com",
-            "role": "staff",
-            "phoneNumber": "582-393-1190",
-            "address": "5 Gerald Parkway",
-            "createdAt": "2022-10-17T11:05:41.123Z",
-            "updatedAt": "2022-10-17T11:05:41.123Z"
-        }
-    },
-    ...
+        "name": "Holly",
+        "imgUrl": "https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/58797522/2/?bust=1667950195&width=300",
+        "content": "lucuuukk bangeettt",
+        "rating": 4,
+        "rented": false,
+        "rentEnd": "2022-11-08T23:49:23.566Z",
+        "PetId": 58797522,
+        "UserId": 1,
+        "createdAt": "2022-11-08T23:46:00.048Z"
+    }, ...
 ]
 ```
 
---------------------------------------------
-
-## GET /movies/:id
+## POST /pets/:id
 ### Description
-- one movie data
+- add pet to rent
 
 ### request
 - headers
 ```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
+{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY3OTUwOTU3fQ.OdiX5FgUDEEB0dgOSCk0c7IDhz30oub73LS8hsEJVE4"}
 ```
 
-### response
-_200 - OK_
-
-- Body
-```json
-{
-    "id": 1,
-    "title": "Kara No Kyokai: Paradox Bridge",
-    "synopsis": "Illidge",
-    "trailerUrl": "https://www.youtube.com/watch?v=_OeIWIkDXvk",
-    "imgUrl": "https://cdn.myanimelist.net/images/anime/1574/112838.jpg",
-    "rating": 4,
-    "authorId": 5,
-    "genreId": 2,
-    "createdAt": "2022-10-17T09:02:42.577Z",
-    "updatedAt": "2022-10-17T09:02:42.577Z",
-    "Genre": {
-        "name": "Adventure"
-    },
-    "User": {
-        "username": "awelbrock4"
-    }
-}
-```
-### response
-_404 - Not found_
-
- Body
-```json
-{"msg":"Movie data not found!"}
-```
-
---------------------------------------------
-
-## POST /movies
-### Description
-- add movie
-
-### request
-- headers
-```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
-```
-
--body
-```json
-{
-    "title": "Dragon Ball Super: Broly",
-        "synopsis": "BROLLLYYYYYYYY",
-        "trailerUrl": "https://www.youtube.com/watch?v=nv5FD7NLHCc",
-        "imgUrl": "https://upload.wikimedia.org/wikipedia/en/1/13/DB_THE_MOVIE_NO._20.jpg",
-        "rating": 9,
-        "genreId": 10,
-        "authorId": 2
-}
-```
 
 ### response
 _201 - Created_
@@ -134,19 +419,7 @@ _201 - Created_
 - Body
 ```json
 {
-    "msg": "Movie has been created",
-    "data": {
-        "id": 4,
-        "title": "Dragon Ball Super: Broly",
-        "synopsis": "BROLLLYYYYYYYY",
-        "trailerUrl": "https://www.youtube.com/watch?v=nv5FD7NLHCc",
-        "imgUrl": "https://upload.wikimedia.org/wikipedia/en/1/13/DB_THE_MOVIE_NO._20.jpg",
-        "rating": 9,
-        "genreId": 10,
-        "authorId": 2,
-        "updatedAt": "2022-10-17T12:03:00.567Z",
-        "createdAt": "2022-10-17T12:03:00.567Z"
-    }
+    "msg": "You are now renting Remy "
 }
 ```
 ### response
@@ -165,57 +438,9 @@ _400 - Bad Request_
 ```
 --------------------------------------------
 
-## DELETE /movies/:id (DEPRECATED)
-```
-THIS FUNCTION HAS BEEN DEPRECATED AND UNAVAILABLE IN THE WEBSITE SINCE THE PUT AND PATCH FUNCTION
-```
+## PUT /rents/:id
 ### Description
-- delete movie
-
-### request
-- headers
-```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
-```
-
-### response
-_200 - OK_
-
-- Body
-```json
-{
-    "msg": "Movie with the name Dragon Ball Super: Broly has been deleted."
-}
-```
-
-### response
-_403 - Forbidden_
-
- Body
-```json
-{"msg":"You are forbidden to do this action!"}
-```
-
-### response
-_404 - Not found_
-
- Body
-```json
-{"msg":"User data not found!"}
-```
-### response
-_404 - Not found_
-
- Body
-```json
-{"msg":"Movie data not found!"}
-```
-
---------------------------------------------
-
-## PUT /movies/:id
-### Description
-- edit movie
+- stop renting and add review
 
 ### request
 - headers
@@ -225,12 +450,8 @@ _404 - Not found_
 - Body
 ```json
 {
-        "title": "DBS BROLY",
-        "synopsis": "BROLLLYYYYYYYY",
-        "trailerUrl": "https://www.youtube.com/watch?v=nv5FD7NLHCc",
-        "imgUrl": "https://upload.wikimedia.org/wikipedia/en/1/13/DB_THE_MOVIE_NO._20.jpg",
-        "rating": 10,
-        "genreId": 10
+        "rating": 4,
+        "comment": "uwaw",
 }
 ```
 
@@ -240,7 +461,7 @@ _200 - OK_
 - Body
 ```json
 {
-    "msg": "Movie with the name DBS BROLY has been updated."
+    "msg": "Review posted"
 }
 ```
 
@@ -260,79 +481,6 @@ _404 - Not found_
 {"msg":"User data not found!"}
 ```
 
---------------------------------------------
-
-## PATCH /movies/:id
-### Description
-- change movie status
-
-### request
-- headers
-```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
-```
-- Body
-```json
-{
-        "status": "Archived"
-}
-```
-
-### response
-_200 - OK_
-
-- Body
-```json
-{
-    "msg": "Kara No Kyokai: Paradox Bridge status has been changed from Active to Archived."
-}
-```
-
-### response
-_403 - Forbidden_
-
- Body
-```json
-{"msg":"You are forbidden to do this action!"}
-```
-
-### response
-_404 - Not found_
-
- Body
-```json
-{"msg":"User data not found!"}
-```
-
-
-
---------------------------------------------
-
-## GET /genres
-
-### request
-- headers
-```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
-```
-### Description
-- get all genres data
-
-### response
-_200 - OK_
-
-- Body
-```json
-[
-    {
-        "id": 1,
-        "name": "Action",
-        "createdAt": "2022-10-17T11:05:40.026Z",
-        "updatedAt": "2022-10-17T11:05:40.026Z"
-    },
-    ...
-]
-```
 --------------------------------------------
 
 ## POST /users/register
@@ -374,35 +522,7 @@ _400 - Bad Request_
 ```
 --------------------------------------------
 
-## GET /logs
 
-### request
-- headers
-```json
-{"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImlhdCI6MTY2NjIzODkxM30.aMQLfrvMGA56nW3amkms4DY-8-54jekjzTZtDPhBaFE"}
-```
-### Description
-- get all logs data
-
-### response
-_200 - OK_
-
-- Body
-```json
-[
-    {
-        "id": 6,
-        "title": "DBS BROLY",
-        "description": "Movie with the name DBS BROLY has been updated.",
-        "updatedBy": "abertot0",
-        "createdAt": "2022-10-25T10:03:16.667Z",
-        "updatedAt": "2022-10-25T10:03:16.667Z"
-    },
-    ...
-]
-```
-
---------------------------------------------
 ## POST /users/login
 ### Description
 - user login
