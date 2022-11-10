@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Elden Ring",
+        "releaseDate": "2022-02-25",
+        "imageUrl": "https://media.rawg.io/media/games/5ec/5ecac5cb026ec26a56efcc546364e348.jpg",
+        "rating" : 95
+    },
+    {
+        "name": "Bloodborne",
+        "releaseDate": "2015-03-24",
+        "imageUrl" : "https://media.rawg.io/media/games/214/214b29aeff13a0ae6a70fc4426e85991.jpg",
+        "rating" : 92
+    },
+    {
+        "name": "Dark Souls III",
+        "releaseDate": "2016-04-11",
+        "imageUrl": "https://media.rawg.io/media/games/da1/da1b267764d77221f07a4386b6548e5a.jpg",
+        "rating" : 89
+    },
+    {
+        "name": "Dark Souls II",
+        "releaseDate": "2014-03-11",
+        "imageUrl": "https://media.rawg.io/media/games/651/6512783a214618584d144d5d852ba595.jpg",
+        "rating" : 91
+    },
+    {
+        "name": "Dark Souls",
+        "releaseDate": "2011-09-22",
+        "imageUrl": "https://media.rawg.io/media/games/582/582b5518a52f5086d15dde128264b94d.jpg",
+        "rating" : 89
+    },
+    {
+        "name": "FINAL FANTASY XIV: Endwalker",
+        "releaseDate": "2021-12-07",
+        "imageUrl": "https://media.rawg.io/media/games/bf5/bf5ac217a9e10ff98301e8359a870dc1.jpg",
+        "rating" : 91
+    },
+    {
+        "name" : "BlazBlue: Central Fiction",
+        "releaseDate": "2016-11-01",
+        "imageUrl": "https://media.rawg.io/media/screenshots/cf5/cf58007875bc4b41fc78a93bbffb01ed.jpg",
+        "rating" : 85
+    }
+]
