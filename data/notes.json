@@ -1,0 +1,9 @@
+[
+    {
+        "title": "Belajar Javascript",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "date": "6/8/2022",
+        "userId": 1,
+        "categoryId": 2
+    }
+]
