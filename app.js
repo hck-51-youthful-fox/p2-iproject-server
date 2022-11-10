@@ -7,6 +7,10 @@ const { getDatabase } = require("firebase/database");
 const cors = require("cors");
 const { User, Investment, Stock } = require("./models");
 const midtransClient = require("midtrans-client");
+
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const port = process.env.PORT || 3000;
 
 const api_key = finnhub.ApiClient.instance.authentications["api_key"];
