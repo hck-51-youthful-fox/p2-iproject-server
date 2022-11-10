@@ -129,6 +129,7 @@ class Controller {
 
       https://app.sandbox.midtrans.com/snap/v1/transactions
      */
+    console.log("masuk subscriptionnnn ---------------------------------------------");
     const randomId = Math.floor(Math.random() * 1000);
     const config = {
       headers: {
@@ -180,7 +181,6 @@ class Controller {
     try {
       const { id } = req.params;
       const data = await User.findByPk(id);
-      console.log(data);
       res.status(200).json(data);
     } catch (error) {
       console.log(error);

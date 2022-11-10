@@ -9,8 +9,8 @@ router.post("/google-login", Controller.googleLogin);
 
 // payment
 router.use(authentication);
-router.get("/:id", Controller.fetchUserDetail);
 router.get("/payment-test", Controller.subscription);
 router.patch("/payment-success", Controller.paymentSuccess);
+router.get("/:id", Controller.fetchUserDetail);
 
 module.exports = router;
