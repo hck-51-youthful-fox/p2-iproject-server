@@ -10,12 +10,12 @@ class Controller {
 		let limit = 10;
 		let { search, page } = req.query;
 		try {
-
 			let options = {
 				include: {
 					model: Genre,
 				},
 				where: {},
+				distinct: true,
 			};
 
 			if (search) {
@@ -24,8 +24,6 @@ class Controller {
 					name: { [Op.iLike]: `%${search}%` },
 				};
 			}
-
-			console.log(page)
 
 			if (typeof +page !== "number") {
 				page = 1;
@@ -43,11 +41,13 @@ class Controller {
 				offset,
 			};
 
-			let games = await Game.findAll(options);
+			let data = await Game.findAndCountAll(options);
 
-			res.status(200).json({ games, currentPage: page });
+			res
+				.status(200)
+				.json({ totalGame: data.count, currentPage: page, games: data.rows });
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			next(error);
 		}
 	}
@@ -72,8 +72,6 @@ class Controller {
 
 			let foundGame = await Game.findByPk(id, options);
 
-			console.log(foundGame);
-
 			res.status(200).json(foundGame);
 		} catch (error) {
 			console.log(error);
@@ -91,8 +89,6 @@ class Controller {
 			}
 
 			let { data } = await axios.get(`${rawg_url}?${query}`);
-
-			console.log(data);
 
 			let genreList = await Genre.findAll();
 
