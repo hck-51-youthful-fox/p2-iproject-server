@@ -25,7 +25,7 @@ List of Available Endpoints:
 
 Description:
 
-- Get all the products data
+- Get all the product data
 
 _Response (200 - OK)_
 
