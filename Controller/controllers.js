@@ -151,18 +151,10 @@ class Controller {
       });
     });
     // res.redirect(200, transactionUrl);
-
-    await User.update(
-      { isPremium: true },
-      {
-        where: {
-          id: req.user.id,
-        },
-      }
-    );
   }
 
   static async addPost(req, res) {
+    console.log(req.user);
     let { title, content, imageUrl, tag } = req.body;
     try {
       if (!title || !content || !imageUrl || !tag) {
@@ -241,7 +233,7 @@ class Controller {
     let offset;
     const getPagingData = (data, page, limit) => {
       const { count: totalItems, rows: rows } = data;
-      console.log(data);
+      // console.log(data);
       const currentPage = page ? +page : 0;
       const totalPages = Math.ceil(totalItems / limit);
 
@@ -349,6 +341,21 @@ class Controller {
       res.status(200).json({
         message: "Post Delete Successfully!"
       })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async userUpdateStatus (req, res) {
+    try {
+      await User.update(
+        { isPremium: true },
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      );
     } catch (error) {
       console.log(error);
     }

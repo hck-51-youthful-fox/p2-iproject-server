@@ -1,10 +1,14 @@
 const express = require("express");
 const Controller = require("./Controller/controllers");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const cors = require("cors");
 const authentication = require("./middlewares/authentication");
-const { paymentAuthorization, addAuthorization, editAuthorization } = require("./middlewares/authorization");
+const {
+  paymentAuthorization,
+  addAuthorization,
+  editAuthorization,
+} = require("./middlewares/authorization");
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -19,6 +23,7 @@ app.get("/news/:id", Controller.getNewsById);
 
 app.use(authentication);
 app.post("/user/payment", paymentAuthorization, Controller.userPayment);
+app.patch("/user/updatePremium", Controller.userUpdateStatus);
 app.get("/user/post", Controller.getUserPost);
 app.post("/user/addPost", addAuthorization, Controller.addPost);
 app.put("/user/edit/:id", editAuthorization, Controller.editPost);
