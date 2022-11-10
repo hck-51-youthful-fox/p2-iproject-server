@@ -5,6 +5,7 @@ async function authentication(req, res, next) {
   try {
     let access_token = req.headers.access_token;
     if (!access_token) {
+      return res.status(400).json({ message: "Invalid Token" });
       throw { name: "Unauthorized" };
     }
     let payload = verifyToken(access_token);
@@ -12,7 +13,6 @@ async function authentication(req, res, next) {
     if (!user) {
       throw { name: "Unauthorized" };
     }
-    console.log(user);
 
     req.user = {
       id: user.id,
