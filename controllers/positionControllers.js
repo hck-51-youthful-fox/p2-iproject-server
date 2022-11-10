@@ -84,7 +84,7 @@ class Controller {
         PlayerId: ST,
       });
 
-      console.log(dataGK);
+      // console.log(dataGK);
 
       const dataReal = await Position.findAll({
         where: {
@@ -94,6 +94,37 @@ class Controller {
       });
 
       res.status(201).json(dataReal);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async viewPositions(req, res, next) {
+    console.log(req.user.id);
+    try {
+      const UserId = req.user.id;
+      const data = await Position.findAll({
+        where: {
+          UserId,
+        },
+        include: Player,
+      });
+      console.log(data, "ini data");
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  static async deletePosition(req, res, next) {
+    try {
+      const deleted = await Position.destroy({
+        where: {
+          UserId: req.user.id,
+        },
+      });
+      res.status(deleted);
     } catch (error) {
       next(error);
     }
