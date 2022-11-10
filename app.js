@@ -7,6 +7,7 @@ const { getDatabase } = require("firebase/database");
 const cors = require("cors");
 const { User, Investment, Stock } = require("./models");
 const midtransClient = require("midtrans-client");
+const port = process.env.PORT || 3000;
 
 const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = "cdl1rqiad3i4r9fur7d0cdl1rqiad3i4r9fur7dg";
@@ -213,4 +214,4 @@ app.use((error, req, res, next) => {
   res.status(code).json({ message: str });
 });
 
-app.listen(3000);
+app.listen(port);
