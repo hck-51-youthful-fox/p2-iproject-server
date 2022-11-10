@@ -1,6 +1,6 @@
 const axios = require('axios');
 const headers = {
-	"X-RapidAPI-Key": "f4fecfd9a8msh7526dbddaaeb398p1b6357jsncb86bab074ac",
+	"X-RapidAPI-Key": process.env["X-RapidAPI-Key"],
     "X-RapidAPI-Host": "youtube138.p.rapidapi.com",
 }
 // const { Op } = require('sequelize');
