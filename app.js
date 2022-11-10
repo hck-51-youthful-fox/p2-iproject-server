@@ -6,6 +6,7 @@ const { initializeApp } = require("firebase/app");
 const { getDatabase } = require("firebase/database");
 const cors = require("cors");
 const { User, Investment } = require("./models");
+const midtransClient = require("midtrans-client");
 
 const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = "cdl1rqiad3i4r9fur7d0cdl1rqiad3i4r9fur7dg";
@@ -74,12 +75,17 @@ app.post("/login", async (req, res, next) => {
     if (!data) throw { name: "UNAUTH" };
     if (!comparePass(password, data.password)) throw { name: "UNAUTH" };
 
-    const token = createToken({ id: data.id, email: data.email });
+    const token = createToken({
+      id: data.id,
+      email: data.email,
+      username: data.username,
+    });
     res.status(200).json({ access_token: token });
   } catch (error) {
     next(error);
   }
 });
+
 app.use(async (req, res, next) => {
   try {
     const { access_token } = req.headers;
@@ -88,14 +94,56 @@ app.use(async (req, res, next) => {
 
     const payload = verifyToken(access_token);
 
-    const user = User.findByPk(payload.id);
+    const user = await User.findByPk(payload.id);
     if (!user) throw { name: "INVALID" };
 
-    req.user = { id: payload.id, email: payload.email };
+    req.user = {
+      id: payload.id,
+      email: payload.email,
+      username: payload.username,
+    };
     next();
   } catch (error) {
     next(error);
   }
+});
+
+app.post("/payment", (req, res, next) => {
+  let snap = new midtransClient.Snap({
+    isProduction: false,
+    serverKey: "SB-Mid-server-e9DuibJqeKpE4vwEgak8hir5",
+  });
+
+  let orderId = new Date().valueOf();
+
+  let parameter = {
+    transaction_details: {
+      order_id: `order-${orderId}-${req.user.email.slice(0, 3)}`,
+      gross_amount: 34990,
+    },
+    credit_card: {
+      secure: true,
+    },
+    customer_details: {
+      email: req.user.email,
+      username: req.user.email.split("@")[0],
+      // email: 'ivanjisoo@gmail.com',
+      // username: 'ivanxjisoo'
+    },
+  };
+
+  snap
+    .createTransaction(parameter)
+    .then((transaction) => {
+      // transaction token
+      let transactionToken = transaction.token;
+      // console.log(transaction);
+      res.status(201).json({ transactionToken });
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
 });
 
 app.post("/buy/:StockId", async (req, res, next) => {
@@ -103,13 +151,29 @@ app.post("/buy/:StockId", async (req, res, next) => {
     const StockId = req.params.StockId;
     const UserId = req.user.id;
 
-    const { price, volume } = req.body;
-
-    const data = Investment.create({ price, volume, StockId, User });
+    const data = await Investment.create({
+      price: 125,
+      volume: 25,
+      StockId,
+      UserId,
+    });
+    res.status(201).json("success buy stocks");
   } catch (error) {
     next(error);
   }
 });
+
+app.get("/stocks", async (req, res, next) => {
+  try {
+    const UserId = req.user.id;
+
+    const data = await Investment.findAll({ where: { UserId } });
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use((error, req, res, next) => {
   let err = error.name;
   let code = 500;
