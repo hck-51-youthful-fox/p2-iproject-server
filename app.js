@@ -143,11 +143,13 @@ app.get("/detail/:id", async (req, res, next) => {
 
 app.post("/comments/:id", authentification, async (req, res, next) => {
   try {
-    const { comment } = req.body;
+    const { comment, imgUrl } = req.body;
     if (!comment) {
       return res.status(400).json({ message: "Comment cannot blank" });
     }
-    const imgUrl = "-";
+    if (!imgUrl) {
+      imgUrl = "-";
+    }
     const data = await Comment.create({
       UserId: req.user.id,
       ThreadId: req.params.id,
