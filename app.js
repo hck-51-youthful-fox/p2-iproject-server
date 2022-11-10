@@ -3,12 +3,12 @@ const app = express();
 const port = 3000;
 const cors = require("cors");
 const { User, Thread, Comment } = require("./models/index");
-const { comparePassword } = require("./helpers/bcrypt");
 const bcrypt = require("bcryptjs");
 const { createToken } = require("./helpers/jwt");
 const { authentification } = require("./middlewares/auth");
 const axios = require("axios");
 const { Op } = require("sequelize");
+const nodemailer = require("nodemailer");
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +17,26 @@ app.use(express.urlencoded({ extended: false }));
 app.post("/register", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "pcpeekiproject@gmail.com",
+        pass: "hykfgkafyolsvabg",
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: "pcpeekiproject@gmail.com",
+      to: `${email}`,
+      subject: "Welcome to PCPeeker",
+      text: "Selamat datang di PCPeeker, akun anda sudah aktif",
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
     if (!username) {
       return res.status(400).json({ message: "Username is required" });
@@ -81,15 +101,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/thread", authentification, async (req, res, next) => {
-  try {
-    const data = await Thread.findAll();
-    res.status(200).json(data);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+// app.get("/thread", async (req, res, next) => {
+//   try {
+//     const data = await Thread.findAll();
+//     res.status(200).json(data);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 app.get("/comments", authentification, async (req, res, next) => {
   try {
@@ -108,6 +128,10 @@ app.get("/detail/:id", async (req, res, next) => {
       include: {
         model: Comment,
         attributes: ["UserId", "comment", "imgUrl"],
+        include: {
+          model: User,
+          attributes: ["username"],
+        },
       },
       where: {
         id: id,
@@ -120,7 +144,7 @@ app.get("/detail/:id", async (req, res, next) => {
   }
 });
 
-app.post("/detail/:id", authentification, async (req, res, next) => {
+app.post("/comments/:id", authentification, async (req, res, next) => {
   try {
     const { comment } = req.body;
     const imgUrl = "-";
@@ -153,10 +177,9 @@ app.get("/news", async (req, res) => {
       }
     );
     const dataVGA = [];
-    const topVGA = top.slice(1, 6);
+    const topVGA = top.slice(1, 5);
     topVGA.forEach((element) => {
       let data = element.split(",");
-      console.log(data);
       let obj = {
         merk: `${data[2]}`,
         type: `${data[2]} ${data[3]}`,
@@ -192,7 +215,7 @@ app.delete("/detail/:id", authentification, async (req, res, next) => {
   }
 });
 
-app.get("/detail", async (req, res, next) => {
+app.get("/thread", async (req, res, next) => {
   try {
     let { page, name } = req.query;
     if (!page) {
@@ -206,9 +229,11 @@ app.get("/detail", async (req, res, next) => {
     }
     const limit = 6;
     let options = {
-      order: [["id", "ASC"]],
+      include: [{ model: Comment }],
+      order: [["createdAt", "DESC"]],
       limit,
       offset: limit * page,
+      distinct: true,
     };
 
     if (name) {
