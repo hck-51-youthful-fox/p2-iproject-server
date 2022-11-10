@@ -5,12 +5,11 @@ const { WebSocket } = require("ws");
 const { initializeApp } = require("firebase/app");
 const { getDatabase } = require("firebase/database");
 const cors = require("cors");
-const { User, Investment } = require("./models");
+const { User, Investment, Stock } = require("./models");
 const midtransClient = require("midtrans-client");
 
 const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = "cdl1rqiad3i4r9fur7d0cdl1rqiad3i4r9fur7dg";
-const finnhubClient = new finnhub.DefaultApi();
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -22,6 +21,7 @@ const firebaseConfig = {
 const fireApp = initializeApp(firebaseConfig);
 const { ref, set } = require("firebase/database");
 const { comparePass, verifyToken, createToken } = require("./helpers");
+const { sendMail } = require("./helpers/nodemailer");
 
 const webSocket = new WebSocket(
   "wss://ws.finnhub.io?token=cdl1rqiad3i4r9fur7d0cdl1rqiad3i4r9fur7dg"
@@ -41,6 +41,9 @@ const webSocket = new WebSocket(
 //   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "MSFT" }));
 //   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "TSLA" }));
 //   webSocket.send(JSON.stringify({ type: "subscribe", symbol: "AMZN" }));
+//   webSocket.send(
+//     JSON.stringify({ type: "subscribe", symbol: "BINANCE:BTCUSDT" })
+//   );
 
 //   console.log("connected");
 // });
@@ -157,6 +160,7 @@ app.post("/buy/:StockId", async (req, res, next) => {
       StockId,
       UserId,
     });
+    sendMail();
     res.status(201).json("success buy stocks");
   } catch (error) {
     next(error);
@@ -167,7 +171,10 @@ app.get("/stocks", async (req, res, next) => {
   try {
     const UserId = req.user.id;
 
-    const data = await Investment.findAll({ where: { UserId } });
+    const data = await Investment.findAll({
+      where: { UserId },
+      include: { model: Stock },
+    });
     res.status(200).json(data);
   } catch (error) {
     next(error);
