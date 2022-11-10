@@ -61,11 +61,17 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      status: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
       modelName: "Product",
     }
   );
+  Product.beforeCreate((instance) => {
+    instance.status = `Available`;
+  });
   return Product;
 };

@@ -2,3 +2,6 @@ SECRET=
 googleClientId=
 AUTH_EMAIL=
 AUTH_PASS=
+publicKey=
+privateKey=
+UrlEndpoint=

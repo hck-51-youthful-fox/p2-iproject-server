@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const sendMail = require("../helpers/nodemailer");
 var ImageKit = require("imagekit");
 const fs = require("fs");
+const midtransClient = require("midtrans-client");
 
 class Controller {
   static async register(req, res, next) {
@@ -18,7 +19,7 @@ class Controller {
         password,
         phoneNumber,
         address,
-        role,
+        role: `customer`,
       });
       sendMail(email, username);
 
@@ -90,7 +91,7 @@ class Controller {
       username: user.username,
     };
 
-    const access_token = createToken(payloadGoogle);
+    const access_token = signToken(payloadGoogle);
 
     res.status(200).json({
       access_token: access_token,
@@ -103,7 +104,6 @@ class Controller {
   static async addProduct(req, res, next) {
     try {
       let { name, description, price } = req.body;
-      console.log(req.file);
 
       const imagekit = new ImageKit({
         publicKey: "public_MOW2oPu6MEH1AlsNJdVkcC4QIa8=",
@@ -115,7 +115,6 @@ class Controller {
         fileName: req.file.originalname, //required
       });
 
-      console.log(req.file);
       let product = await Product.create({
         name,
         img: image.url,
@@ -142,17 +141,7 @@ class Controller {
         return { totalProduct, rows, totalPages, currentPage };
       };
 
-      const { page, filterProduct } = req.query;
-
-      if (filterProduct !== "" && typeof filterProduct !== "undefined") {
-        let productQuery = filterProduct.split(",").map((product) => ({
-          [Op.eq]: product,
-        }));
-
-        query.where = {
-          companyId: { [Op.or]: productQuery },
-        };
-      }
+      const { page } = req.query;
 
       if (page !== "" && typeof page !== "undefined") {
         offset = page * limit - limit;
@@ -167,6 +156,63 @@ class Controller {
 
       let dataProduct = await Product.findAndCountAll(query);
       res.status(200).json(paging(dataProduct, page, limit));
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async midtransTransaction(req, res, next) {
+    let { id } = req.params;
+    let foundProduct = await Product.findByPk(id);
+
+    let snap = new midtransClient.Snap({
+      // Set to true if you want Production Environment (accept real transaction).
+      isProduction: false,
+      serverKey: "SB-Mid-server-vIob-_je6hTfGgkzW4kGL5Ho",
+    });
+
+    let parameter = {
+      transaction_details: {
+        order_id: Math.random(1000),
+        gross_amount: foundProduct.price,
+      },
+      credit_card: {
+        secure: true,
+      },
+      customer_details: {
+        first_name: req.user.username,
+        email: req.user.email,
+        phone: req.user.phoneNumber,
+      },
+    };
+
+    snap.createTransaction(parameter).then((transaction) => {
+      // transaction token
+      let transactionToken = transaction.token;
+      let transactionUrl = transaction.redirect_url;
+      res.status(200).json({
+        transactionToken: transactionToken,
+        transactionUrl: transactionUrl,
+      });
+    });
+  }
+
+  static async updateProductStatus(req, res, next) {
+    try {
+      let { id } = req.params;
+      let { status } = req.body;
+      let searchData = await Product.findByPk(id);
+      let dataProduct = await Product.update(
+        { status },
+        {
+          where: {
+            id: `${id}`,
+          },
+        }
+      );
+      res.status(201).json({
+        message: `Product ${id} Sold`,
+      });
     } catch (err) {
       next(err);
     }

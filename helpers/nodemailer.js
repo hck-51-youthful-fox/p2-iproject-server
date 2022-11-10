@@ -22,8 +22,8 @@ const sendMail = (email, username) => {
     from: process.env.AUTH_EMAIL, // sender address
     to: `${email}`, // list of receivers
     subject: "Welcome to RZ Hobby Shop", // Subject line
-    text: `Welcome to RZ Hobby Shop
-           Happy Shopping and enjoy`, // plain text body
+    text: `${username}, Welcome to RZ Hobby Shop
+    Happy Shopping and enjoy`, // plain text body
   };
 
   transporter.sendMail(message);

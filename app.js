@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 const router = require("./routers/index");
 
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: 500000 }));
 app.use(express.json());
 
 app.use("/", router);
