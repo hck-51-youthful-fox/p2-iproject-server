@@ -1,4 +1,4 @@
-const { User, Rent } = require("../models");
+const { Rent } = require("../models");
 const axios = require("axios");
 let showsUrl = "https://api.tvmaze.com/shows";
 const cloudinary = require("../setups/cloudinary");
