@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Invoice.belongsTo(models.User, { foreignKey: "UserId" });
     }
   }
   Invoice.init(
@@ -16,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       totalPrice: DataTypes.INTEGER,
       ongkir: DataTypes.INTEGER,
       information: DataTypes.JSON,
+      url_payment: DataTypes.STRING,
+      token_payment: DataTypes.STRING,
+      isPay: DataTypes.STRING,
+      UserId: DataTypes.INTEGER,
     },
     {
       sequelize,
