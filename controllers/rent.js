@@ -1,50 +1,63 @@
 const { Rent } = require("../models");
 const axios = require("axios");
 let showsUrl = "https://api.tvmaze.com/shows";
-const cloudinary = require("../setups/cloudinary");
-const fs = require("fs");
 
+const sharp = require("sharp");
+const cloudinary = require("cloudinary").v2;
+const { Readable } = require("stream");
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const bufferToStream = (buffer) => {
+  const readable = new Readable({
+    read() {
+      this.push(buffer);
+      this.push(null);
+    },
+  });
+  return readable;
+};
 class Controller {
   static async addRent(req, res, next) {
-    let file;
-    let url;
-    try {
-      const uploader = async (path) => await cloudinary.uploads(path, "Images");
-      if (req.method == "POST") {
-        file = req.file;
-        const { path } = file;
-        const newPath = await uploader(path);
-        url = newPath;
-        fs.unlinkSync(path);
-      } else {
-        return res.status(405).json({ message: "Image Upload Failed" });
+    const data = await sharp(req.file.buffer).webp({ quality: 20 }).toBuffer();
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "images" },
+      async (error, result) => {
+        if (error) return console.error(error);
+        //   return res.json({ URL: result.secure_url});
+        try {
+          let imgName = Date.now() + "-" + Math.floor(Math.random() * 1000);
+          let imgUrl = result.secure_url;
+          let { ShowId } = req.params;
+          let { id: UserId } = req.user;
+          let { data } = await axios.get(`${showsUrl}/${ShowId}`);
+          let checkRented = await Rent.findOne({
+            where: { UserId, ShowId: data.id },
+          });
+          if (checkRented) {
+            throw { name: "Forbidden" };
+          }
+          let payload = {
+            UserId,
+            imgName,
+            ShowId,
+            imgUrl,
+            showName: data.name,
+            showImgUrl: data.image.original,
+            showSummary: data.summary,
+          };
+          let rented = await Rent.create(payload);
+          res.status(201).json(rented);
+        } catch (error) {
+          console.log(error);
+          next(error);
+        }
       }
-      let imgName = Date.now() + "-" + file.originalname;
-      let imgUrl = url.url;
-      let { ShowId } = req.params;
-      let { id: UserId } = req.user;
-      let { data } = await axios.get(`${showsUrl}/${ShowId}`);
-      let checkRented = await Rent.findOne({
-        where: { UserId, ShowId: data.id },
-      });
-      if (checkRented) {
-        throw { name: "Forbidden" };
-      }
-      let payload = {
-        UserId,
-        imgName,
-        ShowId,
-        imgUrl,
-        showName: data.name,
-        showImgUrl: data.image.original,
-        showSummary: data.summary,
-      };
-      let rented = await Rent.create(payload);
-      res.status(201).json(rented);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
+    );
+    bufferToStream(data).pipe(stream);
   }
   static async removeRent(req, res, next) {
     try {
@@ -54,7 +67,7 @@ class Controller {
         throw { name: "DATA_NOT_FOUND" };
       }
       let deleted = await Rent.destroy({ where: { id } });
-      res.status(200).json({message: "You have unsubscribed"});
+      res.status(200).json({ message: "You have unsubscribed" });
     } catch (error) {
       next(error);
     }
