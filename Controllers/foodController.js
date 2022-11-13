@@ -170,8 +170,10 @@ class FoodController {
       if (!data || data.rows.length === 0) {
         throw { name: "FOOD_NOT_FOUND", model: "Foods" };
       }
+
       totalPage = data.count;
       data.totalPage = Math.ceil(totalPage / limit);
+
       if (!data.totalPage) {
         data.totalPage = 1;
       }
