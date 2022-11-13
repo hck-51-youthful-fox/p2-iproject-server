@@ -44,7 +44,10 @@ class CartController {
 
   static async cost(req, res, next) {
     try {
-      const destinationCode = req.body.destination;
+      let destinationCode = req.body.destination;
+      if (!destinationCode) {
+        return res.status(200).json(0);
+      }
       const { data } = await axios.post(
         `https://api.rajaongkir.com/starter/cost`,
         {

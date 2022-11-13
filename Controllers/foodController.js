@@ -108,22 +108,21 @@ class FoodController {
       ];
 
       let { page, filter, search } = req.query;
-      let limit = 8;
+      let limit = 9;
       let offset = 0;
       let totalPage;
 
-      options.order = [["id", "DESC"]];
       options.include = [{ model: Category }];
 
       // pagination
       if (page !== "" && typeof page !== "undefined") {
-        limit = 8;
+        limit = 9;
         options.limit = limit;
         if (page.number !== "" && typeof page.number !== "undefined") {
           let offset = page.number * limit - limit;
           options.offset = offset;
         } else {
-          limit = 8;
+          limit = 9;
           offset = 0;
           page.number = 1;
           totalPage = 1;
