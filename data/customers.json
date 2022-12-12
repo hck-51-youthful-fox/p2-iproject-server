@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Customer 1 Name",
+    "email": "customer@customer.com",
+    "password": "customer",
+    "phoneNumber": "02188888888",
+    "address": "Jl. Customer 1"
+  },
+  {
+    "name": "Customer 2 Name",
+    "email": "customer2@customer2.com",
+    "password": "customer2",
+    "phoneNumber": "02288888888",
+    "address": "Jl. Customer 2"
+  },
+  {
+    "name": "Customer 3 Name",
+    "email": "customer3@customer3.com",
+    "password": "customer3",
+    "phoneNumber": "02388888888",
+    "address": "Jl. Customer 3"
+  }
+]
