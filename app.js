@@ -173,36 +173,40 @@ app.get("/news", async (req, res) => {
     const { data } = await axios.get(
       `https://newsapi.org/v2/top-headlines?country=id&category=technology&apiKey=a461f6286f304f9f86bae3b2817e6439`
     );
-    const { data: top } = await axios.get(
-      `https://top-computer-parts.p.rapidapi.com/gpu`,
-      {
-        headers: {
-          "X-RapidAPI-Key":
-            "edd710fddbmsh1b70c326f0e172ep16d0f9jsn5c6b7aae0e20",
-          "X-RapidAPI-Host": "top-computer-parts.p.rapidapi.com",
-        },
-      }
-    );
-    const dataVGA = [];
-    const topVGA = top.slice(1, 5);
-    topVGA.forEach((element) => {
-      let data = element.split(",");
-      let obj = {
-        merk: `${data[2]}`,
-        type: `${data[2]} ${data[3]}`,
-        ranking: `${data[4]}`,
-        bechmark: `${data[6]}`,
-        source: `${data[7]}`,
-      };
-      dataVGA.push(obj);
-    });
+
+    console.log(data);
+    // const { data: top } = await axios.get(
+    //   `https://top-computer-parts.p.rapidapi.com/gpu`,
+    //   {
+    //     headers: {
+    //       "X-RapidAPI-Key":
+    //         "edd710fddbmsh1b70c326f0e172ep16d0f9jsn5c6b7aae0e20",
+    //       "X-RapidAPI-Host": "top-computer-parts.p.rapidapi.com",
+    //     },
+    //   }
+    // );
+    // const dataVGA = [];
+    // const topVGA = top.slice(1, 5);
+    // topVGA.forEach((element) => {
+    //   let data = element.split(",");
+    //   let obj = {
+    //     merk: `${data[2]}`,
+    //     type: `${data[2]} ${data[3]}`,
+    //     ranking: `${data[4]}`,
+    //     bechmark: `${data[6]}`,
+    //     source: `${data[7]}`,
+    //   };
+    //   dataVGA.push(obj);
+    // });
 
     const dataNews = data.articles.slice(1, 5);
     dataNews.forEach((el) => {
       delete el.source;
     });
-    res.status(200).json({ topVGA: dataVGA, news: dataNews });
+    console.log(dataNews, "dari News");
+    res.status(200).json({ news: dataNews });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
